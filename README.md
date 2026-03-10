@@ -1,7 +1,5 @@
-# 🛡️ GigShield
+# GigShield
 ### AI-Powered Parametric Income Protection for Zepto/Blinkit Delivery Partners
-
-> *"If your zone goes down, your income doesn't."*
 
 ## 1. Problem Statement
 
@@ -12,7 +10,7 @@ India's Q-Commerce delivery partners — working for platforms like **Zepto, Bli
 - **Local curfews or dark store closures** instantly cut off their pickup points
 - Workers lose **20–30% of monthly income** during such disruptions with zero safety net
 
-Unlike food delivery workers who can operate across a wider area, Q-Commerce partners are **zone-locked** — if their micro-zone is disrupted, they cannot simply shift to another area. They bear the full financial loss with no recourse.
+Unlike food delivery workers who can operate across a wider area, Q-Commerce partners are **zone-locked** — if their micro-zone is disrupted, they cannot simply shift elsewhere. They bear the full financial loss alone.
 
 **Currently, no insurance product addresses this gap.**
 
@@ -20,17 +18,18 @@ Unlike food delivery workers who can operate across a wider area, Q-Commerce par
 
 ## 2. Our Solution
 
-**GigShield** is an AI-enabled parametric income protection platform built exclusively for Q-Commerce delivery partners. 
+**GigShield** is an AI-enabled parametric income protection platform built exclusively for Q-Commerce delivery partners.
 
 ### How It's Different from Traditional Insurance
 
 | Traditional Insurance | GigShield |
 |---|---|
 | Worker files a claim manually | Claims triggered automatically |
-| Payout takes days/weeks | Payout in under 60 seconds |
-| Coverage based on incident proof | Coverage based on objective data triggers |
+| Payout takes days or weeks | Payout processed in under 60 seconds |
 | City-level weather assessment | **Micro-zone** (dark store radius) assessment |
 | Fixed premiums | **AI-adjusted weekly premiums** per zone risk |
+| No engagement between claims | **GigPoints** loyalty system keeps workers engaged daily |
+| Worker never knows their savings | **Savings Dashboard** shows lifetime ROI |
 
 ### Core Principle — Parametric Insurance
 
@@ -41,33 +40,56 @@ GigShield does **not** insure health, life, accidents, or vehicle damage. It ins
 ## 3. Persona & Scenarios
 
 ### Target Persona
-**Q-Commerce Delivery Partner** — A gig worker employed by Zepto, Blinkit, or Swiggy Instamart, operating within a fixed micro-zone (typically a 2–3 km radius around a dark store), completing 15–25 deliveries per day, earning approximately ₹600–₹1,200/day.
+
+**Q-Commerce Delivery Partner** — A gig worker employed by Zepto, Blinkit, or Swiggy Instamart, operating within a fixed micro-zone (2–3 km radius around a dark store), completing 15–25 deliveries per day, earning approximately ₹600–₹1,200/day.
+
+```
+Typical Profile:
+  Device:      Budget Android (Redmi, Realme, Samsung M-series)
+  Income:      ₹600–₹1,200/day | ₹15,000–₹25,000/month
+  Work style:  Zone-locked, 6–14 hrs/day, week-to-week earnings
+  Pain point:  Zero income protection against external disruptions
+```
+
+---
 
 ### Real-World Scenarios
 
 ---
 
-**Scenario 1 — Heavy Monsoon Rain (Most Common)**
+**Scenario 1 — Heavy Monsoon Rain**
 
-> Ravi is a Zepto delivery partner operating in the HSR Layout zone, Bangalore. At 2 PM on a Tuesday, rainfall intensifies to 20mm/hr. After 10 minutes of sustained rain, GigShield's trigger monitor detects the breach. Ravi's GPS confirms he is inside the zone, and his app shows 2 completed deliveries in the last 30 minutes (he was actively working). His claim is auto-approved. ₹600 is credited to his UPI account before he even gets home.
+> Ravi is a Zepto partner in HSR Layout, Bangalore. At 2 PM, rainfall hits 20mm/hr. GigShield detects the breach and waits 10 minutes — sustained. Ravi's GPS confirms he is inside the zone, and his app shows 2 deliveries in the last 30 minutes. Claim auto-approved. ₹600 credited before he gets home. His Protection Timeline updates: *"2:10 PM — Rainfall Trigger — +₹600"*. He earns +200 GigPoints.
 
 ---
 
 **Scenario 2 — Hazardous AQI (Delhi Winter)**
 
-> Priya works for Blinkit in the Dwarka zone, Delhi. In November, the AQI spikes to 340 (Hazardous). Blinkit suspends outdoor operations in the zone. GigShield detects the breach via WAQI API. Since Priya had been active that morning, her claim is auto-validated. She receives ₹600 for the lost afternoon shift — without filing anything.
+> Priya works for Blinkit in Dwarka, Delhi. November AQI spikes to 340. Blinkit suspends outdoor operations. GigShield detects the breach via WAQI API. Priya was active that morning — claim validated automatically. ₹600 credited. Her Savings Dashboard now shows: *"Lifetime Net Savings: ₹1,800 — 420% return on protection."*
 
 ---
 
-**Scenario 3 — Dark Store Closure (Platform Signal)**
+**Scenario 3 — Dark Store Closure**
 
-> Arjun's Zepto dark store in Koramangala unexpectedly closes for 4 hours due to a local strike. GigShield receives the simulated platform closure signal for Zone KOR-02. All 31 active workers in the zone who were logged in and active are auto-triggered for a payout. Zero manual intervention.
+> Arjun's Zepto dark store in Koramangala closes for 4 hours due to a local strike. GigShield receives the platform closure signal for Zone KOR-02. All 31 active, validated workers receive ₹600 each — ₹18,600 paid out in under 60 seconds. Zero manual intervention.
 
 ---
 
-**Scenario 4 — Fraud Attempt (Blocked)**
+**Scenario 4 — Pre-Disruption Alert (Parametric Transparency)**
 
-> Vikram tries to claim a payout during a rainfall event, but his GPS shows he is 8 km outside the zone, and his app shows zero deliveries in the last 30 minutes. The fraud checker assigns him a score of 0.25 (below the 0.75 threshold). His claim is flagged for review and blocked from auto-payout.
+> Meera opens GigShield at noon. Her zone status card shows  **ZONE WATCH** — *"Rainfall at 12mm/hr, approaching threshold of 15mm/hr. Your policy is active "*. She continues working, knowing she's covered. 20 minutes later it tips — her claim auto-fires. She knew it was coming before it happened.
+
+---
+
+**Scenario 5 — Fraud Attempt (Blocked)**
+
+> Vikram tries to claim during a rainfall event. His GPS shows him 8 km outside the zone with zero deliveries in the last 30 minutes. Fraud score: 0.25 (below 0.75 threshold). Admin console shows: ❌ GPS outside zone ·  Not active ·  No duplicate ·  App logged in. Payout blocked.
+
+---
+
+**Scenario 6 — Coverage Gap Detector**
+
+> Suresh forgot to renew on Sunday. Monday morning a trigger fires. He opens GigShield and sees: *"34 active Pro Shield workers each received ₹600 today. You would have received ₹600. Policy lapsed Sunday midnight. Renew now → ₹108/week."* He renews immediately and enables auto-renew.
 
 ---
 
@@ -76,77 +98,89 @@ GigShield does **not** insure health, life, accidents, or vehicle damage. It ins
 ### Worker-Facing Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        WORKER JOURNEY                           │
-└─────────────────────────────────────────────────────────────────┘
-
 1. ONBOARDING
    ├── Register with mobile number (OTP verification)
    ├── Select platform: Zepto / Blinkit / Swiggy Instamart
-   ├── Zone auto-detected based on nearest dark store
-   └── Basic profile: avg daily hours, shift pattern
+   ├── Zone auto-detected based on nearest dark store coordinates
+   ├── Profile: avg daily hours, shift pattern (improves risk scoring)
+   └── Complete profile → earn +100 GigPoints (one-time)
 
         ↓
 
 2. POLICY PURCHASE
-   ├── AI calculates zone risk score (0.0 → 1.0)
-   ├── Three weekly plans displayed with adjusted premiums:
-   │     Basic Shield  — ₹49/week  — ₹300/disruption day
-   │     Pro Shield    — ₹99/week  — ₹600/disruption day
-   │     Elite Shield  — ₹149/week — ₹1,000/disruption day
-   ├── Worker selects plan and pays via UPI/Razorpay
-   └── Policy active for 7 days from Sunday midnight
+   ├── AI calculates zone risk score (0.0 → 1.0) — shown transparently
+   ├── Three weekly plans with AI-adjusted premiums:
+   │     Basic Shield  — ₹49/week base  → ₹300/disruption day
+   │     Pro Shield    — ₹99/week base  → ₹600/disruption day
+   │     Elite Shield  — ₹149/week base → ₹1,000/disruption day
+   ├── Worker sees: "Zone risk: 0.74 — Premium adjusted to ₹108/week"
+   ├── GigPoints tier discount applied automatically at checkout
+   ├── Worker pays via UPI / Razorpay
+   ├── Policy Certificate PDF generated and downloadable
+   └── Policy active Sunday midnight → next Sunday midnight
 
         ↓
 
 3. ACTIVE COVERAGE
-   ├── Worker continues working normally
-   ├── GigShield monitors zone every 5 minutes (background)
-   └── Worker dashboard shows: active plan, zone risk, weekly earnings protected
+   ├── Zone Status Widget: 🟢 SAFE / 🟡 WATCH / 🔴 DISRUPTED
+   ├── Pre-disruption alerts pushed to lock screen when approaching threshold
+   ├── GigShield monitors zone every 5 minutes (background polling)
+   └── Dashboard shows: active plan, GigPoints balance, weekly earnings protected
 
         ↓
 
 4. DISRUPTION DETECTED
    ├── Trigger monitor detects threshold breach in worker's zone
-   ├── Waits for 10 minutes of sustained breach (false positive protection)
+   ├── Waits 10 minutes of sustained breach (false positive protection)
    ├── Fraud validation runs automatically:
-   │     GPS inside zone radius (Haversine check)
-   │     Activity score ≥ 1 delivery in last 30 min
-   │     App logged in within 10 min of trigger
-   │     No duplicate claim for this event
-   └── Score ≥ 0.75 → AUTO APPROVED
+   │      GPS inside zone radius (Haversine distance check)
+   │      Activity score ≥ 1 delivery in last 30 min
+   │      App logged in within 10 min of trigger event
+   │      No duplicate claim for this event ID
+   └── Score ≥ 0.75 (3 of 4 checks) → AUTO APPROVED
 
         ↓
 
-5. PAYOUT
-   ├── Razorpay/UPI transfer initiated (mock in demo)
-   ├── SMS notification sent: "₹600 credited — Rainfall disruption, HSR Zone"
-   └── Worker dashboard updates: Protection Timeline + Weekly Protected total
+5. PAYOUT + REWARDS
+   ├── UPI transfer initiated via Razorpay (mock in demo)
+   ├── Push notification: "₹600 credited — Rainfall, HSR Zone"
+   ├── Claim Statement (EOB) generated and downloadable
+   ├── Protection Timeline updated on dashboard
+   ├── GigPoints credited: +200 pts (payout) + +100 pts (active during disruption)
+   └── Savings Dashboard updates lifetime net savings and ROI
+
+        ↓
+
+6. RENEWAL
+   ├── Sunday evening push notification: "Your policy expires tonight. Renew?"
+   ├── Auto-renew toggle available (UPI mandate simulation)
+   ├── Streak maintained → +75 GigPoints streak bonus
+   └── If lapsed → Coverage Gap Detector shown on next open
 ```
 
 ### Admin / Insurer Flow
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                       ADMIN DASHBOARD                           │
-└─────────────────────────────────────────────────────────────────┘
-
-Risk Map         → Leaflet + OSM map showing all zones
-                   colored Red / Orange / Green by live risk level
+Risk Map         → Leaflet + OSM map, zones colored Red/Orange/Green
+                   by live risk level. Click zone → workers, payouts, status
 
 Live Feed        → Real-time stream of disruption events and claims
                    "Zone HSR-01 | Rainfall 19mm/hr | 34 claims | ₹20,400"
 
-Analytics        → Loss ratios, weekly payout trends, zone-wise breakdown
+Analytics        → Loss ratios, weekly payout trends, zone-wise breakdown,
+                   premium pool vs payouts chart
 
 7-Day Forecast   → Predicted disruption risk per zone for next 7 days
-                   (rolling average from 90-day historical data)
+                   "HSR Layout — Thursday: HIGH (0.74) — Monsoon pattern"
 
-Risk Simulator   → Sliders for Rainfall / AQI / Active Workers
-                   → Live output: Affected Workers | Estimated Payout | Loss Ratio
+Risk Simulator   → Sliders: Rainfall / AQI / Active workers
+                   Live output: Affected Workers | Estimated Payout | Loss Ratio
 
 Fraud Console    → Flagged claims with per-check explainability
-                   
+                    GPS outside zone ·  Not active → BLOCKED
+
+Loyalty Monitor  → GigPoints distribution, tier breakdown,
+                   redemption activity, churn risk by tier
 ```
 
 ---
@@ -155,11 +189,11 @@ Fraud Console    → Flagged claims with per-check explainability
 
 ### Why Weekly?
 
-Zepto/Blinkit partners operate week-to-week — they receive platform payouts weekly, their active zones can change weekly, and their financial planning horizon is a single week. A weekly premium model aligns directly with how they think about money.
+Zepto/Blinkit partners operate week-to-week — platform payouts are weekly, active zones can change weekly, and their financial planning horizon is a single week. A weekly premium model aligns directly with how they earn and spend.
 
 ### Pricing Structure
 
-| Plan | Weekly Premium | Max Payout/Day | Coverage Hours |
+| Plan | Base Weekly Premium | Max Payout/Day | Coverage Hours |
 |---|---|---|---|
 | Basic Shield | ₹49/week | ₹300 | 6 hrs/day |
 | Pro Shield | ₹99/week | ₹600 | 10 hrs/day |
@@ -167,188 +201,476 @@ Zepto/Blinkit partners operate week-to-week — they receive platform payouts we
 
 ### AI-Adjusted Dynamic Pricing
 
-The base premium is adjusted ±30% by the AI risk model based on zone-level features:
-
 ```
 Final Premium = Base Premium × (1 + 0.3 × (risk_score − 0.5))
 
 Examples:
   HSR Layout, Bangalore (flood-prone, high AQI history)
-    risk_score = 0.8 → adjustment = +9% → Pro Shield = ₹108/week
+  risk_score = 0.8 → +9% → Pro Shield = ₹108/week
 
   Whitefield, Bangalore (historically dry zone)
-    risk_score = 0.2 → adjustment = −9% → Pro Shield = ₹90/week
+  risk_score = 0.2 → −9% → Pro Shield = ₹90/week
 ```
 
-**Risk Score Inputs** (fed to XGBoost model):
+**Risk Score Inputs** (XGBoost model):
 - Zone rainfall frequency over last 90 days
-- Zone average AQI score
-- Historical flood/waterlogging incidents
+- Zone average AQI history
+- Historical flood / waterlogging incidents
 - Worker's average daily shift hours
 - Current month (monsoon season weighting)
 
-The AI-adjusted price is shown to the worker on the policy screen with full transparency: *"Your zone risk score: 0.74 — Premium adjusted to ₹108/week"*
+Worker sees on policy screen: *"Zone risk score: 0.74 — Premium adjusted to ₹108/week"*
+
+### GigPoints Tier Discount Applied at Checkout
+
+| Tier | Discount |
+|---|---|
+| 🥈 Reliable (1,000+ pts) | 5% off weekly premium |
+| 🥇 Veteran (2,500+ pts) | 10% off weekly premium |
+| 💎 Champion (5,000+ pts) | 15% off + 1 free week per quarter |
 
 ---
 
 ## 6. Parametric Triggers
 
-> **These are Q-Commerce specific triggers.** Unlike food delivery, Zepto/Blinkit workers are zone-locked. Even one of these triggers halts ALL deliveries in the affected micro-zone.
+> These are Q-Commerce specific triggers. Zepto/Blinkit workers are zone-locked — even one trigger halts ALL deliveries in the affected micro-zone.
 
 ### Trigger Table
 
-| Trigger | Parameter | Data Source | Threshold | Sustained? |
+| Trigger | Parameter | Data Source | Threshold | Sustained |
 |---|---|---|---|---|
-| Heavy Rain | Rainfall mm/hr | OpenWeatherMap API | > 15 mm/hr | 10 minutes |
-| Extreme Heat | Temperature °C | OpenWeatherMap API | > 43°C | 10 minutes |
-| Severe AQI | Air Quality Index | WAQI API (free) | > 300 (Hazardous) | 10 minutes |
+| Heavy Rain | Rainfall mm/hr | OpenWeatherMap API | > 15 mm/hr | 10 min |
+| Extreme Heat | Temperature °C | OpenWeatherMap API | > 43°C | 10 min |
+| Severe AQI | Air Quality Index | WAQI API (free) | > 300 | 10 min |
 | Flash Flood Alert | IMD-style alert | Mocked JSON feed | Alert issued | Instant |
 | Dark Store Closure | Platform signal | Simulated API | Closure flag | Instant |
 | Local Curfew | Govt alert | Mocked event trigger | Curfew issued | Instant |
 
-### False Positive Protection
-
-Q-Commerce delivery windows are 10 minutes. A 2-minute rain spike should not trigger payouts. GigShield requires **10 minutes of sustained threshold breach** before any claim is created.
+### False Positive Protection Logic
 
 ```
 Poll every 5 minutes
-First breach detected → start timer
-If breach persists at next poll (10 min elapsed) → TRIGGER
-If breach clears before 10 min → RESET (no claim)
+  │
+  ├── Threshold breached?
+  │     YES → Start 10-minute sustained timer
+  │     NO  → Reset timer (no claim)
+  │
+  └── Still breached after 10 minutes?
+        YES → TRIGGER CLAIMS
+        NO  → RESET (false positive avoided)
 ```
 
-This design decision shows real insurance thinking, not just API integration.
+*A 10-minute delivery window means a 2-minute rain spike should not wipe out a worker's income. We require 10 minutes of sustained breach — standard parametric false-positive protection.*
 
 ---
 
 ## 7. AI/ML Integration Plan
 
 ### Model 1 — Zone Risk Scorer (XGBoost)
-- **Purpose:** Calculate zone-level risk score (0.0–1.0) to adjust weekly premiums
-- **Features:** Rainfall history, AQI averages, flood incidents, seasonal patterns
-- **Output:** Risk score visible to worker at policy purchase
-- **Training data:** OpenWeatherMap historical data + synthetic zone disruption history
+- **Input:** Rainfall history, AQI averages, flood incidents, seasonal patterns, shift hours
+- **Output:** Risk score 0.0–1.0 per zone
+- **Visible to user:** Risk score shown transparently at policy purchase
+- **Impact:** Drives premium adjustment ±30%
 
 ### Model 2 — Dynamic Premium Calculator
-- **Purpose:** Apply risk score to base premium with ±30% adjustment range
 - **Logic:** `final = base × (1 + 0.3 × (risk − 0.5))`
-- **Shown to user:** Full transparency — risk score + adjustment % displayed
+- **Full transparency:** Score + adjustment % shown to worker before purchase
 
-### Model 3 — Fraud Checker (Rule-Based + Scoring)
-- **Purpose:** Validate every auto-claim before payout
-- **Checks:**
-  - GPS location validated via Haversine distance formula against zone radius
-  - Activity score: deliveries completed in last 30 minutes (≥1 = active)
-  - App session: last_seen timestamp within 10 minutes of trigger
-  - Duplicate check: no existing claim for this worker + event ID
-- **Score:** 4 checks → pass ≥ 3 of 4 (score ≥ 0.75) for auto-approval
-- **Why explainable over black-box:** Every check shown in admin UI — judges and insurers see exactly why a claim was approved or flagged
+### Model 3 — Fraud Checker (Explainable Scoring)
+- **GPS Check:** Haversine distance formula validates worker is inside zone radius
+- **Activity Score:** `deliveries_last_30min` — ≥ 1 = active, 0 = suspicious
+- **Session Check:** `last_seen_at` within 10 minutes of trigger timestamp
+- **Duplicate Check:** No existing claim for this worker + event ID combination
+- **Score:** Pass ≥ 3 of 4 checks (score ≥ 0.75) for auto-approval
+- **Admin UI shows:** Per-check checklist — fully explainable, not a black box
 
 ### Model 4 — 7-Day Zone Risk Predictor
-- **Purpose:** Admin dashboard shows next 7 days disruption forecast per zone
-- **Method:** 90-day rolling average of disruption events per day-of-week
-- **Output:** Risk label (High / Medium / Low) + score per day
-- **Example:** "HSR Layout — Thursday: High Risk (0.74) — Monsoon pattern"
+- **Method:** 90-day rolling average of disruption events per day-of-week per zone
+- **Output:** Risk label (High / Medium / Low) + probability score per day
+- **Admin display:** *"HSR Layout — Thursday: High Risk (0.74) — Monsoon pattern"*
+
+### GPS Validation — Haversine Formula
+
+```javascript
+function haversineDistance(lat1, lng1, lat2, lng2) {
+  const R  = 6371000
+  const φ1 = lat1 * Math.PI / 180
+  const φ2 = lat2 * Math.PI / 180
+  const Δφ = (lat2 - lat1) * Math.PI / 180
+  const Δλ = (lng2 - lng1) * Math.PI / 180
+  const a  = Math.sin(Δφ/2) ** 2
+           + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) ** 2
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+}
+
+// Returns true if worker is physically inside the zone delivery radius
+function isWorkerInZone(worker, zone) {
+  return haversineDistance(
+    worker.current_lat, worker.current_lng,
+    zone.center_lat,    zone.center_lng
+  ) <= zone.radius_meters
+}
+```
 
 ---
 
-## 8. Tech Stack
+## 8. GigPoints Loyalty & Savings System
+
+This transforms insurance from a passive *"I hope I never need it"* product into an active *"I'm earning rewards every week"* experience — the key to long-term retention.
+
+---
+
+### 8.1 Savings Dashboard
+
+```
+💰 Your GigShield Savings
+
+  Total Premiums Paid:      ₹432  (lifetime)
+  Total Payouts Received:   ₹2,400 (lifetime)
+                            ──────────────────
+  Net Savings:              ₹1,968 
+
+  Return on Protection:     556% 
+  "For every ₹1 you paid, you got ₹5.56 back"
+```
+
+The **Return on Protection** metric reframes insurance as an investment. Workers become evangelists when they can show zone-mates their ROI.
+
+---
+
+### 8.2 GigPoints — How to Earn
+
+| Action | Points | Notes |
+|---|---|---|
+| Buy a weekly policy | +50 pts | Every week |
+| Policy active during a disruption | +100 pts | Stayed covered when it mattered |
+| Payout received | +200 pts | System worked for you |
+| Renew without lapsing | +75 pts | Per streak week |
+| 4-week no-lapse streak | +300 pts | Milestone bonus |
+| 12-week streak | +1,000 pts | Champion milestone |
+| Refer a zone partner | +500 pts | Per confirmed referral |
+| Complete profile | +100 pts | One-time only |
+
+**Points are NOT earned for:** lapsed weeks, pending fraud review periods.
+
+---
+
+### 8.3 Tier Structure & Benefits
+
+| Tier | Points | Premium Discount | Extra Benefit |
+|---|---|---|---|
+| 🥉 Starter | 0–999 | None | Standard coverage |
+| 🥈 Reliable | 1,000–2,499 | 5% off weekly premium | — |
+| 🥇 Veteran | 2,500–4,999 | 10% off weekly premium | Priority payout < 30 sec |
+| 💎 Champion | 5,000+ | 15% off weekly premium | 1 free week every quarter |
+
+### Redemption Milestones
+
+| Points | Reward |
+|---|---|
+| 1,000 pts | 5% premium waiver on next renewal |
+| 2,500 pts | 10% waiver + priority payout queue |
+| 5,000 pts | 1 free week every 13 weeks |
+| 7,500 pts | ₹500 bonus coverage top-up for 1 month |
+| 10,000 pts | Lifetime Veteran badge + 15% permanent discount |
+
+---
+
+### 8.4 Worker Protection Timeline
+
+```
+Today
+  12:10 PM    Rainfall Trigger — HSR Layout    +₹600  +200 pts
+  11:45 AM    Policy Active (Pro Shield)
+
+Yesterday
+  03:20 PM  🌫️  AQI Trigger — HSR Layout          +₹600  +200 pts
+
+This Week
+  Protected Income:   ₹1,200
+  GigPoints Earned:   +725 pts
+  Active Since:       Week 7 — 🥈 Reliable Tier
+```
+
+---
+
+### 8.5 Policy Certificate (Downloadable PDF)
+
+```
+┌─────────────────────────────────────┐
+│  🛡️  GIGSHIELD POLICY CERTIFICATE   │
+│       Certificate of Coverage        │
+│                                      │
+│  Policy ID:    GS-2026-HSR-00342    │
+│  Holder:       Ravi Kumar            │
+│  Zone:         HSR Layout, Bangalore │
+│  Plan:         Pro Shield            │
+│  Coverage:     ₹600/disruption day   │
+│  Valid:        10 Mar – 16 Mar 2026  │
+│  Premium Paid: ₹108                  │
+│  Tier:         🥈 Reliable           │
+│                                      │
+│  Covered Triggers:                   │
+│  • Rainfall > 15mm/hr (10 min)       │
+│  • AQI > 300 (10 min)                │
+│  • Temperature > 43°C (10 min)       │
+│  • Dark Store Closure (instant)      │
+│  • Local Curfew (instant)            │
+└─────────────────────────────────────┘
+```
+
+---
+
+### 8.6 Claim Statement / EOB (Explanation of Benefits)
+
+```
+CLAIM STATEMENT — GS-CLM-0892
+
+  Event:       Heavy Rainfall
+  Zone:        HSR Layout
+  Triggered:   12:10 PM, March 10, 2026
+  Validated:   12:11 PM (automated)
+  Payout:      ₹600
+
+  Validation Summary:
+     GPS in zone (0.8 km from center)
+     Active (3 deliveries in last 30 min)
+     App logged in at time of trigger
+     No duplicate claim
+
+  Payment:      UPI — ravi@okicici
+  GigPoints:    +300 pts credited
+  Status:        SETTLED
+```
+
+---
+
+### 8.7 Coverage Gap Detector
+
+```
+  You Were Not Covered Today
+
+A rainfall trigger fired in HSR Layout at 12:10 PM.
+34 active Pro Shield workers each received ₹600.
+
+You would have received:  ₹600
+You would have earned:    +300 GigPoints
+Policy lapsed:            Sunday midnight
+
+→  Renew now — ₹108/week
+→  Enable auto-renew so this never happens again
+```
+
+---
+
+### 8.8 Zone Disruption History
+
+```
+Zone: HSR Layout — Last 30 Days
+
+Mar 10   Heavy Rain (19mm/hr)  — 4 hrs — 34 workers paid — ₹20,400
+Mar 08   AQI 320               — 2 hrs — 31 workers paid — ₹18,600
+Mar 03   Dark Store Closure    — 3 hrs — 28 workers paid — ₹16,800
+Feb 28   Extreme Heat (44°C)   — 6 hrs — 40 workers paid — ₹24,000
+```
+
+Shows workers the system reliably pays out — builds trust before they personally experience a claim.
+
+---
+
+### 8.9 Referral + Group Enrollment
+
+```
+Refer a zone partner → Both get ₹50 off next week's premium
+                        Referrer earns +500 GigPoints
+
+Zone Milestone:  If 20+ workers in your zone enroll
+                 → Everyone in the zone gets ₹20 cashback that week
+```
+
+Solves adverse selection — entire zones enroll together, not just the highest-risk workers.
+
+---
+
+## 9. Platform Justification
+
+**Platform: Progressive Web App (PWA) — Mobile-First**
+
+### Why Not Native Android?
+
+| Problem | Impact on GigShield |
+|---|---|
+| Play Store review: 3–7 days | Cannot demo a live app by Phase 2 deadline |
+| Workers already have 3–4 delivery apps | Storage-sensitive — another APK won't be downloaded |
+| Version updates require user action | Trigger logic must update instantly across all workers |
+| Judges won't install unknown APK | Friction kills the demo evaluation |
+
+### Why Not Pure Desktop Web?
+
+| Problem | Impact |
+|---|---|
+| Workers are on the road on phones | They will never open a laptop between deliveries |
+| Lock-screen alerts need mobile | Pre-disruption and payout notifications must be instant |
+| GPS zone detection needs mobile | Browser GPS works on mobile, not desktop |
+
+### Why PWA Wins
+
+**1. Zero Friction Onboarding**
+A Zepto partner gets a WhatsApp link → opens in Chrome → *"Add to Home Screen"* → icon on phone. No Play Store, no download. Onboarding in under 60 seconds.
+
+**2. Instant Updates — Critical for Insurance**
+When trigger thresholds change or new zones are added, the update deploys server-side. Every worker gets it instantly — no version mismatch in live insurance contracts.
+
+**3. Push Notifications on Android Chrome**
+Pre-disruption alerts and payout confirmations hit the lock screen without a native app. These are the two most critical UX moments in parametric insurance.
+
+**4. Offline Support**
+Service workers cache the active policy details, zone info, GigPoints balance, and claim history. Workers check their coverage mid-delivery with no signal.
+
+**5. One Codebase — Two Experiences**
+The same React codebase serves the mobile worker (card UI, large touch targets) and the desktop admin (Leaflet map, Risk Simulator, analytics). No duplication, full speed.
+
+---
+
+*"Our workers live on their phones between deliveries. A PWA gives them a native app experience via a WhatsApp link — no Play Store, no storage concerns, no version lag. The same codebase gives our insurers a full desktop analytics dashboard. It's the only architecture that serves both users perfectly."*
+
+---
+
+## 10. Tech Stack
 
 ### Frontend
 | Tech | Purpose |
 |---|---|
 | React.js + Tailwind CSS | Worker app + Admin dashboard |
-| Leaflet + OpenStreetMap | Zone risk heatmap (free, no API key) |
-| Recharts | Analytics charts and loss ratio graphs |
+| Leaflet + OpenStreetMap | Zone risk heatmap — free, no API key required |
+| Recharts | Analytics, savings charts, GigPoints progress bars |
+| PWA (manifest + service worker) | Installable, offline support, push notifications |
 
 ### Backend
 | Tech | Purpose |
 |---|---|
 | Node.js + Express | REST APIs for all core operations |
-| PostgreSQL | Workers, policies, claims, zones, payouts |
+| PostgreSQL | Workers, policies, claims, zones, payouts, GigPoints |
 | node-cron | 5-minute trigger polling scheduler |
 
 ### AI / ML
 | Tech | Purpose |
 |---|---|
 | Python + scikit-learn | Risk scoring, fraud validation logic |
-| XGBoost | Dynamic premium calculation |
-| pandas + numpy | Historical data processing + 7-day forecasting |
+| XGBoost | Dynamic weekly premium calculation |
+| pandas + numpy | Historical data processing, 7-day zone forecasting |
 
 ### External APIs
 | API | Purpose | Cost |
 |---|---|---|
-| OpenWeatherMap | Live weather + rainfall data per zone lat/lng | Free tier |
+| OpenWeatherMap | Live weather + rainfall per zone lat/lng | Free tier |
 | WAQI API | Live AQI per zone coordinates | Free tier |
 | Razorpay Test Mode | Simulated UPI payouts to workers | Free sandbox |
-| Twilio (trial) / Mock | SMS notification on payout | Free trial |
+| Twilio (trial) / Mock | SMS + Push notification on payout | Free trial |
 
 ### Infrastructure
 | Tech | Purpose |
 |---|---|
-| Render / Railway | Hosting backend + frontend | Free tier |
-| GitHub | Version control + submission repo | Free |
-
-### Platform Choice — Web
-We chose a **web platform** (PWA-enabled) over native mobile because:
-- Workers can access it on any Android browser without a Play Store install
-- Faster to build and demo within the 6-week timeline
-- PWA enables add-to-homescreen for a near-native experience
-- Admin dashboard is best experienced on desktop/tablet
+| Render / Railway | Backend + frontend hosting | Free tier |
+| GitHub | Version control + submission repository | Free |
 
 ---
 
-## 9. Business Viability
+## 11. Feature List
 
-### Unit Economics (1,000 Workers — Bangalore)
+### Worker App
+
+| Feature | Phase |
+|---|---|
+| OTP registration + zone auto-detection | 2 |
+| AI-adjusted weekly premium (shown transparently) | 2 |
+| Policy purchase with UPI / Razorpay mock | 2 |
+| Policy Certificate PDF (downloadable) | 2 |
+| Zone Status Widget (🟢🟡🔴) | 2 |
+| Pre-disruption weather push alert | 2 |
+| Auto claim creation + fraud validation | 2 |
+| Claim Statement / EOB PDF | 2 |
+| Protection Timeline feed | 3 |
+| Savings Dashboard (net savings + ROI %) | 3 |
+| GigPoints balance + tier progress bar | 3 |
+| Points activity history | 3 |
+| Zone Disruption History (30 days) | 3 |
+| Coverage Gap Detector | 3 |
+| Policy renewal nudge + auto-renew toggle | 3 |
+| Referral system + zone group enrollment | 3 |
+
+### Admin Dashboard
+
+| Feature | Phase |
+|---|---|
+| Leaflet + OSM zone risk heatmap | 2 |
+| Real-time disruption + claims live feed | 2 |
+| Fraud console with per-check explainability | 2 |
+| Loss ratio analytics + payout trends | 3 |
+| 7-Day Zone Risk Predictor | 3 |
+| Risk Simulator with live sliders | 3 |
+| GigPoints / loyalty tier monitor | 3 |
+| Zone-wise payout breakdown | 3 |
+
+---
+
+## 13. Business Viability
+
+### Unit Economics — 1,000 Workers, Bangalore
 
 ```
 Weekly Premium Pool:
-  1,000 workers × ₹99 average = ₹99,000/week
+  1,000 workers × ₹99 avg = ₹99,000/week
 
-Monsoon Season Disruptions (Jun–Sep):
-  ~3 events/week × ~150 affected workers × ₹500 avg payout
+Monsoon Season (Jun–Sep):
+  ~3 events/week × 150 workers affected × ₹500 avg payout
   = ₹2,25,000/week in payouts
-  Loss Ratio = 2.27  →  Requires reinsurance above 1.5x
+  Loss Ratio = 2.27  →  Reinsurance covers above 1.5x
 
 Off-Season (Oct–May):
-  ~0.8 events/week × ~40 affected workers × ₹500 avg payout
+  ~0.8 events/week × 40 workers affected × ₹500 avg payout
   = ₹16,000/week in payouts
   Loss Ratio = 0.16  →  Highly profitable
 
 Annual Per-Worker Economics:
-  Premium collected:  ₹99 × 52 weeks  = ₹5,148
+  Premium collected:  ₹99 × 52 weeks = ₹5,148
   Average claims:     ~₹1,800/year
-  Net margin:         ~65% off-season / reinsured in-season
+  Gross margin:       ~65% off-season / reinsured in-season
 ```
 
 ### Sustainability Strategy
+
 - **Dynamic surge pricing** during monsoon season (+40% premium uplift)
 - **Reinsurance layer** covers loss ratios above 1.5x
-- **Zone-level risk differentiation** prevents adverse selection (risky zones priced higher)
-- **Fraud detection** targets <5% fraudulent claim rate
+- **Zone-level risk differentiation** prevents adverse selection — risky zones priced higher
+- **GigPoints loyalty** reduces churn — Champion-tier workers target 85%+ renewal rate
+- **Referral + group enrollment** grows the risk pool organically within zones
+- **Fraud detection** targets < 5% fraudulent claim rate
 
 ---
 
-## 10. Team
+## 14. Team
 
 | Name | Role |
 |---|---|
-| Rian K Sinu | Frontend + UX |
+| Rian K Sinu | Full Stack Development |
 | Romit Deokar | AI/ML Engineering |
-| Vandanapu Saidhiraj | Full Stack Developer |
+| Vandanapu Saidhiraj | Frontend + UX |
 | Pragalbh Rai | Backend + DevOps |
-| Manmohan Singh | Database |
+| Manmohan Singh | Backend + DevOps |
 
 **University:** SRM University
-**Track:** Q-Commerce / Instant Delivery
+**Persona Track:** Q-Commerce / Instant Delivery (Zepto / Blinkit)
 
 ---
 
-##  Submission Links
+## 📎 Submission Links
 
 - **GitHub Repository:** *(this repo)*
-- **Demo Video (2 min):** [Link to be added]
+- **Demo Video (2 min):** [Link to be added — Phase 1]
 - **Figma Wireframes:** [Link to be added]
 
 ---
+> *Built for Guidewire DEVTrails 2026 — Unicorn Chase*
+>
+> *"Build fast. Spend smart. Don't go broke. Happy Hacking."*
