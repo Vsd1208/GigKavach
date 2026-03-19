@@ -400,7 +400,7 @@ export default function WorkerApp({ onBack }) {
               <button onClick={() => setShowGigBot(true)}
                       className="absolute bottom-20 right-4 w-12 h-12 rounded-full gradient-primary flex items-center justify-center shadow-lg shadow-primary/40 z-30 active:scale-95 transition-transform">
                 <MessageCircle size={20} className="text-white" />
-                <div className="absolute -top-0.5 -right-0.5 w-[15px] h-[15px] rounded-full bg-success flex items-center justify-center border border-dark">
+                <div className="absolute -top-0.5 -right-0.5 w-[15px] h-[15px] rounded-full bg-success flex items-center justify-center border border-white">
                   <span className="text-[6px] text-white font-bold">AI</span>
                 </div>
               </button>
@@ -462,11 +462,11 @@ function GigBotPanel({ onClose }) {
   }
 
   return (
-    <div className={`absolute inset-x-0 bottom-[56px] top-[40px] z-40 backdrop-blur-2xl flex flex-col rounded-t-3xl shadow-2xl overflow-hidden ${
+    <div className={`absolute inset-x-0 bottom-[56px] z-40 backdrop-blur-2xl flex flex-col rounded-t-3xl shadow-2xl overflow-hidden ${
       isDark 
         ? 'bg-dark/97 border-t border-primary/20' 
         : 'bg-white/98 border-t border-gray-200'
-    }`}>
+    }`} style={{ height: '55%', maxHeight: '420px' }}>
       <div className={`flex items-center justify-between px-4 py-2.5 border-b ${isDark ? 'border-dark-border' : 'border-gray-100'}`}>
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg gradient-primary flex items-center justify-center">

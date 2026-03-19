@@ -102,7 +102,7 @@ export default function LandingPage({ onNavigate }) {
               <div className="flex items-center gap-4">
                 <div className="flex -space-x-2">
                   {['R', 'P', 'A', 'M', 'S'].map((l, i) => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-bold border-2 border-dark">
+                    <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-bold border-2 border-white dark:border-dark">
                       {l}
                     </div>
                   ))}
@@ -352,7 +352,7 @@ export default function LandingPage({ onNavigate }) {
 // ─── PHONE MOCKUP COMPONENT (Compact) ───────────────
 function PhoneMockup() {
   return (
-    <div className="w-[320px] rounded-[36px] border-2 border-dark-border/80 bg-dark overflow-hidden shadow-2xl shadow-black/40 relative">
+    <div className="w-[320px] rounded-[36px] border-2 border-[#1a1333] dark:border-dark-border/80 bg-dark overflow-hidden shadow-2xl shadow-black/40 relative landing-phone-frame">
       {/* Notch */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[26px] bg-black rounded-b-2xl z-10" />
       
