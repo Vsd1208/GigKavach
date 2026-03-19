@@ -22,6 +22,51 @@
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* ─── THEME VARIABLES ─────────────────────── */
+:root {
+  --bg-main: #ffffff;
+  --bg-card: #ffffff;
+  --bg-surface: #f7f6fb;
+  --bg-border: #e2dff0;
+  --txt-primary: #1a1333;
+  --txt-secondary: #5a5275;
+  --txt-muted: #8b83a8;
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-strong-bg: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(108, 92, 231, 0.12);
+  --glass-strong-border: rgba(108, 92, 231, 0.18);
+  --phone-border: #e2dff0;
+  --phone-shadow: rgba(108, 92, 231, 0.08);
+  --phone-glow: rgba(108, 92, 231, 0.06);
+  --phone-notch: #e8e6f0;
+  --scrollbar-track: #f5f5f5;
+  --scrollbar-thumb: #d4d0e4;
+  --chart-grid: rgba(108, 92, 231, 0.08);
+  --chart-tick: #8b83a8;
+}
+
+[data-theme="dark"] {
+  --bg-main: #0F0A1E;
+  --bg-card: #1A1333;
+  --bg-surface: #231C3D;
+  --bg-border: #2D2550;
+  --txt-primary: #F5F3FF;
+  --txt-secondary: #B8B0D4;
+  --txt-muted: #7C72A0;
+  --glass-bg: rgba(26, 19, 51, 0.7);
+  --glass-strong-bg: rgba(26, 19, 51, 0.9);
+  --glass-border: rgba(108, 92, 231, 0.15);
+  --glass-strong-border: rgba(108, 92, 231, 0.2);
+  --phone-border: #2D2550;
+  --phone-shadow: rgba(0, 0, 0, 0.5);
+  --phone-glow: rgba(108, 92, 231, 0.15);
+  --phone-notch: #000;
+  --scrollbar-track: #0F0A1E;
+  --scrollbar-thumb: #2D2550;
+  --chart-grid: rgba(45, 37, 80, 0.5);
+  --chart-tick: #7C72A0;
+}
+
 @layer base {
   * {
     margin: 0;
@@ -35,10 +80,11 @@
 
   body {
     font-family: var(--font-sans);
-    background: var(--color-dark);
-    color: var(--color-text-primary);
+    background: var(--bg-main);
+    color: var(--txt-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   ::-webkit-scrollbar {
@@ -47,11 +93,11 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: var(--color-dark);
+    background: var(--scrollbar-track);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--color-dark-border);
+    background: var(--scrollbar-thumb);
     border-radius: 3px;
   }
 
@@ -61,18 +107,73 @@
 }
 
 @layer utilities {
+  /* ─── THEMED UTILITIES ────────────────── */
+  .bg-themed {
+    background: var(--bg-main);
+    transition: background-color 0.3s ease;
+  }
+
+  .bg-themed-card {
+    background: var(--bg-card);
+    transition: background-color 0.3s ease;
+  }
+
+  .bg-themed-surface {
+    background: var(--bg-surface);
+    transition: background-color 0.3s ease;
+  }
+
+  .border-themed {
+    border-color: var(--bg-border);
+    transition: border-color 0.3s ease;
+  }
+
+  .text-themed {
+    color: var(--txt-primary);
+    transition: color 0.3s ease;
+  }
+
+  .text-themed-secondary {
+    color: var(--txt-secondary);
+    transition: color 0.3s ease;
+  }
+
+  .text-themed-muted {
+    color: var(--txt-muted);
+    transition: color 0.3s ease;
+  }
+
   .glass {
-    background: rgba(26, 19, 51, 0.7);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(108, 92, 231, 0.15);
+    border: 1px solid var(--glass-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .glass-strong {
-    background: rgba(26, 19, 51, 0.9);
+    background: var(--glass-strong-bg);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(108, 92, 231, 0.2);
+    border: 1px solid var(--glass-strong-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card-insurance {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .card-elevated {
+    background: var(--glass-strong-bg);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid var(--glass-strong-border);
+    box-shadow: 0 4px 24px rgba(108, 92, 231, 0.06);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
   .gradient-primary {
@@ -84,6 +185,10 @@
   }
 
   .gradient-success {
+    background: linear-gradient(135deg, #00B894, #00D2D3);
+  }
+
+  .gradient-emerald {
     background: linear-gradient(135deg, #00B894, #00D2D3);
   }
 
@@ -160,98 +265,37 @@
     background-clip: text;
   }
 
-  /* Professional insurance card styles */
-  .card-insurance {
-    background: linear-gradient(145deg, rgba(26, 19, 51, 0.85), rgba(35, 28, 61, 0.65));
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(108, 92, 231, 0.12);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(108, 92, 231, 0.06);
-  }
-
-  .card-elevated {
-    background: rgba(26, 19, 51, 0.8);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(108, 92, 231, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  }
-
-  .badge-glow {
-    box-shadow: 0 0 12px currentColor;
-  }
-
-  .gradient-gold {
-    background: linear-gradient(135deg, #F0C27F, #FC5C7D);
-  }
-
-  .gradient-emerald {
-    background: linear-gradient(135deg, #00B894, #55EFC4);
-  }
-
-  .gradient-ocean {
-    background: linear-gradient(135deg, #6C5CE7, #74B9FF);
-  }
-
-  .gradient-sunset {
-    background: linear-gradient(135deg, #FF6B6B, #FDCB6E);
-  }
-
   .pattern-dots {
-    background-image: radial-gradient(rgba(108, 92, 231, 0.08) 1px, transparent 1px);
-    background-size: 16px 16px;
-  }
-
-  .stagger-1 { animation-delay: 0.05s; }
-  .stagger-2 { animation-delay: 0.1s; }
-  .stagger-3 { animation-delay: 0.15s; }
-  .stagger-4 { animation-delay: 0.2s; }
-  .stagger-5 { animation-delay: 0.25s; }
-
-  .scale-in {
-    animation: scale-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  @keyframes scale-in {
-    0% { transform: scale(0.9); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-
-  .slide-right {
-    animation: slide-right 0.4s ease-out;
-  }
-
-  @keyframes slide-right {
-    0% { transform: translateX(-20px); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+    background-image: radial-gradient(circle, var(--bg-border) 1px, transparent 1px);
+    background-size: 20px 20px;
   }
 }
 
 /* Leaflet overrides */
 .leaflet-container {
-  background: var(--color-dark) !important;
+  background: var(--bg-main) !important;
   border-radius: 16px;
 }
 
-.leaflet-tile-pane {
+[data-theme="dark"] .leaflet-tile-pane {
   filter: brightness(0.7) saturate(0.8) hue-rotate(200deg);
 }
 
 .leaflet-control-zoom a {
-  background: var(--color-dark-card) !important;
-  color: var(--color-text-primary) !important;
-  border-color: var(--color-dark-border) !important;
+  background: var(--bg-card) !important;
+  color: var(--txt-primary) !important;
+  border-color: var(--bg-border) !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: var(--color-dark-card) !important;
-  color: var(--color-text-primary) !important;
+  background: var(--bg-card) !important;
+  color: var(--txt-primary) !important;
   border-radius: 12px !important;
-  border: 1px solid var(--color-dark-border);
+  border: 1px solid var(--bg-border);
 }
 
 .leaflet-popup-tip {
-  background: var(--color-dark-card) !important;
+  background: var(--bg-card) !important;
 }
 
 /* Mobile phone frame */
@@ -259,10 +303,20 @@
   width: 375px;
   height: 812px;
   border-radius: 40px;
-  border: 3px solid var(--color-dark-border);
+  border: 2px solid #1a1333;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(108, 92, 231, 0.15);
+  box-shadow: 0 25px 80px var(--phone-shadow), 0 0 60px var(--phone-glow);
+  background: var(--bg-main);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .phone-frame {
+  border-color: var(--phone-border);
+}
+
+[data-theme="dark"] .landing-phone-frame {
+  border-color: #2D2550 !important;
 }
 
 .phone-notch {
@@ -276,3 +330,47 @@
   border-radius: 0 0 20px 20px;
   z-index: 50;
 }
+
+/* ─── LIGHT THEME SPECIFIC OVERRIDES ──── */
+:root .bg-dark { background: var(--bg-main); }
+:root .bg-dark-card { background: var(--bg-card); }
+:root .bg-dark-surface { background: #f7f6fb; }
+:root .border-dark-border { border-color: var(--bg-border); }
+:root .text-text-primary { color: var(--txt-primary); }
+:root .text-text-secondary { color: var(--txt-secondary); }
+:root .text-text-muted { color: var(--txt-muted); }
+
+/* Light theme opacity variant overrides - ensure white backgrounds */
+:root .bg-dark\/90 { background: rgba(255, 255, 255, 0.95) !important; }
+:root .bg-dark\/50 { background: rgba(255, 255, 255, 0.5) !important; }
+:root .bg-dark\/30 { background: rgba(255, 255, 255, 0.3) !important; }
+:root .bg-dark\/97 { background: rgba(255, 255, 255, 0.98) !important; }
+:root .bg-dark-surface\/50 { background: rgba(255, 255, 255, 0.5) !important; }
+:root .bg-dark-surface\/40 { background: rgba(255, 255, 255, 0.6) !important; }
+:root .bg-dark-card\/50 { background: rgba(255, 255, 255, 0.5) !important; }
+:root .bg-dark-card\/30 { background: rgba(255, 255, 255, 0.3) !important; }
+:root .bg-dark-card\/80 { background: rgba(255, 255, 255, 0.9) !important; }
+:root .bg-dark-border { background: #e2dff0; }
+:root .bg-dark-border\/60 { background: rgba(226, 223, 240, 0.6); }
+:root .border-dark-border\/60 { border-color: rgba(226, 223, 240, 0.6); }
+:root .border-dark-border\/40 { border-color: rgba(226, 223, 240, 0.4); }
+:root .border-dark-border\/20 { border-color: rgba(226, 223, 240, 0.2); }
+
+[data-theme="dark"] .bg-dark { background: #0F0A1E; }
+[data-theme="dark"] .bg-dark-card { background: #1A1333; }
+[data-theme="dark"] .bg-dark-surface { background: #231C3D; }
+[data-theme="dark"] .border-dark-border { border-color: #2D2550; }
+[data-theme="dark"] .text-text-primary { color: #F5F3FF; }
+[data-theme="dark"] .text-text-secondary { color: #B8B0D4; }
+[data-theme="dark"] .text-text-muted { color: #7C72A0; }
+
+/* Dark theme specific overrides for contrast */
+[data-theme="dark"] .bg-dark\/90 { background: rgba(15, 10, 30, 0.9); }
+[data-theme="dark"] .bg-dark\/50 { background: rgba(15, 10, 30, 0.5); }
+[data-theme="dark"] .bg-dark\/30 { background: rgba(15, 10, 30, 0.3); }
+[data-theme="dark"] .bg-dark\/97 { background: rgba(15, 10, 30, 0.97); }
+[data-theme="dark"] .bg-dark-surface\/50 { background: rgba(35, 28, 61, 0.5); }
+[data-theme="dark"] .bg-dark-surface\/40 { background: rgba(35, 28, 61, 0.4); }
+[data-theme="dark"] .bg-dark-card\/50 { background: rgba(26, 19, 51, 0.5); }
+[data-theme="dark"] .bg-dark-card\/30 { background: rgba(26, 19, 51, 0.3); }
+[data-theme="dark"] .bg-dark-card\/80 { background: rgba(26, 19, 51, 0.8); }

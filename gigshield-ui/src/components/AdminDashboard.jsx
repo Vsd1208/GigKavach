@@ -1,6 +1,17 @@
-import { useState, useEffect } from 'react'
-import { Shield, ArrowLeft, Map, Activity, BarChart3, AlertTriangle, Sliders, Award, Users, Clock, TrendingUp, TrendingDown, IndianRupee, CloudRain, Wind, Thermometer, CheckCircle2, XCircle, MapPin, Zap, ChevronRight, ChevronDown, Bell, Search, Filter, RefreshCw, Eye, Download, Calendar, Globe, Layers, Target, PieChart, Flame } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { Shield, ArrowLeft, Map, Activity, BarChart3, AlertTriangle, Sliders, Award, Users, Clock, TrendingUp, TrendingDown, IndianRupee, CloudRain, Wind, Thermometer, CheckCircle2, XCircle, MapPin, Zap, ChevronRight, ChevronDown, Bell, Search, Filter, RefreshCw, Eye, Download, Calendar, Globe, Layers, Target, PieChart, Flame, ShieldAlert, Fingerprint, Network, Radio, Wifi, Moon, Sun } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RPieChart, Pie, Cell, RadialBarChart, RadialBar, Legend } from 'recharts'
+import L from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+// Fix Leaflet default icon issue with bundlers
+delete L.Icon.Default.prototype._getIconUrl
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+})
 
 const sidebarItems = [
   { id: 'overview', label: 'Overview', icon: BarChart3 },
@@ -8,6 +19,7 @@ const sidebarItems = [
   { id: 'live', label: 'Live Feed', icon: Activity },
   { id: 'analytics', label: 'Analytics', icon: TrendingUp },
   { id: 'fraud', label: 'Fraud Console', icon: AlertTriangle },
+  { id: 'antispoofing', label: 'Anti-Spoofing', icon: ShieldAlert },
   { id: 'simulator', label: 'Risk Simulator', icon: Sliders },
   { id: 'forecast', label: '7-Day Forecast', icon: Calendar },
   { id: 'loyalty', label: 'Loyalty Monitor', icon: Award },
@@ -72,6 +84,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 export default function AdminDashboard({ onBack }) {
   const [activeTab, setActiveTab] = useState('overview')
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const { isDark, toggleTheme } = useTheme()
 
   return (
     <div className="min-h-screen bg-dark flex">
@@ -119,6 +132,9 @@ export default function AdminDashboard({ onBack }) {
               <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
               Live Monitoring
             </div>
+            <button onClick={toggleTheme} className="w-8 h-8 rounded-lg bg-dark-surface border border-dark-border flex items-center justify-center hover:border-primary/30 transition-all" title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}>
+              {isDark ? <Sun size={14} className="text-warning" /> : <Moon size={14} className="text-text-secondary" />}
+            </button>
             <div className="relative">
               <Bell size={18} className="text-text-secondary" />
               <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-danger" />
@@ -134,6 +150,7 @@ export default function AdminDashboard({ onBack }) {
           {activeTab === 'fraud' && <FraudPanel />}
           {activeTab === 'simulator' && <SimulatorPanel />}
           {activeTab === 'forecast' && <ForecastPanel />}
+          {activeTab === 'antispoofing' && <AntiSpoofingPanel />}
           {activeTab === 'loyalty' && <LoyaltyPanel />}
         </div>
       </main>
@@ -267,8 +284,89 @@ function OverviewPanel() {
   )
 }
 
-// MAP PANEL
+// MAP PANEL (with real Leaflet map)
 function MapPanel() {
+  const mapRef = useRef(null)
+  const mapInstanceRef = useRef(null)
+
+  useEffect(() => {
+    if (mapInstanceRef.current) return // already initialized
+
+    const map = L.map(mapRef.current, {
+      center: [12.9352, 77.6245],
+      zoom: 12,
+      zoomControl: true,
+      scrollWheelZoom: true,
+    })
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19,
+    }).addTo(map)
+
+    // Add zone markers with circles
+    zones.forEach(zone => {
+      const color = zone.status === 'safe' ? '#00B894' : zone.status === 'watch' ? '#FDCB6E' : '#FF6B6B'
+
+      // Zone radius circle
+      L.circle([zone.lat, zone.lng], {
+        radius: 2500,
+        color: color,
+        fillColor: color,
+        fillOpacity: 0.12,
+        weight: 2,
+        opacity: 0.6,
+      }).addTo(map)
+
+      // Zone marker
+      const markerIcon = L.divIcon({
+        className: 'custom-zone-marker',
+        html: `<div style="
+          width: 36px; height: 36px; border-radius: 50%;
+          background: ${color}30; border: 2.5px solid ${color};
+          display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 2px 8px ${color}40;
+        "><div style="width: 10px; height: 10px; border-radius: 50%; background: ${color};"></div></div>`,
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
+      })
+
+      const marker = L.marker([zone.lat, zone.lng], { icon: markerIcon }).addTo(map)
+
+      marker.bindPopup(`
+        <div style="font-family: Inter, sans-serif; min-width: 180px;">
+          <div style="font-weight: 700; font-size: 13px; margin-bottom: 2px;">${zone.name}</div>
+          <div style="font-size: 10px; color: #94A3B8; margin-bottom: 8px;">${zone.id} &bull; ${zone.workers} workers</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center; margin-bottom: 8px;">
+            <div><div style="font-size: 9px; color: #94A3B8;">Rain</div><div style="font-size: 12px; font-weight: 600;">${zone.rainfall}mm</div></div>
+            <div><div style="font-size: 9px; color: #94A3B8;">AQI</div><div style="font-size: 12px; font-weight: 600;">${zone.aqi}</div></div>
+            <div><div style="font-size: 9px; color: #94A3B8;">Temp</div><div style="font-size: 12px; font-weight: 600;">${zone.temp}&deg;C</div></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding-top: 6px; border-top: 1px solid #E2E8F0; font-size: 10px;">
+            <span style="color: #94A3B8;">Risk Score</span>
+            <span style="font-weight: 700; color: ${color};">${zone.risk.toFixed(2)}</span>
+          </div>
+          <div style="margin-top: 4px; display: flex; justify-content: space-between; font-size: 10px;">
+            <span style="color: #94A3B8;">Status</span>
+            <span style="font-weight: 700; color: ${color}; text-transform: uppercase;">${zone.status}</span>
+          </div>
+        </div>
+      `, { className: 'leaflet-popup' })
+    })
+
+    mapInstanceRef.current = map
+
+    // Force resize after mount
+    setTimeout(() => map.invalidateSize(), 100)
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove()
+        mapInstanceRef.current = null
+      }
+    }
+  }, [])
+
   return (
     <div className="space-y-6">
       <div className="glass rounded-2xl p-5">
@@ -280,65 +378,7 @@ function MapPanel() {
             <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-full bg-danger" /> Disrupted</span>
           </div>
         </div>
-        {/* Map placeholder - since Leaflet needs specific setup, showing a rich placeholder */}
-        <div className="relative h-[500px] rounded-2xl bg-dark-surface border border-dark-border overflow-hidden">
-          <div className="absolute inset-0 opacity-20" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236C5CE7' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-          {/* Simulated map with zone circles */}
-          {zones.map((zone, i) => {
-            const positions = [
-              { x: '45%', y: '55%' },
-              { x: '40%', y: '35%' },
-              { x: '55%', y: '25%' },
-              { x: '75%', y: '30%' },
-              { x: '35%', y: '65%' },
-            ]
-            const pos = positions[i]
-            const color = zone.status === 'safe' ? '#00B894' : zone.status === 'watch' ? '#FDCB6E' : '#FF6B6B'
-            return (
-              <div key={i} className="absolute group cursor-pointer" style={{ left: pos.x, top: pos.y, transform: 'translate(-50%, -50%)' }}>
-                {/* Pulse ring */}
-                <div className="absolute inset-0 rounded-full animate-ping" style={{ background: `${color}20`, width: '80px', height: '80px', left: '-20px', top: '-20px' }} />
-                {/* Zone circle */}
-                <div className="relative w-10 h-10 rounded-full flex items-center justify-center border-2 z-10"
-                     style={{ background: `${color}30`, borderColor: color }}>
-                  <MapPin size={18} style={{ color }} />
-                </div>
-                {/* Tooltip */}
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 glass-strong rounded-xl p-3 min-w-[180px] opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                  <p className="text-xs font-bold text-text-primary">{zone.name}</p>
-                  <p className="text-[10px] text-text-muted mb-2">{zone.id} • {zone.workers} workers</p>
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div>
-                      <CloudRain size={10} className="mx-auto text-text-muted mb-0.5" />
-                      <p className="text-[10px] text-text-primary">{zone.rainfall}mm</p>
-                    </div>
-                    <div>
-                      <Wind size={10} className="mx-auto text-text-muted mb-0.5" />
-                      <p className="text-[10px] text-text-primary">{zone.aqi}</p>
-                    </div>
-                    <div>
-                      <Thermometer size={10} className="mx-auto text-text-muted mb-0.5" />
-                      <p className="text-[10px] text-text-primary">{zone.temp}°C</p>
-                    </div>
-                  </div>
-                  <div className="mt-2 pt-2 border-t border-dark-border flex justify-between text-[10px]">
-                    <span className="text-text-muted">Risk</span>
-                    <span className="font-bold" style={{ color }}>{zone.risk.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-          {/* Map labels */}
-          <div className="absolute bottom-4 left-4 glass-strong rounded-lg p-2 text-[10px] text-text-muted">
-            Bangalore, India • 5 Active Zones
-          </div>
-          <div className="absolute top-4 right-4 glass-strong rounded-lg p-2 text-[10px] text-text-muted flex items-center gap-1">
-            <Globe size={10} /> OpenStreetMap + Leaflet
-          </div>
-        </div>
+        <div ref={mapRef} className="h-[500px] rounded-2xl overflow-hidden border border-dark-border" style={{ zIndex: 1 }} />
       </div>
 
       {/* Zone Detail Cards */}
@@ -894,6 +934,291 @@ function LoyaltyPanel() {
                 <p className="text-xs text-primary font-semibold">{r.cost}</p>
                 <p className="text-[10px] text-text-muted">{r.time}</p>
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ANTI-SPOOFING PANEL
+function AntiSpoofingPanel() {
+  const spoofingAttempts = [
+    { id: 'SPF-001', ring: 'Ring Alpha', accounts: 460, method: 'GPS Spoof + Fake Deliveries', detected: 'Network Graph', status: 'quarantined', time: '12:02 PM' },
+    { id: 'SPF-002', ring: 'Ring Beta', accounts: 35, method: 'Cell Tower Mismatch', detected: 'Device Integrity', status: 'quarantined', time: '12:03 PM' },
+    { id: 'SPF-003', ring: null, accounts: 3, method: 'Teleportation Event', detected: 'Velocity Analysis', status: 'blocked', time: '12:04 PM' },
+  ]
+
+  const validationLayers = [
+    { name: 'GPS Velocity & Trajectory', weight: '20%', checks: 'Road-snapping, jitter analysis, teleportation detection', icon: MapPin, color: '#6C5CE7', passRate: 94 },
+    { name: 'Device Integrity', weight: '25%', checks: 'Cell tower, Wi-Fi BSSID, IP geolocation cross-check', icon: Wifi, color: '#00D2D3', passRate: 97 },
+    { name: 'Behavioral Biometrics', weight: '15%', checks: 'Shift patterns, accelerometer, delivery cadence', icon: Fingerprint, color: '#FDCB6E', passRate: 91 },
+    { name: 'Network Coordination', weight: '30%', checks: 'Temporal clustering, social graph, device fingerprint clusters', icon: Network, color: '#FF6B6B', passRate: 99 },
+    { name: 'Environmental Consistency', weight: '10%', checks: 'Ambient light, barometric pressure, signal quality', icon: Radio, color: '#00B894', passRate: 88 },
+  ]
+
+  return (
+    <div className="space-y-6">
+      {/* Alert Banner */}
+      <div className="bg-danger/10 border border-danger/30 rounded-2xl p-5 flex items-start gap-4">
+        <div className="w-12 h-12 rounded-xl bg-danger/20 flex items-center justify-center shrink-0">
+          <ShieldAlert size={24} className="text-danger" />
+        </div>
+        <div>
+          <h3 className="text-base font-bold text-danger mb-1">Market Crash Defense Active</h3>
+          <p className="text-sm text-text-secondary mb-2">
+            Coordinated GPS spoofing attack detected: 498 fraudulent claims from organized ring blocked in under 3 minutes. 
+            2 legitimate workers paid normally. Liquidity pool intact.
+          </p>
+          <div className="flex gap-3">
+            <span className="px-2.5 py-1 rounded-lg bg-danger/20 text-danger text-xs font-bold">498 Blocked</span>
+            <span className="px-2.5 py-1 rounded-lg bg-success/20 text-success text-xs font-bold">2 Approved</span>
+            <span className="px-2.5 py-1 rounded-lg bg-primary/20 text-primary text-xs font-bold">0 False Positives</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+        {[
+          { label: 'Ring Detected', value: '2', color: 'danger' },
+          { label: 'Accounts Quarantined', value: '495', color: 'danger' },
+          { label: 'Individual Blocks', value: '3', color: 'warning' },
+          { label: 'False Positive Rate', value: '0.0%', color: 'success' },
+          { label: 'Detection Time', value: '<3 min', color: 'primary' },
+        ].map((s, i) => (
+          <div key={i} className="glass rounded-2xl p-4 text-center">
+            <p className={`text-2xl font-bold text-${s.color}`}>{s.value}</p>
+            <p className="text-xs text-text-muted mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* 5-Layer Validation Architecture */}
+      <div className="glass rounded-2xl p-5">
+        <h3 className="text-sm font-bold text-text-primary mb-1">5-Layer Adversarial Scoring Architecture</h3>
+        <p className="text-xs text-text-muted mb-4">Each layer produces an independent score. Composite score determines claim outcome.</p>
+        
+        <div className="space-y-3">
+          {validationLayers.map((layer, i) => (
+            <div key={i} className="p-4 rounded-xl bg-dark-surface border border-dark-border/50">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: `${layer.color}20` }}>
+                  <layer.icon size={20} style={{ color: layer.color }} />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="text-sm font-bold text-text-primary">{layer.name}</p>
+                    <span className="text-xs font-mono text-primary">{layer.weight}</span>
+                  </div>
+                  <p className="text-xs text-text-secondary mb-2">{layer.checks}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 rounded-full bg-dark-border overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: `${layer.passRate}%`, background: layer.color }} />
+                    </div>
+                    <span className="text-xs font-bold text-text-primary">{layer.passRate}%</span>
+                    <span className="text-[10px] text-text-muted">legit pass rate</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Scoring Thresholds */}
+        <div className="mt-4 p-4 rounded-xl bg-dark-surface">
+          <p className="text-xs font-bold text-text-primary mb-2">Composite Score Thresholds</p>
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-success" />
+              <span className="text-xs text-text-primary font-medium w-24">≥ 0.75</span>
+              <span className="text-xs text-success font-bold">AUTO APPROVE</span>
+              <span className="text-xs text-text-muted">— Payout in &lt;60 seconds</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-warning" />
+              <span className="text-xs text-text-primary font-medium w-24">0.50 – 0.74</span>
+              <span className="text-xs text-warning font-bold">SOFT HOLD</span>
+              <span className="text-xs text-text-muted">— 15-min review window, auto-release if no action</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-danger" />
+              <span className="text-xs text-text-primary font-medium w-24">&lt; 0.50</span>
+              <span className="text-xs text-danger font-bold">AUTO BLOCK</span>
+              <span className="text-xs text-text-muted">— Worker can appeal via GigBot</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Detected Spoofing Attempts */}
+      <div className="glass rounded-2xl p-5">
+        <h3 className="text-sm font-bold text-text-primary mb-4">Detected Spoofing Attempts (Today)</h3>
+        <div className="space-y-3">
+          {spoofingAttempts.map((attempt, i) => (
+            <div key={i} className="p-4 rounded-xl bg-dark-surface border border-dark-border/50">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <ShieldAlert size={16} className="text-danger" />
+                  <span className="text-sm font-bold text-text-primary">{attempt.id}</span>
+                  {attempt.ring && (
+                    <span className="px-2 py-0.5 rounded-full bg-danger/20 text-danger text-[10px] font-bold">{attempt.ring}</span>
+                  )}
+                </div>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  attempt.status === 'quarantined' ? 'bg-danger/20 text-danger' : 'bg-warning/20 text-warning'
+                }`}>{attempt.status.toUpperCase()}</span>
+              </div>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <p className="text-text-muted">Accounts</p>
+                  <p className="text-text-primary font-bold">{attempt.accounts}</p>
+                </div>
+                <div>
+                  <p className="text-text-muted">Method</p>
+                  <p className="text-text-primary">{attempt.method}</p>
+                </div>
+                <div>
+                  <p className="text-text-muted">Detected By</p>
+                  <p className="text-primary font-semibold">{attempt.detected}</p>
+                </div>
+                <div>
+                  <p className="text-text-muted">Time</p>
+                  <p className="text-text-primary">{attempt.time}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Network Graph Visualization (Simulated) */}
+      <div className="glass rounded-2xl p-5">
+        <h3 className="text-sm font-bold text-text-primary mb-1">Fraud Ring Network Graph</h3>
+        <p className="text-xs text-text-muted mb-4">Nodes = claimants | Edges = shared attributes (device, IP, referral, timing)</p>
+        <div className="relative h-[300px] rounded-xl bg-dark-surface border border-dark-border overflow-hidden">
+          {/* Legitimate cluster (small, spread) */}
+          <div className="absolute left-[15%] top-[50%] -translate-y-1/2">
+            <p className="text-[10px] text-success font-bold mb-2">Legitimate Workers</p>
+            <div className="relative w-[120px] h-[120px]">
+              {[
+                { x: 20, y: 10 }, { x: 60, y: 5 }, { x: 95, y: 25 },
+                { x: 10, y: 55 }, { x: 50, y: 45 }, { x: 85, y: 60 },
+                { x: 30, y: 90 }, { x: 70, y: 85 },
+              ].map((p, i) => (
+                <div key={i} className="absolute w-3 h-3 rounded-full bg-success border border-success/50" 
+                     style={{ left: p.x, top: p.y }} />
+              ))}
+              <svg className="absolute inset-0 w-full h-full">
+                <line x1="25" y1="15" x2="65" y2="10" stroke="#00B894" strokeWidth="0.5" strokeOpacity="0.3" />
+                <line x1="55" y1="50" x2="90" y2="65" stroke="#00B894" strokeWidth="0.5" strokeOpacity="0.3" />
+              </svg>
+            </div>
+          </div>
+          
+          {/* Fraud ring cluster (dense, tightly connected) */}
+          <div className="absolute right-[10%] top-[50%] -translate-y-1/2">
+            <p className="text-[10px] text-danger font-bold mb-2">Ring Alpha (460 accounts)</p>
+            <div className="relative w-[160px] h-[160px]">
+              {Array.from({ length: 20 }, (_, i) => {
+                const angle = (i / 20) * Math.PI * 2
+                const r = 40 + Math.random() * 25
+                return { x: 80 + Math.cos(angle) * r, y: 80 + Math.sin(angle) * r }
+              }).map((p, i) => (
+                <div key={i} className="absolute w-2.5 h-2.5 rounded-full bg-danger border border-danger/50" 
+                     style={{ left: p.x, top: p.y }} />
+              ))}
+              {/* Dense interconnections */}
+              <svg className="absolute inset-0 w-full h-full">
+                {Array.from({ length: 30 }, (_, i) => {
+                  const a1 = (i / 20) * Math.PI * 2
+                  const a2 = ((i + 3) / 20) * Math.PI * 2
+                  const r1 = 50, r2 = 55
+                  return <line key={i} x1={80+Math.cos(a1)*r1} y1={80+Math.sin(a1)*r1} 
+                              x2={80+Math.cos(a2)*r2} y2={80+Math.sin(a2)*r2} 
+                              stroke="#FF6B6B" strokeWidth="0.5" strokeOpacity="0.4" />
+                })}
+              </svg>
+              <div className="absolute inset-0 rounded-full border-2 border-dashed border-danger/30" 
+                   style={{ left: 30, top: 30, width: 100, height: 100 }} />
+            </div>
+          </div>
+
+          {/* Labels */}
+          <div className="absolute bottom-3 left-3 flex gap-4 text-[10px]">
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-success" /> Legitimate (sparse edges)</span>
+            <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-danger" /> Fraud Ring (dense cluster)</span>
+          </div>
+          <div className="absolute top-3 right-3 text-[10px] text-text-muted">Louvain Community Detection</div>
+        </div>
+      </div>
+
+      {/* Temporal Distribution */}
+      <div className="grid lg:grid-cols-2 gap-6">
+        <div className="glass rounded-2xl p-5">
+          <h3 className="text-sm font-bold text-text-primary mb-3">Claim Submission Timeline</h3>
+          <p className="text-xs text-text-muted mb-4">Legitimate claims spread over 5–15 min. Fraud rings submit in &lt;60 sec burst.</p>
+          <div className="space-y-3">
+            <div>
+              <p className="text-xs text-success font-semibold mb-1">Legitimate Pattern (34 claims)</p>
+              <div className="h-8 bg-dark-surface rounded-lg overflow-hidden relative">
+                {[5, 12, 18, 25, 30, 35, 40, 42, 48, 52, 55, 60, 65, 68, 72, 75, 78, 80, 82, 85, 87, 88, 90, 91, 92, 93, 94, 95, 96, 97, 97.5, 98, 98.5, 99].map((p, i) => (
+                  <div key={i} className="absolute top-0 bottom-0 w-px bg-success/70" style={{ left: `${p}%` }} />
+                ))}
+                <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[8px] text-text-muted">
+                  <span>0s</span><span>5min</span><span>10min</span><span>15min</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs text-danger font-semibold mb-1">Fraud Ring Pattern (498 claims)</p>
+              <div className="h-8 bg-dark-surface rounded-lg overflow-hidden relative">
+                <div className="absolute top-0 bottom-0 left-[2%] w-[6%] bg-danger/40 rounded" />
+                <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[8px] text-text-muted">
+                  <span>0s</span><span>45s burst</span><span></span><span>15min</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="glass rounded-2xl p-5">
+          <h3 className="text-sm font-bold text-text-primary mb-3">Honest Worker Protection</h3>
+          <p className="text-xs text-text-muted mb-4">How we prevent false positives during GPS degradation events.</p>
+          <div className="space-y-2.5">
+            {[
+              { label: 'Zone Radius Expansion', desc: '+25% during active triggers (2.5km → 3.1km)', icon: MapPin },
+              { label: 'Reputation Fast Lane', desc: 'Veteran/Champion tiers get +0.15 trust bonus', icon: Award },
+              { label: 'Soft Hold (not hard block)', desc: 'Borderline claims auto-release in 15 min', icon: Clock },
+              { label: 'Transparent Appeals', desc: 'One-tap review + GigBot explanation in Hindi/English', icon: CheckCircle2 },
+              { label: 'Goodwill Gesture', desc: 'Successful appeals get +50 bonus GigPoints', icon: Award },
+            ].map((item, i) => (
+              <div key={i} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-dark-surface">
+                <item.icon size={14} className="text-success mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-xs font-semibold text-text-primary">{item.label}</p>
+                  <p className="text-[10px] text-text-secondary">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Continuous Adaptation */}
+      <div className="glass rounded-2xl p-5">
+        <h3 className="text-sm font-bold text-text-primary mb-3">Continuous Adaptation</h3>
+        <div className="grid md:grid-cols-4 gap-4">
+          {[
+            { title: 'Weekly Retraining', desc: 'Behavioral baselines recalculated every 7 days' },
+            { title: 'Honeypot Zones', desc: 'Synthetic triggers in non-event zones catch remaining fraudsters' },
+            { title: 'Adversarial Feedback', desc: 'Confirmed fraud cases improve detection accuracy' },
+            { title: 'Full Explainability', desc: 'Admins see exactly which layers flagged each claim' },
+          ].map((item, i) => (
+            <div key={i} className="p-3 rounded-xl bg-dark-surface">
+              <p className="text-xs font-bold text-text-primary mb-1">{item.title}</p>
+              <p className="text-[10px] text-text-secondary">{item.desc}</p>
             </div>
           ))}
         </div>
