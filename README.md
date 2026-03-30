@@ -1,20 +1,46 @@
 # 🛡️ GigShield
-### AI-Powered Parametric Income Protection for Zepto/Blinkit Delivery Partners
 
-> *"If your zone goes down, your income doesn't."*
+**AI-Powered Parametric Income Protection for India's Q-Commerce Delivery Partners**
+
+> "If your zone goes down, your income doesn't."
+
+**Live Demo:** [gigshield-ui](./gigshield-ui/) — React PWA, deployable on Vercel/Netlify/Render
+
+---
+
+## Table of Contents
+
+1. [Problem Statement](#1-problem-statement)
+2. [Our Solution](#2-our-solution)
+3. [Persona & Real-World Scenarios](#3-persona--real-world-scenarios)
+4. [Application Workflow](#4-application-workflow)
+5. [Weekly Premium Model](#5-weekly-premium-model)
+6. [Parametric Triggers](#6-parametric-triggers)
+7. [AI/ML Integration](#7-aiml-integration)
+8. [GigPoints Loyalty & Savings System](#8-gigpoints-loyalty--savings-system)
+9. [Advanced Features](#9-advanced-features)
+10. [Adversarial Defense & Anti-Spoofing Strategy](#10-adversarial-defense--anti-spoofing-strategy)
+11. [Platform Justification](#11-platform-justification)
+12. [Tech Stack](#12-tech-stack)
+13. [Feature List](#13-feature-list)
+14. [Risk Management & Reinsurance](#14-risk-management--reinsurance)
+15. [Business Viability](#15-business-viability)
+16. [Team](#16-team)
+
+---
 
 ## 1. Problem Statement
 
-India's Q-Commerce delivery partners — working for platforms like **Zepto, Blinkit, and Swiggy Instamart** — operate in hyper-local micro-zones, completing 10-minute deliveries within a 2–3 km radius of dark stores. This tight operational model makes them uniquely vulnerable:
+India's Q-Commerce delivery partners — working for platforms like Zepto, Blinkit, and Swiggy Instamart — operate in hyper-local micro-zones, completing 10-minute deliveries within a 2–3 km radius of dark stores. This tight operational model makes them uniquely vulnerable:
 
-- A **single rainfall event** can shut down an entire zone for hours
-- **Extreme heat or AQI spikes** trigger platform-level worker safety suspensions
-- **Local curfews or dark store closures** instantly cut off their pickup points
-- Workers lose **20–30% of monthly income** during such disruptions with zero safety net
+- A single rainfall event can shut down an entire zone for hours
+- Extreme heat or AQI spikes trigger platform-level worker safety suspensions
+- Local curfews or dark store closures instantly cut off their pickup points
+- Workers lose 20–30% of monthly income during such disruptions with zero safety net
 
-Unlike food delivery workers who can operate across a wider area, Q-Commerce partners are **zone-locked** — if their micro-zone is disrupted, they cannot simply shift elsewhere. They bear the full financial loss alone.
+Unlike food delivery workers who can operate across a wider area, Q-Commerce partners are **zone-locked** — if their micro-zone is disrupted, they cannot simply shift elsewhere.
 
-**Currently, no insurance product addresses this gap.**
+**Currently, no insurance product in India addresses this gap.**
 
 ---
 
@@ -40,7 +66,7 @@ GigShield does **not** insure health, life, accidents, or vehicle damage. It ins
 
 ---
 
-## 3. Persona & Scenarios
+## 3. Persona & Real-World Scenarios
 
 ### Target Persona
 
@@ -53,8 +79,6 @@ Typical Profile:
   Work style:  Zone-locked, 6–14 hrs/day, week-to-week earnings
   Pain point:  Zero income protection against external disruptions
 ```
-
----
 
 ### Real-World Scenarios
 
@@ -120,13 +144,11 @@ Typical Profile:
 
 ```
 1. ONBOARDING
-   ├── Register with mobile number (OTP verification)
+   ├── Register with mobile number (OTP)
    ├── Select platform: Zepto / Blinkit / Swiggy Instamart
-   ├── Zone auto-detected based on nearest dark store coordinates
-   ├── Profile: avg daily hours, shift pattern (improves risk scoring)
-   └── Complete profile → earn +100 GigPoints (one-time)
-
-        ↓
+   ├── Zone auto-detected via nearest dark store coordinates
+   ├── Profile: avg daily hours, shift pattern
+   └── Complete profile → earn +100 GigPoints
 
 2. POLICY PURCHASE
    ├── AI calculates zone risk score (0.0 → 1.0) — shown transparently
@@ -141,28 +163,24 @@ Typical Profile:
    ├── Policy Certificate PDF generated and downloadable
    └── Policy active Sunday midnight → next Sunday midnight
 
-        ↓
-
 3. ACTIVE COVERAGE
-   ├── Zone Status Widget: 🟢 SAFE / 🟡 WATCH / 🔴 DISRUPTED
+   ├── Zone Status Widget:  SAFE /  WATCH /  DISRUPTED
    ├── Pre-disruption alerts pushed to lock screen when approaching threshold
    ├── GigShield monitors zone every 5 minutes (background polling)
    ├── GigBot available 24/7 for Hindi + English help
    └── Dashboard shows: active plan, GigPoints balance, weekly earnings protected
 
-        ↓
-
 4. DISRUPTION DETECTED
-   ├── Trigger monitor detects threshold breach in worker's zone
-   ├── Waits 10 minutes of sustained breach (false positive protection)
-   ├── Fraud validation runs automatically:
-   │      GPS inside zone radius (Haversine distance check)
+   ├── Trigger monitor detects threshold breach
+   ├── 10-minute sustained breach required (false positive protection)
+   ├── Multi-layer fraud validation runs automatically:
+   │      GPS in zone (Haversine + velocity + multi-signal)
    │      Activity score ≥ 1 delivery in last 30 min
-   │      App logged in within 10 min of trigger event
+   │      App logged in within 10 min of trigger
    │      No duplicate claim for this event ID
-   └── Score ≥ 0.75 (3 of 4 checks) → AUTO APPROVED
-
-        ↓
+   │      Behavioral fingerprint consistency check
+   │      Cross-device & network integrity validation
+   └── Score ≥ 0.75 → AUTO APPROVED
 
 5. PAYOUT + REWARDS
    ├── UPI transfer initiated via Razorpay (mock in demo)
@@ -223,7 +241,7 @@ Zepto/Blinkit partners operate week-to-week — platform payouts are weekly, act
 
 ### Pricing Structure
 
-| Plan | Base Weekly Premium | Max Payout/Day | Coverage Hours |
+| Plan | Base Premium | Max Payout/Day | Coverage Hours |
 |---|---|---|---|
 | Basic Shield | ₹49/week | ₹300 | 6 hrs/day |
 | Pro Shield | ₹99/week | ₹600 | 10 hrs/day |
@@ -242,7 +260,7 @@ Examples:
   risk_score = 0.2 → −9% → Pro Shield = ₹90/week
 ```
 
-**Risk Score Inputs** (XGBoost model):
+**Risk Score Inputs** (XGBoost):
 - Zone rainfall frequency over last 90 days
 - Zone average AQI history
 - Historical flood / waterlogging incidents
@@ -265,27 +283,23 @@ Worker sees on policy screen: *"Zone risk score: 0.74 — Premium adjusted to �
 
 > These are Q-Commerce specific triggers. Zepto/Blinkit workers are zone-locked — even one trigger halts ALL deliveries in the affected micro-zone.
 
-### Trigger Table
-
 | Trigger | Parameter | Data Source | Threshold | Sustained |
 |---|---|---|---|---|
 | Heavy Rain | Rainfall mm/hr | OpenWeatherMap API | > 15 mm/hr | 10 min |
 | Extreme Heat | Temperature °C | OpenWeatherMap API | > 43°C | 10 min |
-| Severe AQI | Air Quality Index | WAQI API (free) | > 300 | 10 min |
-| Flash Flood Alert | IMD-style alert | Mocked JSON feed | Alert issued | Instant |
+| Severe AQI | Air Quality Index | WAQI API | > 300 | 10 min |
+| Flash Flood | IMD alert | IMD API (mocked) | Alert issued | Instant |
 | Dark Store Closure | Platform signal | Simulated API | Closure flag | Instant |
-| Local Curfew | Govt alert | Mocked event trigger | Curfew issued | Instant |
+| Local Curfew | Govt alert | Mocked trigger | Curfew issued | Instant |
 
-### False Positive Protection Logic
+### False Positive Protection
 
 ```
 Poll every 5 minutes
-  │
   ├── Threshold breached?
   │     YES → Start 10-minute sustained timer
-  │     NO  → Reset timer (no claim)
-  │
-  └── Still breached after 10 minutes?
+  │     NO  → Reset timer(no claim)
+  └── Still breached after 10 min?
         YES → TRIGGER CLAIMS
         NO  → RESET (false positive avoided)
 ```
@@ -294,7 +308,7 @@ Poll every 5 minutes
 
 ---
 
-## 7. AI/ML Integration Plan
+## 7. AI/ML Integration
 
 ### Model 1 — Zone Risk Scorer (XGBoost)
 - **Input:** Rainfall history, AQI averages, flood incidents, seasonal patterns, shift hours
@@ -319,17 +333,20 @@ Poll every 5 minutes
 - **Output:** Risk label (High / Medium / Low) + probability score per day
 - **Admin display:** *"HSR Layout — Thursday: High Risk (0.74) — Monsoon pattern"*
 
-### Model 5 — Predictive Premium Price Forecast
+### Model 5 — Premium Price Forecast
 - **Method:** Multi-signal weighted fusion — weather forecast + AQI trend + seasonal history + ground signals
 - **Output:** 7-day forward premium price per plan per zone
 - **Visible to user:** Shown on policy purchase screen before checkout
 - **Impact:** Creates urgency to buy at lower price, mirrors airline dynamic pricing UX
 
-### Model 6 — GigBot (Claude API)
-- **Model:** `claude-sonnet-4-6` via Anthropic SDK
+### Model 6 — GigBot
 - **Context injected:** Worker's active policy, GigPoints, claim history, zone info, trigger thresholds
 - **Languages:** Hindi + English (auto-detected from worker's message)
 - **Handles:** Claim rejections with specific checklist, coverage questions, GigPoints queries, renewal help
+
+### Model 7 — Adversarial Fraud Ring Detection (NEW)
+
+See [Section 10](#10-adversarial-defense--anti-spoofing-strategy) for full details. This model detects coordinated GPS spoofing attacks using behavioral biometrics, network graph analysis, and velocity anomaly detection.
 
 ### GPS Validation — Haversine Formula
 
@@ -344,19 +361,43 @@ function haversineDistance(lat1, lng1, lat2, lng2) {
            + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) ** 2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
-
-// Returns true if worker is physically inside the zone delivery radius
-function isWorkerInZone(worker, zone) {
-  return haversineDistance(
-    worker.current_lat, worker.current_lng,
-    zone.center_lat,    zone.center_lng
-  ) <= zone.radius_meters
-}
 ```
 
 ---
 
 ## 8. GigPoints Loyalty & Savings System
+
+### Savings Dashboard
+
+```
+Total Premiums Paid:      ₹432
+Total Payouts Received:   ₹2,400
+Net Savings:              ₹1,968
+Return on Protection:     556%
+"For every ₹1 you paid, you got ₹5.56 back"
+```
+
+### How to Earn
+
+| Action | Points |
+|---|---|
+| Buy weekly policy | +50 |
+| Active during disruption | +100 |
+| Payout received | +200 |
+| Renew without lapsing | +75/week |
+| 4-week streak | +300 |
+| 12-week streak | +1,000 |
+| Refer zone partner | +500 |
+| Complete profile | +100 |
+
+### Tier Structure
+
+| Tier | Points | Discount | Extra |
+|---|---|---|---|
+| Starter | 0–999 | None | Standard |
+| Reliable | 1,000–2,499 | 5% | — |
+| Veteran | 2,500–4,999 | 10% | Priority payout |
+| Champion | 5,000+ | 15% | Free week/quarter |
 
 This transforms insurance from a passive *"I hope I never need it"* product into an active *"I'm earning rewards every week"* experience — the key to long-term retention.
 
@@ -536,12 +577,8 @@ Solves adverse selection — entire zones enroll together, not just the highest-
 
 ## 9. Advanced Features
 
-These five features push GigShield beyond a standard hackathon submission and into a product that feels real, intelligent, and deeply worker-centric.
-
----
-
 ### 9.1 Worker Lifetime Protection Graph
-
+Monthly bar chart — premiums paid vs payouts received. Shows all-time ROI. Turns skeptics into advocates.
 Most workers don't understand the long-term value of insurance. This feature makes it viscerally obvious with a visual yearly breakdown of what they paid vs what they received.
 
 **What the worker sees:**
@@ -580,9 +617,9 @@ Most workers don't understand the long-term value of insurance. This feature mak
 
 ---
 
-### 9.2 Worker Collective Protection Pool
 
-A community-driven micro-insurance layer where workers in the same zone voluntarily contribute small top-up amounts together to create a shared emergency pool — separate from and in addition to their standard GigShield policy.
+### 9.2 Worker Collective Protection Pool
+Zone-level community micro-insurance. Workers contribute ₹10/week to a shared emergency pool. Covers borderline situations where the zone trigger didn't formally fire but workers still lost income (e.g., 13mm/hr rainfall, just below 15mm/hr threshold). >50% member vote to disburse.
 
 **How it works:**
 
@@ -614,9 +651,8 @@ Zone Pool — HSR Layout
 
 ---
 
-### 9.3 GigBot — AI Chatbot for Help & FAQs
-
-A lightweight AI chatbot embedded in the worker app that answers insurance questions in plain language — in **Hindi and English** — without the worker needing to call anyone or read a document.
+### 9.3 GigBot — AI Chatbot
+Claude-powered chatbot. Hindi + English auto-detection. Handles claim rejections with specific validation checklists, coverage questions, GigPoints queries, renewal help.
 
 **Sample conversation:**
 
@@ -684,7 +720,7 @@ GigBot: GigShield covers income lost due to:
 ---
 
 ### 9.4 Smart Policy Expiry Reminder System
-
+4-touchpoint schedule: Friday 6PM push, Saturday 10AM SMS, Sunday 6PM push, Sunday 11:30PM final SMS. Context-aware: zone risk surge, streak awareness, lapse history, price forecast hook.
 A multi-channel, context-aware reminder system that ensures workers never accidentally lapse their coverage.
 
 **Reminder Schedule:**
@@ -726,9 +762,9 @@ Monday 12:00 AM  →  If not renewed:
 
 ---
 
-### 9.5 Predictive Premium Price Forecast
-
-The most innovative feature in GigShield. Similar to how flight price trackers show *"prices expected to rise — book now"*, GigShield shows workers a **7-day forward premium forecast** so they know if buying today is cheaper than waiting.
+### 9.5 Premium Price Forecast
+7-day forward pricing. Worker sees: "This week ₹108 → Next week ₹127 (+18%) — Monsoon approaching." Creates urgency, builds trust through transparency. No insurance product in India does this.
+ Similar to how flight price trackers show *"prices expected to rise — book now"*, GigShield shows workers a **7-day forward premium forecast** so they know if buying today is cheaper than waiting.
 
 **What the worker sees on the Policy screen:**
 
@@ -807,26 +843,278 @@ def forecast_premium_next_7_days(zone_id: str, base_plan: str) -> list:
 
 ---
 
-## 10. Platform Justification
+## 10. Adversarial Defense & Anti-Spoofing Strategy
+
+> This section addresses the Phase 1 Market Crash scenario: a coordinated syndicate of 500 delivery workers using GPS-spoofing apps to fake presence in disrupted zones and drain liquidity pools.
+
+### 10.1 Threat Model
+
+The attack vector is clear: organized fraud rings coordinate via Telegram groups, use GPS spoofing apps (Fake GPS, Mock Locations) to place themselves inside a weather-disrupted zone while physically sitting at home, and mass-trigger parametric payouts simultaneously. This is not an individual bad actor — it's a coordinated, synchronized attack designed to drain a platform's capital in minutes.
+
+Our existing 4-check fraud system (GPS, activity, session, duplicate) catches individual fraudsters effectively. But a coordinated ring of 500 actors who are *also* generating fake delivery activity signals requires a fundamentally different detection approach. Simple GPS verification is dead against this attack. We need **layered behavioral intelligence**.
+
+### 10.2 The Differentiation: Genuine Worker vs. Spoofer
+
+We identify spoofed locations through **five independent, complementary signal layers** — no single layer is a silver bullet, but the combination creates a detection surface that is extremely expensive for attackers to defeat simultaneously.
+
+#### Layer 1: GPS Velocity & Trajectory Analysis
+
+A genuine delivery partner generates a continuous, physically plausible GPS trail. They move at 15–40 km/hr on roads, stop at dark stores for 2–5 minutes, follow actual road geometry, and have natural GPS jitter (±5–15m) caused by building reflections and weather.
+
+A spoofed location appears as a **teleportation event** — the worker's position jumps instantaneously from one coordinate to another with no intermediate points. Even sophisticated spoofing apps that simulate movement produce unnaturally smooth, straight-line trajectories that don't follow actual road networks.
+
+**Detection logic:**
+```
+velocity_check(worker):
+  positions = get_gps_trail(worker, last_60_min)
+  for i in range(1, len(positions)):
+    speed = haversine(positions[i-1], positions[i]) / time_delta
+    if speed > 120 km/hr → FLAG: impossible velocity (teleportation)
+    if speed == 0 for > 45 min and then sudden zone entry → FLAG: stationary-then-jump
+  
+  jitter = calculate_gps_jitter(positions, last_10_min)
+  if jitter < 2m → FLAG: unnaturally stable (real GPS has 5–15m jitter)
+  if jitter > 100m → FLAG: erratic signal (spoofing oscillation)
+  
+  road_snap = match_to_road_network(positions)
+  if road_snap_match_rate < 60% → FLAG: path doesn't follow roads
+```
+
+**Why this works:** GPS spoofing apps set a single coordinate or a scripted path. They cannot replicate the micro-variations in a real person's movement — the slight wobble when they're waiting at a traffic signal, the 2-minute pause at a dark store, the specific road they take that matches Google Maps routing. We compare the GPS trace against the actual road network within the zone using OpenStreetMap road data. A genuine worker's trail will snap to roads >90% of the time. A spoofed trail sits in the middle of buildings.
+
+**Why attackers can't easily defeat this:** To beat trajectory analysis, every attacker would need to actually be on the road in the zone or run a real-time road-following GPS simulation — which requires knowing the exact road network and simulating realistic delivery stop patterns. This is orders of magnitude harder than just setting a fake GPS pin.
+
+#### Layer 2: Cross-Signal Device Integrity
+
+GPS coordinates are one signal. A real smartphone in a real location generates **multiple independent location signals** that are extremely difficult to spoof simultaneously:
+
+- **Cell tower triangulation:** The phone connects to specific cell towers. A phone in HSR Layout connects to different towers than one in JP Nagar, regardless of what the GPS reports. We log the serving cell tower IDs.
+- **Wi-Fi BSSID fingerprint:** Every location has a unique Wi-Fi environment. The phone sees specific Wi-Fi network names (BSSIDs) that correspond to routers in that physical area. A spoofed GPS in HSR Layout but a phone physically in another area will see completely different Wi-Fi networks.
+- **IP geolocation cross-check:** The phone's IP address (via cellular data) maps to a rough geographic area. If the GPS says HSR Layout but the IP geolocates to a different district, that's a discrepancy.
+- **Barometric pressure sensor:** Modern phones have barometers. A phone reporting location in a flood zone should show barometric readings consistent with local weather conditions. A phone at home in a clear-sky area will show different atmospheric pressure.
+
+**Detection logic:**
+```
+device_integrity_check(worker):
+  gps_location = worker.reported_gps
+  cell_towers = worker.connected_cell_tower_ids
+  wifi_bssids = worker.visible_wifi_networks
+  ip_geo = geolocate(worker.ip_address)
+  
+  tower_location = triangulate(cell_towers)
+  tower_distance = haversine(gps_location, tower_location)
+  if tower_distance > 5km → FLAG: cell tower mismatch
+  
+  expected_wifis = get_known_wifi_signatures(gps_location, radius=500m)
+  wifi_overlap = len(set(wifi_bssids) & set(expected_wifis)) / len(expected_wifis)
+  if wifi_overlap < 20% → FLAG: Wi-Fi environment doesn't match claimed location
+  
+  ip_distance = haversine(gps_location, ip_geo)
+  if ip_distance > 15km → FLAG: IP geolocation mismatch
+```
+
+**Why this is hard to defeat:** Spoofing GPS is easy — one app toggle. Spoofing cell tower connections requires a hardware IMSI catcher. Spoofing Wi-Fi BSSIDs requires physically placing routers. Spoofing all three simultaneously while also spoofing GPS is technically impractical for a gig worker fraud ring.
+
+#### Layer 3: Behavioral Biometric Fingerprinting
+
+Every worker develops a unique behavioral fingerprint over time. A genuine Ravi Kumar in HSR Layout has consistent patterns:
+
+- He starts work between 8–9 AM, takes lunch around 1 PM, ends around 8 PM
+- His average delivery rate is 3.2 deliveries/hour
+- He covers 14–18 km per shift
+- His app interaction pattern: checks zone status 2–3 times per hour, opens claim details within 30 seconds of a payout notification
+- His accelerometer/gyroscope data shows movement patterns consistent with two-wheeler riding
+
+A spoofed claim during a disruption will show:
+- A worker who is "active in zone" but whose behavioral pattern suddenly deviates from their baseline
+- No accelerometer movement (phone is on a table, not on a scooter)
+- App opened only at the exact moment of trigger (not the natural periodic checking)
+- Delivery cadence that doesn't match their historical pattern
+
+**Detection logic:**
+```
+behavioral_check(worker, event):
+  baseline = get_30_day_behavioral_profile(worker)
+  current = get_current_session_metrics(worker)
+  
+  deviation_score = calculate_behavioral_deviation(baseline, current)
+  # Includes: shift_start_time, delivery_rate, km_covered, app_interaction_frequency,
+  #           accelerometer_entropy, gyroscope_variance
+  
+  if deviation_score > 3_standard_deviations → FLAG: behavior anomaly
+  if current.accelerometer_entropy < threshold → FLAG: phone is stationary (not riding)
+  if current.delivery_cadence == 0 and status == "active" → FLAG: claiming active but no deliveries
+```
+
+**Key insight:** This catches the "smart" spoofing rings that also fake delivery completions. Even if they somehow generate fake delivery records, the phone's physical sensor data (accelerometer showing no movement) and the temporal pattern (all 500 workers suddenly becoming "active" at the exact same minute) will betray the coordination.
+
+#### Layer 4: Network Graph & Coordination Detection
+
+This is where we catch the **ring**, not just the individual. A coordinated attack of 500 workers has a signature that random legitimate claims do not.
+
+**Graph-based detection:**
+```
+ring_detection(event):
+  claimants = get_all_claimants(event_id)
+  
+  # 1. Temporal clustering: legitimate claims arrive with natural variance
+  #    coordinated claims arrive in a suspiciously tight window
+  claim_times = [c.submitted_at for c in claimants]
+  time_spread = max(claim_times) - min(claim_times)
+  if len(claimants) > 20 and time_spread < 60_seconds:
+    FLAG: mass synchronized submission (legitimate claims trickle in over 5–15 min)
+  
+  # 2. Device fingerprint clustering
+  device_hashes = [hash(c.device_model + c.os_version + c.screen_res + c.installed_fonts) for c in claimants]
+  unique_ratio = len(set(device_hashes)) / len(device_hashes)
+  if unique_ratio < 0.5:
+    FLAG: too many identical device fingerprints (fraud farms use cloned phones)
+  
+  # 3. Social graph analysis (shared attributes)
+  #    Build edges between workers who share: same registration IP, same referral chain,
+  #    same UPI handle prefix, same device IMEI prefix, accounts created within same hour
+  G = build_social_graph(claimants)
+  communities = detect_communities(G)  # Louvain algorithm
+  for community in communities:
+    if len(community) > 10 and community.density > 0.6:
+      FLAG: tightly connected cluster — likely organized ring
+  
+  # 4. Historical co-occurrence: do the same workers ALWAYS claim together?
+  for pair in combinations(claimants, 2):
+    shared_claims = count_shared_claim_events(pair)
+    if shared_claims / total_events > 0.8:
+      FLAG: pair always claims together — statistically suspicious
+```
+
+**Why this is the most powerful layer:** Individual spoofing can be sophisticated. But coordinating 500 people to independently defeat all signal layers is essentially impossible. The network layer doesn't even need to catch each individual — it catches the **pattern** of coordination. Legitimate workers claim independently, at slightly different times, from genuinely different devices, with no social graph connections. Fraud rings share Telegram groups, registration timing, referral chains, and device characteristics.
+
+#### Layer 5: Environmental Consistency Verification
+
+If a parametric trigger fires for "rainfall >15mm/hr in HSR Layout," we verify that the **worker's local device sensors** are consistent with being in a rainfall zone:
+
+- **Ambient light sensor:** Should show low light levels during heavy rain (overcast sky)
+- **Microphone ambient noise sample** (with explicit permission): Heavy rain creates distinctive ambient audio patterns
+- **Screen brightness adjustments:** Workers in rain tend to increase brightness
+- **Network quality:** Heavy rain causes measurable degradation in cellular signal quality in the affected area
+
+This layer is supplementary — it cannot be the primary signal because sensor data varies. But combined with the other four layers, it adds another dimension that spoofing apps cannot replicate.
+
+### 10.3 Composite Adversarial Score
+
+Each layer produces an independent score. The composite adversarial score determines the claim outcome:
+
+```
+adversarial_score(worker, event):
+  s1 = velocity_trajectory_score(worker)      # 0.0–1.0 (1.0 = legitimate)
+  s2 = device_integrity_score(worker)          # 0.0–1.0
+  s3 = behavioral_biometric_score(worker)      # 0.0–1.0
+  s4 = network_coordination_score(event)       # 0.0–1.0
+  s5 = environmental_consistency_score(worker) # 0.0–1.0
+  
+  # Weighted composite — device integrity and coordination get highest weight
+  # because they're hardest to spoof
+  composite = (
+    0.20 * s1 +  # velocity/trajectory
+    0.25 * s2 +  # device integrity (cell/WiFi/IP)
+    0.15 * s3 +  # behavioral biometric
+    0.30 * s4 +  # network/coordination detection
+    0.10 * s5    # environmental consistency
+  )
+  
+  if composite >= 0.75 → AUTO APPROVE
+  if composite >= 0.50 → MANUAL REVIEW (hold payout, notify admin within 15 min)
+  if composite <  0.50 → AUTO BLOCK (worker can appeal via GigBot)
+```
+
+### 10.4 The UX Balance: Protecting Honest Workers
+
+This is the hardest part. A genuine delivery partner whose phone GPS glitches during heavy rain (which actually happens — rain degrades GPS accuracy) should NOT be treated like a fraudster. Here's how we handle it:
+
+#### Tiered Response, Not Binary Block
+
+We do not have a single "approved/rejected" outcome. We have three tiers:
+
+1. **Auto-Approve (score ≥ 0.75):** Payout in <60 seconds. No friction. This covers ~92% of legitimate claims based on our modeling.
+
+2. **Soft Hold (score 0.50–0.74):** Payout held for up to 15 minutes. Worker gets a notification: *"Your claim is being verified. This usually takes 5–10 minutes. If everything checks out, you'll receive your payout automatically."* This buys time for manual review without alarming the worker. If the admin doesn't act in 15 minutes, it auto-releases (fail-open for borderline cases — we'd rather pay a few questionable claims than punish genuine workers).
+
+3. **Block (score < 0.50):** Payout blocked. Worker gets a clear, non-accusatory explanation via GigBot: *"We couldn't verify your location for this event. This can happen due to GPS issues in bad weather. Please ensure location services are enabled and try staying within your zone boundaries. If you believe this is an error, tap 'Request Review' and we'll look into it within 24 hours."*
+
+#### Reputation-Based Fast Lane
+
+Workers with a strong history (Veteran/Champion tier, 4+ week streak, no previous flags) get a higher trust baseline. Their composite score starts at +0.15 bonus, meaning they're almost never soft-held. This rewards loyalty and ensures long-term honest workers aren't caught by overzealous fraud detection.
+
+```
+trust_bonus(worker):
+  if worker.tier == "Champion" and worker.streak >= 8 → +0.20
+  if worker.tier == "Veteran" and worker.streak >= 4  → +0.15
+  if worker.tier == "Reliable" and worker.streak >= 2  → +0.10
+  if worker.has_previous_fraud_flag                    → -0.20
+```
+
+#### GPS Degradation Awareness
+
+During heavy rainfall events (the most common trigger), GPS accuracy degrades. We account for this by **widening the zone radius by 25% during active trigger events**. If the zone radius is normally 2.5 km, during a rainfall trigger we accept GPS positions up to 3.1 km from center. This prevents false rejections of genuine workers whose GPS drifts during the exact conditions that trigger a claim.
+
+#### Transparent Appeals Process
+
+Every blocked claim comes with:
+1. The specific checks that failed (full transparency — we show exactly which signals were flagged)
+2. A one-tap "Request Review" button that escalates to a human admin
+3. GigBot follow-up in Hindi/English explaining what happened and what the worker can do
+4. Admin target: resolve appeals within 24 hours
+5. If appeal is successful, payout + 50 bonus GigPoints as a goodwill gesture
+
+### 10.5 Catching the Ring: Playbook for the 500-Worker Syndicate
+
+Here's specifically how our system handles the Market Crash scenario:
+
+**Minute 0:** Severe weather trigger fires in Zone HSR-01. 500 claims flood in from "workers in zone."
+
+**Minute 0–1 (Network Layer triggers first):**
+- The system detects that 480 of the 500 claims arrived within a 45-second window. Legitimate claims from 34 zone workers would arrive over 5–15 minutes as they each notice the event independently.
+- Social graph analysis finds 460 of the accounts were created within the same 48-hour window, share referral chains, and have overlapping device fingerprints.
+- **Result:** 460 accounts flagged as coordinated ring. Claims auto-blocked.
+
+**Minute 1–2 (Device Integrity on remaining 40):**
+- Cell tower data: 35 of the 40 remaining claimants show cell tower connections inconsistent with HSR Layout.
+- Wi-Fi fingerprints: Zero overlap with known Wi-Fi signatures in the zone.
+- **Result:** 35 more blocked. 5 remain.
+
+**Minute 2–3 (Velocity + Behavioral on final 5):**
+- 3 show teleportation events in their GPS trail (jumped from >10km away in under 1 minute).
+- 2 pass all checks — these are likely genuine workers who were in the zone.
+- **Result:** 3 blocked, 2 approved.
+
+**Total:** 498 fraudulent claims blocked, 2 legitimate claims paid. Liquidity pool intact. Zero honest workers harmed.
+
+**Admin Dashboard shows:**
+- Real-time ring visualization (network graph with flagged clusters)
+- Device fingerprint clusters highlighted
+- Temporal distribution of claims (spike vs natural spread)
+- One-click "quarantine ring" action to freeze all associated accounts pending investigation
+
+### 10.6 Continuous Adaptation
+
+Fraud rings evolve. Our defenses must evolve faster.
+
+- **Weekly model retraining:** Behavioral baselines recalculated every 7 days using the latest activity data
+- **Honeypot zones:** We occasionally create synthetic trigger events in zones where no real weather event occurred. Any claims from these honeypot events are instant fraud confirmations and feed back into our training data.
+- **Adversarial feedback loop:** Every confirmed fraud case (whether caught automatically or via admin review) is added to a labeled dataset that continuously improves detection accuracy
+- **Explainability dashboard:** Admins can drill into any flagged claim and see exactly which of the 5 layers flagged it and why — no black-box decisions
+
+---
+
+## 11. Platform Justification
 
 **Platform: Progressive Web App (PWA) — Mobile-First**
 
-### Why Not Native Android?
-
-| Problem | Impact on GigShield |
+| Why Not Native Android? | Why Not Desktop? |
 |---|---|
-| Play Store review: 3–7 days | Cannot demo a live app by Phase 2 deadline |
-| Workers already have 3–4 delivery apps | Storage-sensitive — another APK won't be downloaded |
-| Version updates require user action | Trigger logic must update instantly across all workers |
-| Judges won't install unknown APK | Friction kills the demo evaluation |
-
-### Why Not Pure Desktop Web?
-
-| Problem | Impact |
-|---|---|
-| Workers are on the road on phones | They will never open a laptop between deliveries |
-| Lock-screen alerts need mobile | Pre-disruption and payout notifications must be instant |
-| GPS zone detection needs mobile | Browser GPS works on mobile, not desktop |
+| Play Store review: 3–7 days | Workers are on phones between deliveries |
+| Workers have 3–4 apps already (storage-sensitive) | Push notifications need mobile |
+| Version updates require user action | GPS detection needs mobile browser |
+| Judges won't install unknown APK | — |
 
 ### Why PWA Wins
 
@@ -851,13 +1139,17 @@ The same React codebase serves the mobile worker (card UI, large touch targets) 
 
 ---
 
-## 11. Tech Stack
+Zero-friction onboarding via WhatsApp link → Chrome → "Add to Home Screen." Instant server-side updates. Push notifications on Android. Service worker for offline caching. One React codebase serves mobile worker (card UI) + desktop admin (analytics).
+
+---
+
+## 12. Tech Stack
 
 ### Frontend
 | Tech | Purpose |
 |---|---|
 | React.js + Tailwind CSS | Worker app + Admin dashboard |
-| Leaflet + OpenStreetMap | Zone risk heatmap — free, no API key required |
+| Leaflet + OpenStreetMap | Zone risk heatmap |
 | Recharts | Analytics, savings charts, GigPoints progress bars, Lifetime Protection Graph |
 | PWA (manifest + service worker) | Installable, offline support, push notifications |
 
@@ -868,34 +1160,35 @@ The same React codebase serves the mobile worker (card UI, large touch targets) 
 | PostgreSQL | Workers, policies, claims, zones, payouts, GigPoints, collective pools |
 | node-cron | 5-minute trigger poller + multi-touchpoint reminder scheduler |
 
-### AI / ML
+### AI/ML
 | Tech | Purpose |
 |---|---|
-| Python + scikit-learn | Risk scoring, fraud validation logic |
-| XGBoost | Dynamic weekly premium calculation |
+| Python + scikit-learn + XGBoost | Risk scoring, premium calculation |
 | pandas + numpy | Historical data processing, 7-day zone forecasting |
-| Multi-signal fusion model | Predictive premium price forecast (7-day forward) |
-| Claude API (claude-sonnet-4-6) | GigBot — policy-aware chatbot, Hindi + English |
+| Multi-signal fraud engine | 5-layer adversarial scoring (GPS velocity, device integrity, behavioral, network graph, environmental) |
+| Predictive premium price forecast (7-day forward) |
+| Louvain community detection | Fraud ring identification in social graphs |
+| GigBot chatbot (Hindi + English) |
 
 ### External APIs
-| API | Purpose | Cost |
-|---|---|---|
-| OpenWeatherMap | Live weather + rainfall per zone lat/lng | Free tier |
-| WAQI API | Live AQI per zone coordinates | Free tier |
-| Razorpay Test Mode | Simulated UPI payouts + recurring mandate (auto-renew) | Free sandbox |
-| Twilio (trial) / Mock | Multi-touchpoint SMS reminder system | Free trial |
-| Anthropic Claude API | GigBot chatbot | Free trial credits |
+| API | Purpose |
+|---|---|
+| OpenWeatherMap | Live weather + rainfall per zone lat/lng |
+| WAQI API | Live AQI per zone coordinates |
+| Razorpay Test Mode | Simulated UPI payouts + recurring mandate (auto-renew) | 
+| Twilio (trial) / Mock | Multi-touchpoint SMS reminder system | 
+| GigBot chatbot | chatbot (english and hinglish) |
 | News API / Mock | Ground situation signals for premium forecast | Free tier |
 
 ### Infrastructure
 | Tech | Purpose |
 |---|---|
-| Render / Railway | Backend + frontend hosting | Free tier |
-| GitHub | Version control + submission repository | Free |
+| Vercel / Render | Frontend + backend hosting |
+| GitHub | Version control + submission |
 
 ---
 
-## 12. Feature List
+## 13. Feature List
 
 ### Worker App
 
@@ -927,20 +1220,52 @@ The same React codebase serves the mobile worker (card UI, large touch targets) 
 
 | Feature | Phase |
 |---|---|
-| Leaflet + OSM zone risk heatmap | 2 |
+| Zone risk heatmap (Leaflet + OSM) | 2 |
 | Real-time disruption + claims live feed | 2 |
-| Fraud console with per-check explainability | 2 |
+| Fraud console (per-check explainability) | 2 |
+| Anti-spoofing dashboard (ring detection, velocity analysis) | 2 |
 | Loss ratio analytics + payout trends | 3 |
 | 7-Day Zone Risk Predictor | 3 |
-| Risk Simulator with live sliders | 3 |
 | GigPoints / loyalty tier monitor | 3 |
 | Zone-wise payout breakdown | 3 |
 
 ---
 
-## 13. Business Viability
+## 14. Risk Management & Reinsurance
 
-### Unit Economics — 1,000 Workers, Bangalore
+### Loss Ratio Targets
+
+```
+Off-Season (Oct–May):    Loss Ratio ~0.16  (profitable baseline)
+Monsoon Season (Jun–Sep): Loss Ratio ~2.27  (reinsurance kicks in above 1.5x)
+```
+
+### Reinsurance Layer
+- Quota-share treaty: reinsurer covers 70% of claims when loss ratio > 1.5x
+- Net exposure cap: ₹44,550/week per 1,000-worker zone in worst-case monsoon
+
+### Adverse Selection Defense
+1. Zone-level dynamic pricing (risky zones pay more)
+2. Group enrollment incentive (20+ workers → ₹20 cashback — pulls in low-risk workers)
+3. Weekly commitment + streak incentives (prevents selective monsoon-only buying)
+
+### Fraud Rate Target: < 5%
+Achieved through 5-layer adversarial scoring + network graph ring detection + honeypot zones.
+
+---
+
+## 15. Business Viability
+
+### Competitive Landscape
+
+| Player | Coverage | Trigger | Speed | Gig-Specific |
+|---|---|---|---|---|
+| Toffee Insurance | Health/Accident | Manual | Days | No |
+| Kover (Acko) | Vehicle/Health | Manual | Days | Partial |
+| Onsurity | Group Health | Manual | Weeks | No |
+| **GigShield** | **Income only** | **Parametric/Auto** | **<60 sec** | **Yes — micro-zone** |
+
+### Unit Economics (1,000 workers, Bangalore)
 
 ```
 Weekly Premium Pool:
@@ -973,9 +1298,13 @@ Annual Per-Worker Economics:
 - **Collective Pool** improves retention by covering below-threshold events
 - **Fraud detection** targets < 5% fraudulent claim rate
 
+
+### Regulatory Framework
+Operates under IRDAI Regulatory Sandbox Guidelines, 2019. GigShield is the technology + distribution layer. Premium collection routed through licensed insurer partner. All financial flows simulated for hackathon.
+
 ---
 
-## 14. Team
+## 16. Team
 
 | Name | Role |
 |---|---|
@@ -985,18 +1314,13 @@ Annual Per-Worker Economics:
 | Pragalbh Rai | Backend + DevOps |
 | Manmohan Singh | Backend + DevOps |
 
-**University:** SRM University
+**University:** SRM University <br>
 **Persona Track:** Q-Commerce / Instant Delivery (Zepto / Blinkit)
 
 ---
 
-## 📎 Submission Links
+## Submission Links
 
 - **GitHub Repository:** *(this repo)*
-- **Demo Video (2 min):** [Link to be added — Phase 1]
-- **Figma Wireframes:** [Link to be added]
-
----
-> *Built for Guidewire DEVTrails 2026 — Unicorn Chase*
->
-> *"Build fast. Spend smart. Don't go broke. Happy Hacking."*
+- **Live UI Demo:** [gigshield-ui](./gigshield-ui/)
+- **Demo Video:** [Link — Phase 2]
