@@ -7,12 +7,16 @@ import {
   buildWorkerDashboard,
   buyPolicy,
   calculatePremium,
+  captureRazorpayPayment,
   confirmReferral,
+  createOrUpdatePaymentMandate,
+  createRazorpayOrder,
   createOrUpdateWorkerProfile,
   createPoolMotion,
   createReferral,
   evaluateFraud,
   getNotifications,
+  getPaymentState,
   generateCertificate,
   generateClaimStatement,
   getCoverageGap,
@@ -159,10 +163,15 @@ export async function handleRequest(req, res) {
       return {
         policy,
         pricingPreview: ["basic", "pro", "elite"].map((planId) => calculatePremium(planId, zone.riskScore, worker.points)),
-        forecast: buildWorkerDashboard(workerId).forecast
+        forecast: buildWorkerDashboard(workerId).forecast,
+        payment: getPaymentState(workerId)
       };
     }],
     ["POST", "/api/workers/:workerId/policies/purchase", async ({ workerId }) => buyPolicy(workerId, await readJson(req))],
+    ["GET", "/api/workers/:workerId/payments", async ({ workerId }) => getPaymentState(workerId)],
+    ["POST", "/api/workers/:workerId/payments/checkout", async ({ workerId }) => createRazorpayOrder(workerId, await readJson(req))],
+    ["POST", "/api/workers/:workerId/payments/verify", async ({ workerId }) => captureRazorpayPayment(workerId, await readJson(req))],
+    ["POST", "/api/workers/:workerId/payments/mandate", async ({ workerId }) => createOrUpdatePaymentMandate(workerId, await readJson(req))],
     ["PATCH", "/api/workers/:workerId/policy/auto-renew", async ({ workerId }) => toggleAutoRenew(workerId, (await readJson(req)).autoRenew)],
     ["GET", "/api/workers/:workerId/history", async ({ workerId }) => ({
       summary: workerHistorySummary(workerId),

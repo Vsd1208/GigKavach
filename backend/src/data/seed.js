@@ -201,6 +201,52 @@ export const policies = [
   }
 ];
 
+export const paymentOrders = [
+  {
+    id: "order_demo_0001",
+    workerId: "WRK-001",
+    planId: "pro",
+    amount: 10100,
+    currency: "INR",
+    status: "paid",
+    upiId: "ravi@okicici",
+    autoRenewRequested: true,
+    provider: "razorpay-test-mode",
+    createdAt: "2026-03-24T00:00:00.000Z",
+    paidAt: "2026-03-24T00:00:08.000Z"
+  }
+];
+
+export const paymentTransactions = [
+  {
+    id: "pay_demo_0001",
+    orderId: "order_demo_0001",
+    workerId: "WRK-001",
+    amount: 10100,
+    currency: "INR",
+    method: "upi",
+    upiId: "ravi@okicici",
+    status: "captured",
+    referenceId: "RZP-PAY-DEMO-0001",
+    provider: "razorpay-test-mode",
+    createdAt: "2026-03-24T00:00:08.000Z"
+  }
+];
+
+export const paymentMandates = [
+  {
+    id: "mandate_demo_0001",
+    workerId: "WRK-001",
+    upiId: "ravi@okicici",
+    status: "active",
+    maxAmount: 15000,
+    frequency: "weekly",
+    provider: "razorpay-test-mode",
+    createdAt: "2026-03-24T00:00:09.000Z",
+    approvedAt: "2026-03-24T00:00:09.000Z"
+  }
+];
+
 export const claims = [
   {
     id: "CLM-0892",

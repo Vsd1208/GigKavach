@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Shield, ArrowLeft, Home, FileText, Award, Clock, Settings, Bell, ChevronRight, CloudRain, Wind, Thermometer, AlertTriangle, MapPin, Zap, TrendingUp, IndianRupee, Gift, Users, Star, CheckCircle2, XCircle, ChevronDown, Download, RefreshCw, Info, Flame, Target, Trophy, History, UserPlus, MessageCircle, Send, X, TrendingDown, BarChart3, Moon, Sun, HeartPulse, ArrowRight, FileCheck, CreditCard, Headphones, Timer, Vote, PiggyBank, ShieldCheck, BellRing, Phone, Languages, Fingerprint, BadgeCheck, Siren, Navigation, Activity } from 'lucide-react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area } from 'recharts'
 import { useTheme } from '../context/ThemeContext'
+import { apiFetch } from '../lib/api'
 
 // ─── DATA ─────────────────────────────────────────────
 const tabs = [
@@ -114,17 +115,61 @@ export default function WorkerApp({ onBack }) {
   const [location, setLocation] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [workerId, setWorkerId] = useState('WRK-001')
+  const [paymentLoading, setPaymentLoading] = useState(false)
+  const [paymentError, setPaymentError] = useState('')
+  const [paymentSuccess, setPaymentSuccess] = useState(null)
+  const [paymentMandate, setPaymentMandate] = useState(null)
+  const [paymentStage, setPaymentStage] = useState('plans')
+  const [paymentSession, setPaymentSession] = useState(null)
+  const [paymentUpiId, setPaymentUpiId] = useState('')
+  const [mandateConsent, setMandateConsent] = useState(true)
 
   const { isDark, toggleTheme } = useTheme()
 
   // Check if user is registered (in real app, check localStorage or API)
   useEffect(() => {
     const registered = localStorage.getItem('gigshield_registered')
+    const savedWorkerId = localStorage.getItem('gigshield_worker_id')
     if (registered) {
+      setWorkerId(savedWorkerId || 'WRK-001')
       setIsRegistered(true)
       setScreen('app')
     }
   }, [])
+
+  useEffect(() => {
+    if (!isRegistered || !workerId) return
+
+    let cancelled = false
+
+    const loadPaymentState = async () => {
+      try {
+        const policyData = await apiFetch(`/api/workers/${workerId}/policy`)
+        if (!cancelled) {
+          setAutoRenew(Boolean(policyData.policy?.autoRenew))
+          setPaymentMandate(policyData.payment?.activeMandate ?? null)
+          setPaymentUpiId(policyData.payment?.activeMandate?.upiId ?? '')
+        }
+      } catch {
+        if (!cancelled) {
+          setPaymentMandate(null)
+        }
+      }
+    }
+
+    loadPaymentState()
+
+    return () => {
+      cancelled = true
+    }
+  }, [isRegistered, workerId])
+
+  useEffect(() => {
+    if (!paymentUpiId && profile.upiId) {
+      setPaymentUpiId(profile.upiId)
+    }
+  }, [paymentUpiId, profile.upiId])
 
   // Get user location for zone detection
   const getLocation = () => {
@@ -150,18 +195,12 @@ export default function WorkerApp({ onBack }) {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch('/api/auth/request-otp', {
+      await apiFetch('/api/auth/request-otp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile })
       })
-      const data = await response.json()
-      if (response.ok) {
-        setRegistrationStep('otp')
-      } else {
-        setError(data.error || 'Failed to send OTP')
-      }
-    } catch (err) {
+      setRegistrationStep('otp')
+    } catch {
       setError('Network error. Please try again.')
     }
     setLoading(false)
@@ -171,26 +210,22 @@ export default function WorkerApp({ onBack }) {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch('/api/auth/verify-otp', {
+      const data = await apiFetch('/api/auth/verify-otp', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mobile, otp })
       })
-      const data = await response.json()
-      if (response.ok) {
-        if (data.isNewUser) {
-          setRegistrationStep('profile')
-          getLocation()
-        } else {
-          // Existing user - go to app
-          localStorage.setItem('gigshield_registered', 'true')
-          setIsRegistered(true)
-          setScreen('app')
-        }
+      if (data.isNewUser) {
+        setRegistrationStep('profile')
+        getLocation()
       } else {
-        setError(data.error || 'Invalid OTP')
+        const resolvedWorkerId = data.workerId || 'WRK-001'
+        localStorage.setItem('gigshield_registered', 'true')
+        localStorage.setItem('gigshield_worker_id', resolvedWorkerId)
+        setWorkerId(resolvedWorkerId)
+        setIsRegistered(true)
+        setScreen('app')
       }
-    } catch (err) {
+    } catch {
       setError('Network error. Please try again.')
     }
     setLoading(false)
@@ -200,9 +235,8 @@ export default function WorkerApp({ onBack }) {
     setLoading(true)
     setError('')
     try {
-      const response = await fetch('/api/workers/onboarding', {
+      const data = await apiFetch('/api/workers/onboarding', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           mobile,
           ...profile,
@@ -210,20 +244,116 @@ export default function WorkerApp({ onBack }) {
           lng: location?.lng
         })
       })
-      const data = await response.json()
-      if (response.ok) {
-        localStorage.setItem('gigshield_registered', 'true')
-        setIsRegistered(true)
-        setScreen('app')
-        setShowOnboarding(true)
-        setOnboardStep(0)
-      } else {
-        setError(data.error || 'Registration failed')
-      }
-    } catch (err) {
+      localStorage.setItem('gigshield_registered', 'true')
+      localStorage.setItem('gigshield_worker_id', data.worker.id)
+      setWorkerId(data.worker.id)
+      setIsRegistered(true)
+      setScreen('app')
+      setShowOnboarding(true)
+      setOnboardStep(0)
+    } catch {
       setError('Network error. Please try again.')
     }
     setLoading(false)
+  }
+
+  const purchasePlan = async () => {
+    const planIds = ['basic', 'pro', 'elite']
+    const selectedPlanId = planIds[selectedPlan] || 'pro'
+
+    setPaymentLoading(true)
+    setPaymentError('')
+    setPaymentSuccess(null)
+
+    try {
+      const paymentResult = await apiFetch(`/api/workers/${workerId}/payments/verify`, {
+        method: 'POST',
+        body: JSON.stringify({
+          orderId: paymentSession?.order?.id,
+          planId: selectedPlanId,
+          autoRenew: mandateConsent,
+          upiId: paymentUpiId || profile.upiId || paymentSession?.order?.upiId
+        })
+      })
+
+      setPaymentMandate(paymentResult.mandate ?? null)
+      setAutoRenew(Boolean(paymentResult.policy.autoRenew))
+      setPaymentSuccess({
+        amount: paymentResult.pricing.finalPremium,
+        referenceId: paymentResult.payment.referenceId,
+        upiId: paymentResult.payment.upiId,
+        policyId: paymentResult.policy.id
+      })
+      setPaymentStage('plans')
+      setPaymentSession(null)
+      setShowPurchase(false)
+      setActiveTab('policy')
+    } catch (err) {
+      setPaymentError(err.message || 'Payment failed. Please try again.')
+    } finally {
+      setPaymentLoading(false)
+    }
+  }
+
+  const startPaymentSandbox = async () => {
+    const planIds = ['basic', 'pro', 'elite']
+    const selectedPlanId = planIds[selectedPlan] || 'pro'
+
+    setPaymentLoading(true)
+    setPaymentError('')
+
+    try {
+      const checkout = await apiFetch(`/api/workers/${workerId}/payments/checkout`, {
+        method: 'POST',
+        body: JSON.stringify({
+          planId: selectedPlanId,
+          autoRenew: mandateConsent,
+          upiId: paymentUpiId || profile.upiId || undefined
+        })
+      })
+
+      setPaymentSession(checkout)
+      setPaymentUpiId(checkout.order.upiId || paymentUpiId || profile.upiId || '')
+      setPaymentStage('sandbox')
+    } catch (err) {
+      setPaymentError(err.message || 'Unable to open Razorpay sandbox.')
+    } finally {
+      setPaymentLoading(false)
+    }
+  }
+
+  const resetPaymentSandbox = () => {
+    setPaymentStage('plans')
+    setPaymentSession(null)
+    setPaymentError('')
+  }
+
+  const handleAutoRenewToggle = async () => {
+    const nextValue = !autoRenew
+    setPaymentError('')
+
+    try {
+      if (nextValue) {
+        const response = await apiFetch(`/api/workers/${workerId}/payments/mandate`, {
+          method: 'POST',
+          body: JSON.stringify({
+            upiId: profile.upiId || undefined
+          })
+        })
+        setPaymentMandate(response.mandate)
+        setAutoRenew(true)
+        return
+      }
+
+      const response = await apiFetch(`/api/workers/${workerId}/policy/auto-renew`, {
+        method: 'PATCH',
+        body: JSON.stringify({ autoRenew: false })
+      })
+      setPaymentMandate(response.mandate ?? null)
+      setAutoRenew(false)
+    } catch (err) {
+      setPaymentError(err.message || 'Unable to update auto-renew right now.')
+    }
   }
 
   // Registration screens
@@ -569,6 +699,8 @@ export default function WorkerApp({ onBack }) {
       { name: 'Pro Shield', price: 99, adjusted: 108, payout: 600, hours: 10, icon: 'P', popular: true },
       { name: 'Elite Shield', price: 149, adjusted: 162, payout: 1000, hours: 14, icon: 'E', popular: false },
     ]
+    const activePlan = plans[selectedPlan]
+    const finalAmount = activePlan.adjusted - Math.round(activePlan.adjusted * 0.05)
 
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
@@ -577,11 +709,25 @@ export default function WorkerApp({ onBack }) {
           <div className="phone-frame relative z-10">
             <div className="phone-notch" />
             <div className="h-full flex flex-col pt-12 pb-6 px-5 overflow-y-auto">
-              <button onClick={() => setShowPurchase(false)} className="flex items-center gap-2 text-text-secondary text-sm mb-3 mt-2">
-                <ArrowLeft size={16} /> Back
+              <button
+                onClick={() => {
+                  if (paymentStage === 'sandbox') {
+                    resetPaymentSandbox()
+                    return
+                  }
+                  setShowPurchase(false)
+                }}
+                className="flex items-center gap-2 text-text-secondary text-sm mb-3 mt-2"
+              >
+                <ArrowLeft size={16} /> {paymentStage === 'sandbox' ? 'Back to plans' : 'Back'}
               </button>
-              <h2 className="text-xl font-bold text-text-primary mb-1">Choose Your Shield</h2>
-              <p className="text-sm text-text-secondary mb-4">AI-adjusted premiums for Zone HSR-01</p>
+              <h2 className="text-xl font-bold text-text-primary mb-1">{paymentStage === 'sandbox' ? 'Razorpay Sandbox' : 'Choose Your Shield'}</h2>
+              <p className="text-sm text-text-secondary mb-4">
+                {paymentStage === 'sandbox' ? 'Review the order and simulate a secure UPI payment' : 'AI-adjusted premiums for Zone HSR-01'}
+              </p>
+
+              {paymentStage === 'plans' && (
+                <>
 
               <div className="glass rounded-2xl p-3 mb-4 flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-warning/20 flex items-center justify-center">
@@ -667,10 +813,125 @@ export default function WorkerApp({ onBack }) {
                 </div>
               </div>
 
-              <button onClick={() => setShowPurchase(false)}
-                      className="w-full py-3.5 gradient-primary rounded-2xl text-white font-bold shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
-                <IndianRupee size={18} /> Pay with UPI
+              {paymentError && (
+                <div className="mb-3 rounded-2xl border border-danger/20 bg-danger/10 px-3 py-2">
+                  <p className="text-xs font-medium text-danger">{paymentError}</p>
+                </div>
+              )}
+
+              <button onClick={startPaymentSandbox}
+                      disabled={paymentLoading}
+                      className="w-full py-3.5 gradient-primary rounded-2xl text-white font-bold shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-70">
+                <CreditCard size={18} /> {paymentLoading ? 'Opening checkout...' : 'Continue to Razorpay'}
               </button>
+                </>
+              )}
+
+              {paymentStage === 'sandbox' && (
+                <>
+                  <div className="relative overflow-hidden rounded-[28px] border border-dark-border/80 bg-dark-card/90 p-4 shadow-[0_18px_36px_rgba(83,59,34,0.08)]">
+                    <div className="absolute inset-x-0 top-0 h-1 gradient-primary" />
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-primary">Order Summary</p>
+                        <h3 className="mt-1 text-lg font-semibold text-text-primary">{activePlan.name}</h3>
+                        <p className="text-xs text-text-secondary">Weekly cover for Zone HSR-01</p>
+                      </div>
+                      <div className="rounded-2xl bg-primary/10 px-3 py-2 text-right">
+                        <p className="text-[10px] text-text-muted">Pay now</p>
+                        <p className="text-lg font-bold text-text-primary">₹{paymentSession?.pricing?.finalPremium ?? finalAmount}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-2">
+                      <div className="rounded-2xl bg-dark-surface/70 p-3">
+                        <p className="text-[10px] uppercase tracking-[0.16em] text-text-muted">Order ID</p>
+                        <p className="mt-1 text-xs font-semibold text-text-primary break-all">{paymentSession?.order?.id ?? 'Preparing...'}</p>
+                      </div>
+                      <div className="rounded-2xl bg-dark-surface/70 p-3">
+                        <p className="text-[10px] uppercase tracking-[0.16em] text-text-muted">Method</p>
+                        <p className="mt-1 text-xs font-semibold text-text-primary">UPI collect</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-dark-border bg-[linear-gradient(145deg,rgba(164,91,51,0.08),rgba(239,230,218,0.7))] p-4">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl gradient-primary text-white shadow-[0_12px_24px_rgba(164,91,51,0.22)]">
+                          <Shield size={18} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-text-primary">Razorpay Test Mode</p>
+                          <p className="text-[11px] text-text-secondary">Simulated checkout for the demo flow</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 space-y-3">
+                        <div>
+                          <label className="mb-1.5 block text-[10px] uppercase tracking-[0.16em] text-text-muted">UPI ID</label>
+                          <input
+                            type="text"
+                            value={paymentUpiId}
+                            onChange={(e) => setPaymentUpiId(e.target.value)}
+                            placeholder="partner@upi"
+                            className="w-full rounded-2xl border border-dark-border bg-dark-card px-4 py-3 text-sm text-text-primary outline-none transition-colors focus:border-primary/50"
+                          />
+                        </div>
+
+                        <div className="rounded-2xl bg-dark-card/80 p-3">
+                          <div className="flex items-start gap-3">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setMandateConsent(!mandateConsent)
+                                setAutoRenew(!mandateConsent)
+                              }}
+                              className={`mt-0.5 flex h-5 w-5 items-center justify-center rounded-md border ${mandateConsent ? 'border-primary bg-primary text-white' : 'border-dark-border bg-dark-card text-transparent'}`}
+                            >
+                              <CheckCircle2 size={12} />
+                            </button>
+                            <div>
+                              <p className="text-xs font-semibold text-text-primary">Enable weekly auto-renew mandate</p>
+                              <p className="mt-1 text-[11px] leading-5 text-text-secondary">
+                                Matches the README flow: simulate a Razorpay recurring UPI mandate after checkout.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="rounded-2xl bg-dark-card/70 p-3">
+                          <div className="flex justify-between text-xs">
+                            <span className="text-text-secondary">Premium after tier discount</span>
+                            <span className="font-semibold text-text-primary">₹{paymentSession?.pricing?.finalPremium ?? finalAmount}</span>
+                          </div>
+                          <div className="mt-2 flex justify-between text-xs">
+                            <span className="text-text-secondary">Payout cover</span>
+                            <span className="font-semibold text-text-primary">₹{activePlan.payout}/day</span>
+                          </div>
+                          <div className="mt-2 flex justify-between text-xs">
+                            <span className="text-text-secondary">Mandate status</span>
+                            <span className={`font-semibold ${mandateConsent ? 'text-success' : 'text-text-primary'}`}>
+                              {mandateConsent ? 'Will activate after payment' : 'One-time payment only'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {paymentError && (
+                    <div className="mt-4 rounded-2xl border border-danger/20 bg-danger/10 px-3 py-2">
+                      <p className="text-xs font-medium text-danger">{paymentError}</p>
+                    </div>
+                  )}
+
+                  <button onClick={purchasePlan}
+                          disabled={paymentLoading || !paymentUpiId.trim() || !paymentSession?.order?.id}
+                          className="mt-4 w-full py-3.5 gradient-primary rounded-2xl text-white font-bold shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-70">
+                    <IndianRupee size={18} /> {paymentLoading ? 'Authorising payment...' : 'Simulate successful payment'}
+                  </button>
+                  <p className="text-center text-[10px] text-text-muted mt-2">No real charge happens here. This is a polished sandbox checkout for the demo.</p>
+                </>
+              )}
               <p className="text-center text-[10px] text-text-muted mt-2">Razorpay Sandbox · Secure Payment</p>
             </div>
           </div>
@@ -682,7 +943,7 @@ export default function WorkerApp({ onBack }) {
   const renderTab = () => {
     switch (activeTab) {
       case 'home': return <HomeTab setShowNotif={setShowNotif} showNotif={showNotif} setShowPurchase={setShowPurchase} />
-      case 'policy': return <PolicyTab autoRenew={autoRenew} setAutoRenew={setAutoRenew} />
+      case 'policy': return <PolicyTab autoRenew={autoRenew} onToggleAutoRenew={handleAutoRenewToggle} paymentMandate={paymentMandate} paymentSuccess={paymentSuccess} paymentError={paymentError} />
       case 'points': return <PointsTab />
       case 'history': return <HistoryTab />
       case 'profile': return <ProfileTab onBack={onBack} />
@@ -1197,10 +1458,30 @@ function HomeTab({ setShowNotif, showNotif, setShowPurchase }) {
 
 
 // ─── POLICY TAB (Enhanced) ───────────────────────────
-function PolicyTab({ autoRenew, setAutoRenew }) {
+function PolicyTab({ autoRenew, onToggleAutoRenew, paymentMandate, paymentSuccess, paymentError }) {
   return (
     <div className="space-y-3.5 mt-2">
       <h2 className="text-lg font-bold text-text-primary">My Policy</h2>
+
+      {paymentSuccess && (
+        <div className="rounded-2xl border border-success/20 bg-success/10 p-3.5">
+          <div className="flex items-start gap-2.5">
+            <CheckCircle2 size={18} className="text-success shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-success">Razorpay payment completed</p>
+              <p className="text-[11px] text-text-secondary mt-1">
+                Paid Rs {paymentSuccess.amount} from {paymentSuccess.upiId}. Ref: {paymentSuccess.referenceId}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {paymentError && (
+        <div className="rounded-2xl border border-danger/20 bg-danger/10 p-3">
+          <p className="text-xs font-medium text-danger">{paymentError}</p>
+        </div>
+      )}
 
       {/* Certificate */}
       <div className="relative overflow-hidden rounded-2xl border border-primary/30">
@@ -1386,10 +1667,12 @@ function PolicyTab({ autoRenew, setAutoRenew }) {
           <RefreshCw size={16} className="text-primary" />
           <div>
             <p className="text-sm font-semibold text-text-primary">Auto-Renew</p>
-            <p className="text-[10px] text-text-secondary">UPI mandate active</p>
+            <p className="text-[10px] text-text-secondary">
+              {paymentMandate?.status === 'active' ? `UPI mandate active · ${paymentMandate.upiId}` : 'UPI mandate paused'}
+            </p>
           </div>
         </div>
-        <button onClick={() => setAutoRenew(!autoRenew)}
+        <button onClick={onToggleAutoRenew}
                 className={`w-11 h-6 rounded-full transition-all relative ${autoRenew ? 'bg-primary' : 'bg-dark-border'}`}>
           <div className={`w-4.5 h-4.5 rounded-full bg-white absolute top-[3px] transition-all ${autoRenew ? 'right-[3px]' : 'left-[3px]'}`} style={{ width: 18, height: 18 }} />
         </button>

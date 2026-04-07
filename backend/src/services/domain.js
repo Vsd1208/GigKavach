@@ -252,11 +252,149 @@ export function buyPolicy(workerId, payload) {
   return { policy, pricing };
 }
 
+export function createRazorpayOrder(workerId, payload = {}) {
+  const worker = getWorker(workerId);
+  const zone = getZone(worker.zoneId);
+  const { planId = "pro", autoRenew = true, upiId } = payload;
+  const pricing = calculatePremium(planId, zone.riskScore, worker.points);
+  const order = {
+    id: `order_${Date.now()}`,
+    workerId,
+    planId,
+    amount: pricing.finalPremium * 100,
+    currency: "INR",
+    status: "created",
+    upiId: upiId ?? worker.upiId,
+    autoRenewRequested: Boolean(autoRenew),
+    provider: "razorpay-test-mode",
+    createdAt: new Date().toISOString()
+  };
+  store.paymentOrders.unshift(order);
+  return {
+    order,
+    pricing,
+    checkout: {
+      key: "rzp_test_gigshield",
+      name: "GigShield",
+      description: `${pricing.plan.name} weekly premium`,
+      prefill: {
+        name: worker.name,
+        contact: worker.mobile,
+        method: "upi",
+        vpa: order.upiId
+      }
+    }
+  };
+}
+
+export function captureRazorpayPayment(workerId, payload = {}) {
+  const {
+    orderId,
+    planId = "pro",
+    autoRenew = true,
+    upiId
+  } = payload;
+  const order = store.paymentOrders.find((item) => item.id === orderId && item.workerId === workerId);
+  if (!order) throw createError(404, `Payment order ${orderId} not found`);
+  if (order.status === "paid") throw createError(409, "Payment order already completed");
+
+  const payment = {
+    id: `pay_${Date.now()}`,
+    orderId: order.id,
+    workerId,
+    amount: order.amount,
+    currency: order.currency,
+    method: "upi",
+    upiId: upiId ?? order.upiId,
+    status: "captured",
+    referenceId: `RZP-PAY-${Date.now()}`,
+    provider: "razorpay-test-mode",
+    createdAt: new Date().toISOString()
+  };
+
+  order.status = "paid";
+  order.paidAt = payment.createdAt;
+  order.upiId = payment.upiId;
+  store.paymentTransactions.unshift(payment);
+
+  const purchase = buyPolicy(workerId, {
+    planId,
+    autoRenew,
+    upiId: payment.upiId
+  });
+
+  let mandate = null;
+  if (autoRenew) {
+    mandate = createOrUpdatePaymentMandate(workerId, {
+      upiId: payment.upiId,
+      maxAmount: Math.max(order.amount, 15000),
+      source: "checkout"
+    }).mandate;
+  }
+
+  return {
+    order,
+    payment,
+    mandate,
+    ...purchase
+  };
+}
+
 export function toggleAutoRenew(workerId, autoRenew) {
   const policy = getWorkerPolicy(workerId);
   if (!policy) throw createError(404, "No policy found for worker");
   policy.autoRenew = Boolean(autoRenew);
-  return policy;
+  const mandate = store.paymentMandates.find((item) => item.workerId === workerId && item.status !== "revoked") ?? null;
+  if (mandate) {
+    mandate.status = autoRenew ? "active" : "paused";
+    mandate.updatedAt = new Date().toISOString();
+  }
+  return { policy, mandate };
+}
+
+export function createOrUpdatePaymentMandate(workerId, payload = {}) {
+  const worker = getWorker(workerId);
+  const existingMandate = store.paymentMandates.find((item) => item.workerId === workerId && item.status !== "revoked");
+  const currentPolicy = getWorkerPolicy(workerId);
+  const maxAmount = Number(payload.maxAmount) || ((currentPolicy?.finalPremium ?? calculatePremium("pro", getZone(worker.zoneId).riskScore, worker.points).finalPremium) * 100);
+  const now = new Date().toISOString();
+
+  if (payload.upiId) {
+    worker.upiId = payload.upiId;
+  }
+
+  if (existingMandate) {
+    existingMandate.upiId = payload.upiId ?? existingMandate.upiId;
+    existingMandate.maxAmount = maxAmount;
+    existingMandate.status = "active";
+    existingMandate.updatedAt = now;
+    if (currentPolicy) currentPolicy.autoRenew = true;
+    return { mandate: existingMandate, policy: currentPolicy };
+  }
+
+  const mandate = {
+    id: `mandate_${Date.now()}`,
+    workerId,
+    upiId: worker.upiId,
+    status: "active",
+    maxAmount,
+    frequency: "weekly",
+    provider: "razorpay-test-mode",
+    source: payload.source ?? "settings",
+    createdAt: now,
+    approvedAt: now
+  };
+  store.paymentMandates.unshift(mandate);
+  if (currentPolicy) currentPolicy.autoRenew = true;
+  return { mandate, policy: currentPolicy };
+}
+
+export function getPaymentState(workerId) {
+  return {
+    activeMandate: store.paymentMandates.find((item) => item.workerId === workerId && item.status === "active") ?? null,
+    recentPayments: store.paymentTransactions.filter((item) => item.workerId === workerId).slice(0, 5),
+    recentOrders: store.paymentOrders.filter((item) => item.workerId === workerId).slice(0, 5)
+  };
 }
 
 export function issueOtp(mobile) {
