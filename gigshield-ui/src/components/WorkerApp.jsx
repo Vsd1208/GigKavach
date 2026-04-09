@@ -258,40 +258,97 @@ export default function WorkerApp({ onBack }) {
   }
 
   const purchasePlan = async () => {
-    const planIds = ['basic', 'pro', 'elite']
-    const selectedPlanId = planIds[selectedPlan] || 'pro'
+    const loadScript = (src) => {
+      return new Promise((resolve) => {
+        if (document.querySelector(`script[src="${src}"]`)) {
+          resolve(true);
+          return;
+        }
+        const script = document.createElement("script");
+        script.src = src;
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    };
 
     setPaymentLoading(true)
     setPaymentError('')
     setPaymentSuccess(null)
 
-    try {
-      const paymentResult = await apiFetch(`/api/workers/${workerId}/payments/verify`, {
-        method: 'POST',
-        body: JSON.stringify({
-          orderId: paymentSession?.order?.id,
-          planId: selectedPlanId,
-          autoRenew: mandateConsent,
-          upiId: paymentUpiId || profile.upiId || paymentSession?.order?.upiId
-        })
-      })
+    const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+    if (!isLoaded) {
+      setPaymentError("Could not load Razorpay. Check your connection.");
+      setPaymentLoading(false);
+      return;
+    }
 
-      setPaymentMandate(paymentResult.mandate ?? null)
-      setAutoRenew(Boolean(paymentResult.policy.autoRenew))
-      setPaymentSuccess({
-        amount: paymentResult.pricing.finalPremium,
-        referenceId: paymentResult.payment.referenceId,
-        upiId: paymentResult.payment.upiId,
-        policyId: paymentResult.policy.id
-      })
-      setPaymentStage('plans')
-      setPaymentSession(null)
-      setShowPurchase(false)
-      setActiveTab('policy')
+    const planIds = ['basic', 'pro', 'elite'];
+    const selectedPlanId = planIds[selectedPlan] || 'pro';
+
+    const options = {
+      key: paymentSession?.checkout?.key || "rzp_test_placeholder",
+      amount: paymentSession?.order?.amount || 0,
+      currency: paymentSession?.order?.currency || "INR",
+      name: paymentSession?.checkout?.name || "GigShield",
+      description: paymentSession?.checkout?.description || "Premium",
+      order_id: paymentSession?.order?.id,
+      prefill: {
+        name: profile?.name || "Partner",
+        contact: profile?.mobile || mobile || "9999999999",
+        method: "upi",
+        vpa: paymentUpiId || profile?.upiId || "success@razorpay"
+      },
+      handler: async function (response) {
+        try {
+          const paymentResult = await apiFetch(`/api/workers/${workerId}/payments/verify`, {
+            method: 'POST',
+            body: JSON.stringify({
+              orderId: paymentSession?.order?.id,
+              planId: selectedPlanId,
+              autoRenew: mandateConsent,
+              upiId: paymentUpiId || profile?.upiId || paymentSession?.order?.upiId,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          })
+
+          setPaymentMandate(paymentResult.mandate ?? null)
+          setAutoRenew(Boolean(paymentResult.policy.autoRenew))
+          setPaymentSuccess({
+            amount: paymentResult.pricing.finalPremium,
+            referenceId: paymentResult.payment.referenceId,
+            upiId: paymentResult.payment.upiId,
+            policyId: paymentResult.policy.id
+          })
+          setPaymentStage('plans')
+          setPaymentSession(null)
+          setShowPurchase(false)
+          setActiveTab('policy')
+        } catch (err) {
+          setPaymentError(err.message || 'Payment verification failed.')
+        } finally {
+          setPaymentLoading(false)
+        }
+      },
+      modal: {
+        ondismiss: function () {
+          setPaymentLoading(false)
+        }
+      },
+      theme: { color: "#A45B33" }
+    };
+
+    try {
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function (response) {
+        setPaymentError(`Payment failed: ${response.error.description || 'Unknown error'}`);
+        setPaymentLoading(false);
+      });
+      rzp.open();
     } catch (err) {
-      setPaymentError(err.message || 'Payment failed. Please try again.')
-    } finally {
-      setPaymentLoading(false)
+        setPaymentError(err.message || 'Failed to open Checkout.');
+        setPaymentLoading(false);
     }
   }
 
@@ -925,11 +982,11 @@ export default function WorkerApp({ onBack }) {
                   )}
 
                   <button onClick={purchasePlan}
-                          disabled={paymentLoading || !paymentUpiId.trim() || !paymentSession?.order?.id}
+                          disabled={paymentLoading || !paymentSession?.order?.id}
                           className="mt-4 w-full py-3.5 gradient-primary rounded-2xl text-white font-bold shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2 disabled:opacity-70">
-                    <IndianRupee size={18} /> {paymentLoading ? 'Authorising payment...' : 'Simulate successful payment'}
+                    <IndianRupee size={18} /> {paymentLoading ? 'Opening Razorpay...' : 'Pay with Razorpay (Sandbox)'}
                   </button>
-                  <p className="text-center text-[10px] text-text-muted mt-2">No real charge happens here. This is a polished sandbox checkout for the demo.</p>
+                  <p className="text-center text-[10px] text-text-muted mt-2">Uses Razorpay test mode. No real money will be charged.</p>
                 </>
               )}
               <p className="text-center text-[10px] text-text-muted mt-2">Razorpay Sandbox · Secure Payment</p>

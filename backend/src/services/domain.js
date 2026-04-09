@@ -2,6 +2,8 @@ import { store } from "../store.js";
 import { createError } from "../utils/http.js";
 import { clamp, haversineDistanceMeters, roundCurrency } from "../utils/math.js";
 import { askGigBotModel, getAqiSnapshot, getGroundSignal, getWeatherSnapshot, sendPush, sendSms, simulatePayout } from "./integrations.js";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 const triggerDefinitions = [
   { key: "rainfall", label: "Heavy Rain", threshold: ">15 mm/hr", check: (zone) => zone.metrics.rainfall > 15, sustainedMinutes: 10 },
@@ -252,13 +254,29 @@ export function buyPolicy(workerId, payload) {
   return { policy, pricing };
 }
 
-export function createRazorpayOrder(workerId, payload = {}) {
+export async function createRazorpayOrder(workerId, payload = {}) {
   const worker = getWorker(workerId);
   const zone = getZone(worker.zoneId);
   const { planId = "pro", autoRenew = true, upiId } = payload;
   const pricing = calculatePremium(planId, zone.riskScore, worker.points);
+  
+  let razorpayOrder;
+  if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID,
+      key_secret: process.env.RAZORPAY_KEY_SECRET,
+    });
+    razorpayOrder = await razorpay.orders.create({
+      amount: pricing.finalPremium * 100,
+      currency: "INR",
+      receipt: `rcpt_${workerId}_${Date.now()}`
+    });
+  } else {
+    razorpayOrder = { id: `order_${Date.now()}` };
+  }
+
   const order = {
-    id: `order_${Date.now()}`,
+    id: razorpayOrder.id,
     workerId,
     planId,
     amount: pricing.finalPremium * 100,
@@ -266,7 +284,7 @@ export function createRazorpayOrder(workerId, payload = {}) {
     status: "created",
     upiId: upiId ?? worker.upiId,
     autoRenewRequested: Boolean(autoRenew),
-    provider: "razorpay-test-mode",
+    provider: "razorpay",
     createdAt: new Date().toISOString()
   };
   store.paymentOrders.unshift(order);
@@ -274,7 +292,7 @@ export function createRazorpayOrder(workerId, payload = {}) {
     order,
     pricing,
     checkout: {
-      key: "rzp_test_gigshield",
+      key: process.env.RAZORPAY_KEY_ID || "rzp_test_gigshield",
       name: "GigShield",
       description: `${pricing.plan.name} weekly premium`,
       prefill: {
@@ -287,19 +305,32 @@ export function createRazorpayOrder(workerId, payload = {}) {
   };
 }
 
-export function captureRazorpayPayment(workerId, payload = {}) {
+export async function captureRazorpayPayment(workerId, payload = {}) {
   const {
     orderId,
     planId = "pro",
     autoRenew = true,
-    upiId
+    upiId,
+    razorpay_payment_id,
+    razorpay_signature
   } = payload;
   const order = store.paymentOrders.find((item) => item.id === orderId && item.workerId === workerId);
   if (!order) throw createError(404, `Payment order ${orderId} not found`);
   if (order.status === "paid") throw createError(409, "Payment order already completed");
 
+  if (process.env.RAZORPAY_KEY_SECRET && razorpay_signature) {
+    const body = order.id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body.toString())
+      .digest("hex");
+    if (expectedSignature !== razorpay_signature) {
+      throw createError(400, "Invalid payment signature");
+    }
+  }
+
   const payment = {
-    id: `pay_${Date.now()}`,
+    id: razorpay_payment_id || `pay_${Date.now()}`,
     orderId: order.id,
     workerId,
     amount: order.amount,
@@ -307,8 +338,8 @@ export function captureRazorpayPayment(workerId, payload = {}) {
     method: "upi",
     upiId: upiId ?? order.upiId,
     status: "captured",
-    referenceId: `RZP-PAY-${Date.now()}`,
-    provider: "razorpay-test-mode",
+    referenceId: razorpay_payment_id || `RZP-PAY-${Date.now()}`,
+    provider: "razorpay",
     createdAt: new Date().toISOString()
   };
 
