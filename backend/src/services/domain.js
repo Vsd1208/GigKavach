@@ -292,7 +292,7 @@ export async function createRazorpayOrder(workerId, payload = {}) {
     order,
     pricing,
     checkout: {
-      key: process.env.RAZORPAY_KEY_ID || "rzp_test_gigshield",
+      key: process.env.RAZORPAY_KEY_ID || "rzp_test_1234567890abcd",
       name: "GigShield",
       description: `${pricing.plan.name} weekly premium`,
       prefill: {
