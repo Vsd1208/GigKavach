@@ -14,7 +14,7 @@ import {
   Wallet,
   Wind,
 } from 'lucide-react'
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from '../Context/ThemeContext'
 
 const fieldNotes = [
   {
@@ -361,11 +361,12 @@ function FeatureRow({ text }) {
   )
 }
 
-function MiniMetric({ icon: Icon, label, value }) {
+function MiniMetric({ icon, label, value }) {
+  const MetricIcon = icon
   return (
     <div className="rounded-[24px] border border-dark-border/70 bg-dark-surface/50 p-5">
       <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[rgba(143,109,79,0.14)] text-[#8f6d4f]">
-        <Icon size={18} />
+        <MetricIcon size={18} />
       </div>
       <p className="mt-4 text-xs uppercase tracking-[0.16em] text-text-muted">{label}</p>
       <p className="mt-2 text-sm leading-6 text-text-primary">{value}</p>

@@ -1,14 +1,13 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react'
 
 const ThemeContext = createContext()
 
 export function ThemeProvider({ children }) {
-  const [isDark, setIsDark] = useState(false)
-
-  useEffect(() => {
+  const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('gigshield-theme')
-    if (saved === 'dark') setIsDark(true)
-  }, [])
+    return saved === 'dark'
+  })
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light')

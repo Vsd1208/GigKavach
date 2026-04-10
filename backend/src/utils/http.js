@@ -29,6 +29,19 @@ export function sendText(res, statusCode, text, contentType = "text/plain; chars
   res.end(text);
 }
 
+export function sendBuffer(res, statusCode, buffer, contentType, filename) {
+  res.writeHead(statusCode, {
+    "Content-Type": contentType,
+    "Content-Length": buffer.length,
+    "Content-Disposition": `attachment; filename="${filename}"`,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Expose-Headers": "Content-Disposition"
+  });
+  res.end(buffer);
+}
+
 export function createError(statusCode, message, details) {
   const error = new Error(message);
   error.statusCode = statusCode;

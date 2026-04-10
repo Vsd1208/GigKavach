@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { Shield, ArrowLeft, Map, Activity, BarChart3, AlertTriangle, Sliders, Award, Users, Clock, TrendingUp, TrendingDown, IndianRupee, CloudRain, Wind, Thermometer, CheckCircle2, XCircle, MapPin, Zap, ChevronRight, ChevronDown, Bell, Search, Filter, RefreshCw, Eye, Download, Calendar, Globe, Layers, Target, PieChart, Flame, ShieldAlert, Fingerprint, Network, Radio, Wifi, Moon, Sun } from 'lucide-react'
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from '../Context/ThemeContext'
 import { AreaChart, Area, BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart as RPieChart, Pie, Cell, RadialBarChart, RadialBar, Legend } from 'recharts'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -23,6 +23,7 @@ const sidebarItems = [
   { id: 'simulator', label: 'Risk Simulator', icon: Sliders },
   { id: 'forecast', label: '7-Day Forecast', icon: Calendar },
   { id: 'loyalty', label: 'Loyalty Monitor', icon: Award },
+  { id: 'pools', label: 'Pool Monitor', icon: Users },
 ]
 
 const weeklyPayouts = [
@@ -66,6 +67,11 @@ const forecastData = [
 ]
 
 const COLORS = ['#a45b33', '#8a6a52', '#bf5b45', '#c38a2e', '#bc8750']
+const FRAUD_RING_POINTS = Array.from({ length: 20 }, (_, i) => {
+  const angle = (i / 20) * Math.PI * 2
+  const radius = 40 + ((i * 17) % 25)
+  return { x: 80 + Math.cos(angle) * radius, y: 80 + Math.sin(angle) * radius }
+})
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload) return null
@@ -152,6 +158,7 @@ export default function AdminDashboard({ onBack }) {
           {activeTab === 'forecast' && <ForecastPanel />}
           {activeTab === 'antispoofing' && <AntiSpoofingPanel />}
           {activeTab === 'loyalty' && <LoyaltyPanel />}
+          {activeTab === 'pools' && <PoolMonitorPanel />}
         </div>
       </main>
     </div>
@@ -593,7 +600,9 @@ function FraudPanel() {
         method: 'POST',
         body: JSON.stringify({ decision })
       })
-    } catch {}
+    } catch (error) {
+      console.warn('Fraud decision saved locally:', error)
+    }
     setCases(prev => prev.map(fc => fc.id === caseId ? { ...fc, status: decision } : fc))
   }
 
@@ -984,6 +993,99 @@ function LoyaltyPanel() {
   )
 }
 
+function PoolMonitorPanel() {
+  const [pools, setPools] = useState([])
+  const [selectedPool, setSelectedPool] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    apiFetch('/api/admin/pools')
+      .then((data) => {
+        if (!cancelled) setPools(data.pools ?? [])
+      })
+      .catch(() => {
+        if (!cancelled) setPools([])
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const loadPool = async (zoneId) => {
+    try {
+      setSelectedPool(await apiFetch(`/api/admin/pools/${zoneId}`))
+    } catch {
+      setSelectedPool(null)
+    }
+  }
+
+  const sourcePools = pools.length ? pools : [
+    { zoneId: 'HSR-01', members: 34, weeklyContribution: 10, balance: 1240, contributionRate: 0.88, health: 'strong', lifetimeDisbursed: 200 },
+    { zoneId: 'KOR-02', members: 22, weeklyContribution: 10, balance: 640, contributionRate: 0.79, health: 'stable', lifetimeDisbursed: 0 },
+    { zoneId: 'BTM-05', members: 27, weeklyContribution: 10, balance: 940, contributionRate: 0.67, health: 'watch', lifetimeDisbursed: 500 },
+  ]
+
+  return (
+    <div className="space-y-6">
+      <div className="grid md:grid-cols-3 gap-4">
+        {sourcePools.map((pool) => (
+          <button key={pool.zoneId} onClick={() => loadPool(pool.zoneId)} className="glass rounded-2xl p-5 text-left hover:border-primary/30 transition-all">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-bold text-text-primary">{pool.zoneId}</p>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                pool.health === 'strong' ? 'bg-success/20 text-success' :
+                pool.health === 'watch' ? 'bg-warning/20 text-warning' :
+                'bg-primary/20 text-primary'
+              }`}>{pool.health.toUpperCase()}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-[10px] text-text-muted">Members</p>
+                <p className="text-lg font-bold text-text-primary">{pool.members}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-text-muted">Balance</p>
+                <p className="text-lg font-bold text-success">₹{pool.balance.toLocaleString()}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-text-muted">Weekly</p>
+                <p className="text-sm font-bold text-accent">₹{pool.weeklyContribution}</p>
+              </div>
+              <div>
+                <p className="text-[10px] text-text-muted">Contribution</p>
+                <p className="text-sm font-bold text-primary">{Math.round(pool.contributionRate * 100)}%</p>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      <div className="glass rounded-2xl p-5">
+        <h3 className="text-sm font-bold text-text-primary mb-4">Disbursement Motions</h3>
+        {(selectedPool?.motions ?? [
+          { id: 'PLM-001', reason: 'Below-threshold rain income loss', requestedAmount: 200, votesFor: 19, votesAgainst: 6, status: 'approved' },
+          { id: 'PLM-002', reason: 'Borderline AQI disruption', requestedAmount: 150, votesFor: 7, votesAgainst: 8, status: 'rejected' },
+        ]).map((motion) => (
+          <div key={motion.id} className="flex items-center justify-between py-3 border-b border-dark-border/40 last:border-0">
+            <div>
+              <p className="text-sm font-semibold text-text-primary">{motion.reason}</p>
+              <p className="text-xs text-text-muted">{motion.id} · for {motion.votesFor} · against {motion.votesAgainst}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-bold text-text-primary">₹{motion.requestedAmount}</p>
+              <span className={`text-[10px] font-bold ${
+                motion.status === 'approved' ? 'text-success' :
+                motion.status === 'rejected' ? 'text-danger' :
+                'text-warning'
+              }`}>{motion.status.toUpperCase()}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 // ANTI-SPOOFING PANEL
 function AntiSpoofingPanel() {
   const spoofingAttempts = [
@@ -1163,11 +1265,7 @@ function AntiSpoofingPanel() {
           <div className="absolute right-[10%] top-[50%] -translate-y-1/2">
             <p className="text-[10px] text-danger font-bold mb-2">Ring Alpha (460 accounts)</p>
             <div className="relative w-[160px] h-[160px]">
-              {Array.from({ length: 20 }, (_, i) => {
-                const angle = (i / 20) * Math.PI * 2
-                const r = 40 + Math.random() * 25
-                return { x: 80 + Math.cos(angle) * r, y: 80 + Math.sin(angle) * r }
-              }).map((p, i) => (
+              {FRAUD_RING_POINTS.map((p, i) => (
                 <div key={i} className="absolute w-2.5 h-2.5 rounded-full bg-danger border border-danger/50" 
                      style={{ left: p.x, top: p.y }} />
               ))}

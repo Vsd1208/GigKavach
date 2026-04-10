@@ -3,8 +3,8 @@ import { Shield, ArrowLeft, Home, FileText, Award, Clock, Settings, Bell, Chevro
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area } from 'recharts'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { useTheme } from '../context/ThemeContext'
-import { apiFetch } from '../lib/api'
+import { useTheme } from '../Context/ThemeContext'
+import { apiFetch, getApiBaseUrl } from '../lib/api'
 
 // Fix Leaflet default icon issue with bundlers
 delete L.Icon.Default.prototype._getIconUrl
@@ -81,6 +81,42 @@ const SectionLabel = ({ children, action, actionLabel }) => (
   </div>
 )
 
+async function downloadBackendFile(path, filename) {
+  const response = await fetch(`${getApiBaseUrl()}${path}`)
+  if (!response.ok) {
+    let message = 'Download failed'
+    const contentType = response.headers.get('content-type') ?? ''
+    if (contentType.includes('application/json')) {
+      const payload = await response.json()
+      message = payload.error ?? message
+    } else {
+      message = await response.text() || message
+    }
+    throw new Error(message)
+  }
+  const blob = await response.blob()
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
+async function downloadCertificatePdf(workerId) {
+  try {
+    await downloadBackendFile(`/api/workers/${workerId}/certificate`, `gigshield-certificate-${workerId}.pdf`)
+  } catch (error) {
+    if (workerId !== 'WRK-001' && /worker|policy|certificate/i.test(error.message)) {
+      await downloadBackendFile('/api/workers/WRK-001/certificate', 'gigshield-demo-certificate-WRK-001.pdf')
+      return
+    }
+    throw error
+  }
+}
+
 // Status pill
 const StatusPill = ({ status, children }) => {
   const colors = {
@@ -134,8 +170,6 @@ export default function WorkerApp({ onBack }) {
   const [paymentSession, setPaymentSession] = useState(null)
   const [paymentUpiId, setPaymentUpiId] = useState('')
   const [mandateConsent, setMandateConsent] = useState(true)
-
-  const { isDark, toggleTheme } = useTheme()
 
   // Check if user is registered (in real app, check localStorage or API)
   useEffect(() => {
@@ -286,15 +320,9 @@ export default function WorkerApp({ onBack }) {
     setPaymentError('')
     setPaymentSuccess(null)
 
-    const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
-    if (!isLoaded) {
-      setPaymentError("Could not load Razorpay. Check your connection.");
-      setPaymentLoading(false);
-      return;
-    }
-
     const planIds = ['basic', 'pro', 'elite'];
     const selectedPlanId = planIds[selectedPlan] || 'pro';
+    const isDemoCheckout = paymentSession?.checkout?.demoMode || paymentSession?.checkout?.key === "rzp_test_gigshield_demo";
 
     const options = {
       key: paymentSession?.checkout?.key || "rzp_test_1234567890abcd",
@@ -318,6 +346,7 @@ export default function WorkerApp({ onBack }) {
               planId: selectedPlanId,
               autoRenew: mandateConsent,
               upiId: paymentUpiId || profile?.upiId || paymentSession?.order?.upiId,
+              razorpay_order_id: response.razorpay_order_id || paymentSession?.order?.id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature
             })
@@ -349,13 +378,21 @@ export default function WorkerApp({ onBack }) {
       theme: { color: "#A45B33" }
     };
 
-    if (options.key === "rzp_test_1234567890abcd") {
+    if (isDemoCheckout) {
       setTimeout(() => {
         options.handler({
           razorpay_payment_id: "pay_mock_" + Date.now(),
+          razorpay_order_id: paymentSession?.order?.id,
           razorpay_signature: "mock_signature_no_key"
         });
       }, 1500);
+      return;
+    }
+
+    const isLoaded = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+    if (!isLoaded) {
+      setPaymentError("Could not load Razorpay. Check your connection.");
+      setPaymentLoading(false);
       return;
     }
 
@@ -1021,8 +1058,8 @@ export default function WorkerApp({ onBack }) {
     switch (activeTab) {
       case 'home': return <HomeTab setShowNotif={setShowNotif} showNotif={showNotif} setShowPurchase={setShowPurchase} setActiveTab={setActiveTab} onToggleAutoRenew={handleAutoRenewToggle} setShowGigBot={setShowGigBot} workerId={workerId} />
       case 'policy': return <PolicyTab autoRenew={autoRenew} onToggleAutoRenew={handleAutoRenewToggle} paymentMandate={paymentMandate} paymentSuccess={paymentSuccess} paymentError={paymentError} workerId={workerId} />
-      case 'points': return <PointsTab workerId={workerId} setActiveTab={setActiveTab} />
-      case 'history': return <HistoryTab workerId={workerId} setActiveTab={setActiveTab} />
+      case 'points': return <PointsTab workerId={workerId} />
+      case 'history': return <HistoryTab />
       case 'profile': return <ProfileTab onBack={onBack} setActiveTab={setActiveTab} workerId={workerId} />
       default: return null
     }
@@ -1200,7 +1237,7 @@ function GigBotPanel({ onClose, workerId }) {
 
 
 // ─── HOME TAB (Enhanced) ─────────────────────────────
-function HomeTab({ setShowNotif, showNotif, setShowPurchase, setActiveTab, onToggleAutoRenew, setShowGigBot, workerId }) {
+function HomeTab({ setShowNotif, showNotif, setShowPurchase, setActiveTab, onToggleAutoRenew, setShowGigBot }) {
   const { isDark, toggleTheme } = useTheme()
   const mapRef = useRef(null)
   const mapInstanceRef = useRef(null)
@@ -1592,7 +1629,7 @@ function PolicyTab({ autoRenew, onToggleAutoRenew, paymentMandate, paymentSucces
               <Shield size={16} className="text-primary" />
               <span className="text-xs font-bold text-primary">GIGSHIELD POLICY</span>
             </div>
-            <button onClick={async () => { try { const text = await apiFetch(`/api/workers/${workerId}/certificate`); const blob = new Blob([text], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'gigshield-certificate.txt'; a.click(); URL.revokeObjectURL(url); } catch { alert('Could not download certificate. Make sure backend is running.') } }} className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[10px] font-medium">
+            <button onClick={async () => { try { await downloadCertificatePdf(workerId) } catch (error) { alert(`Could not download certificate: ${error.message}`) } }} className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[10px] font-medium">
               <Download size={10} /> PDF
             </button>
           </div>
@@ -1781,7 +1818,7 @@ function PolicyTab({ autoRenew, onToggleAutoRenew, paymentMandate, paymentSucces
       <div className="glass rounded-2xl p-3.5">
         <div className="flex items-center justify-between mb-2.5">
           <SectionLabel>Latest Claim</SectionLabel>
-          <button onClick={async () => { try { const text = await apiFetch(`/api/workers/${workerId}/claims/GS-CLM-0892/statement`); const blob = new Blob([text], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'claim-statement.txt'; a.click(); URL.revokeObjectURL(url); } catch { alert('Could not download statement. Make sure backend is running.') } }} className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[10px] font-medium">
+          <button onClick={async () => { try { const text = await apiFetch(`/api/workers/${workerId}/claims/CLM-0892/statement`); const blob = new Blob([text], { type: 'text/plain' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'claim-statement.txt'; a.click(); URL.revokeObjectURL(url); } catch { alert('Could not download statement. Make sure backend is running.') } }} className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-primary/10 text-primary text-[10px] font-medium">
             <Download size={10} /> EOB
           </button>
         </div>
@@ -1836,7 +1873,7 @@ function PolicyTab({ autoRenew, onToggleAutoRenew, paymentMandate, paymentSucces
 
 
 // ─── POINTS TAB (Enhanced) ───────────────────────────
-function PointsTab({ workerId, setActiveTab }) {
+function PointsTab({ workerId }) {
   return (
     <div className="space-y-3.5 mt-2">
       <h2 className="text-lg font-bold text-text-primary">GigPoints</h2>
@@ -1959,7 +1996,7 @@ function PointsTab({ workerId, setActiveTab }) {
 
 
 // ─── HISTORY TAB (Enhanced with sub-tabs) ────────────
-function HistoryTab({ workerId, setActiveTab }) {
+function HistoryTab() {
   const [subTab, setSubTab] = useState('savings')
 
   return (
@@ -2270,8 +2307,8 @@ function PoolSubTab() {
           </button>
         ) : (
           <div className="flex gap-2">
-            <button onClick={async () => { try { await apiFetch('/api/admin/pools/motions/PLM-001/vote', { method: 'POST', body: JSON.stringify({ vote: 'for' }) }); } catch {} setVoteResult('for'); setShowVote(false); }} className="flex-1 py-2.5 bg-success/10 border border-success/25 rounded-xl text-success text-[12px] font-semibold">✓ Approve</button>
-            <button onClick={async () => { try { await apiFetch('/api/admin/pools/motions/PLM-001/vote', { method: 'POST', body: JSON.stringify({ vote: 'against' }) }); } catch {} setVoteResult('against'); setShowVote(false); }} className="flex-1 py-2.5 bg-danger/10 border border-danger/25 rounded-xl text-danger text-[12px] font-semibold">✗ Deny</button>
+            <button onClick={async () => { try { await apiFetch('/api/admin/pools/motions/PLM-001/vote', { method: 'POST', body: JSON.stringify({ vote: 'for' }) }); } catch (error) { console.warn('Pool vote saved locally:', error) } setVoteResult('for'); setShowVote(false); }} className="flex-1 py-2.5 bg-success/10 border border-success/25 rounded-xl text-success text-[12px] font-semibold">✓ Approve</button>
+            <button onClick={async () => { try { await apiFetch('/api/admin/pools/motions/PLM-001/vote', { method: 'POST', body: JSON.stringify({ vote: 'against' }) }); } catch (error) { console.warn('Pool vote saved locally:', error) } setVoteResult('against'); setShowVote(false); }} className="flex-1 py-2.5 bg-danger/10 border border-danger/25 rounded-xl text-danger text-[12px] font-semibold">✗ Deny</button>
           </div>
         )}
       </div>

@@ -4,6 +4,9 @@ import { clamp, haversineDistanceMeters, roundCurrency } from "../utils/math.js"
 import { askGigBotModel, getAqiSnapshot, getGroundSignal, getWeatherSnapshot, sendPush, sendSms, simulatePayout } from "./integrations.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import PDFDocument from "pdfkit";
+
+const RAZORPAY_DEMO_KEY = "rzp_test_gigshield_demo";
 
 const triggerDefinitions = [
   { key: "rainfall", label: "Heavy Rain", threshold: ">15 mm/hr", check: (zone) => zone.metrics.rainfall > 15, sustainedMinutes: 10 },
@@ -66,6 +69,18 @@ export function calculatePremium(planId, riskScore, points) {
   };
 }
 
+function toPaise(amountRupees) {
+  const paise = Math.round(Number(amountRupees) * 100);
+  if (!Number.isSafeInteger(paise) || paise <= 0) {
+    throw createError(400, "Invalid payment amount");
+  }
+  return paise;
+}
+
+function fromPaise(amountPaise) {
+  return roundCurrency(Number(amountPaise) / 100);
+}
+
 export function getZoneStatus(zone) {
   if (zone.platformSignals.darkStoreClosed || zone.platformSignals.curfew || zone.platformSignals.floodAlert || zone.metrics.rainfall > 15 || zone.metrics.aqi > 300 || zone.metrics.temperature > 43) {
     return "disrupted";
@@ -109,13 +124,58 @@ export function evaluateFraud(workerId, eventId) {
   const event = store.disruptionEvents.find((item) => item.id === eventId);
   if (!event) throw createError(404, `Event ${eventId} not found`);
   const zone = getZone(worker.zoneId);
+  const eventZone = getZone(event.zoneId);
   const distanceMeters = haversineDistanceMeters(worker.currentLocation.lat, worker.currentLocation.lng, zone.center.lat, zone.center.lng);
-  const gps = distanceMeters <= zone.radiusMeters;
+  const radiusMultiplier = ["rainfall", "flash_flood"].includes(event.type) ? 1.25 : 1;
+  const allowedRadiusMeters = zone.radiusMeters * radiusMultiplier;
+  const gps = worker.zoneId === event.zoneId && distanceMeters <= allowedRadiusMeters;
   const activity = worker.deliveriesLast30Min >= 1;
   const session = Math.abs(Date.parse(worker.lastSeenAt) - Date.parse(event.triggeredAt)) <= 10 * 60 * 1000;
   const duplicate = !store.claims.some((claim) => claim.workerId === workerId && claim.eventId === eventId);
-  const score = Number(([gps, activity, session, duplicate].filter(Boolean).length / 4).toFixed(2));
-  return { gps, activity, session, duplicate, score, distanceMeters: Math.round(distanceMeters), autoApproved: score >= 0.75 };
+  const previousFraudFlag = store.fraudCases.some((item) => item.workerId === workerId && item.status === "blocked");
+  const tier = getTier(worker.points);
+  const trustBonus = tier.name === "Champion" && worker.streakWeeks >= 8
+    ? 0.2
+    : tier.name === "Veteran" && worker.streakWeeks >= 4
+      ? 0.15
+      : tier.name === "Reliable" && worker.streakWeeks >= 2
+        ? 0.1
+        : 0;
+
+  const velocityTrajectory = gps ? 1 : distanceMeters <= allowedRadiusMeters * 1.4 ? 0.65 : 0.15;
+  const deviceIntegrity = session ? 1 : 0.35;
+  const behavioralBiometric = activity ? 1 : worker.avgDailyHours >= 6 ? 0.55 : 0.25;
+  const networkCoordination = duplicate && !previousFraudFlag ? 1 : previousFraudFlag ? 0.2 : 0.45;
+  const environmentalConsistency = getZoneStatus(eventZone) === "disrupted" || event.sustainedMinutes >= 10 ? 1 : 0.7;
+  const weightedScore = (
+    0.2 * velocityTrajectory +
+    0.25 * deviceIntegrity +
+    0.15 * behavioralBiometric +
+    0.3 * networkCoordination +
+    0.1 * environmentalConsistency
+  );
+  const score = Number(clamp(weightedScore + trustBonus - (previousFraudFlag ? 0.2 : 0), 0, 1).toFixed(2));
+  const decision = score >= 0.75 ? "auto_approved" : score >= 0.5 ? "soft_hold" : "blocked";
+  return {
+    gps,
+    activity,
+    session,
+    duplicate,
+    score,
+    decision,
+    distanceMeters: Math.round(distanceMeters),
+    allowedRadiusMeters: Math.round(allowedRadiusMeters),
+    trustBonus,
+    layers: {
+      velocityTrajectory: Number(velocityTrajectory.toFixed(2)),
+      deviceIntegrity: Number(deviceIntegrity.toFixed(2)),
+      behavioralBiometric: Number(behavioralBiometric.toFixed(2)),
+      networkCoordination: Number(networkCoordination.toFixed(2)),
+      environmentalConsistency: Number(environmentalConsistency.toFixed(2))
+    },
+    autoApproved: decision === "auto_approved",
+    softHold: decision === "soft_hold"
+  };
 }
 
 export function workerClaims(workerId) {
@@ -259,6 +319,7 @@ export async function createRazorpayOrder(workerId, payload = {}) {
   const zone = getZone(worker.zoneId);
   const { planId = "pro", autoRenew = true, upiId } = payload;
   const pricing = calculatePremium(planId, zone.riskScore, worker.points);
+  const amountPaise = toPaise(pricing.finalPremium);
   
   let razorpayOrder;
   if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
@@ -267,19 +328,25 @@ export async function createRazorpayOrder(workerId, payload = {}) {
       key_secret: process.env.RAZORPAY_KEY_SECRET,
     });
     razorpayOrder = await razorpay.orders.create({
-      amount: pricing.finalPremium * 100,
+      amount: amountPaise,
       currency: "INR",
-      receipt: `rcpt_${workerId}_${Date.now()}`
+      receipt: `rcpt_${workerId.replace(/[^a-zA-Z0-9]/g, "")}_${Date.now()}`.slice(0, 40),
+      notes: {
+        workerId,
+        planId,
+        autoRenew: String(Boolean(autoRenew))
+      }
     });
   } else {
-    razorpayOrder = { id: `order_${Date.now()}` };
+    razorpayOrder = { id: `order_mock_${Date.now()}` };
   }
 
   const order = {
     id: razorpayOrder.id,
     workerId,
     planId,
-    amount: pricing.finalPremium * 100,
+    amount: amountPaise,
+    amountRupees: fromPaise(amountPaise),
     currency: "INR",
     status: "created",
     upiId: upiId ?? worker.upiId,
@@ -292,7 +359,8 @@ export async function createRazorpayOrder(workerId, payload = {}) {
     order,
     pricing,
     checkout: {
-      key: process.env.RAZORPAY_KEY_ID || "rzp_test_1234567890abcd",
+      key: process.env.RAZORPAY_KEY_ID || RAZORPAY_DEMO_KEY,
+      demoMode: !(process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET),
       name: "GigShield",
       description: `${pricing.plan.name} weekly premium`,
       prefill: {
@@ -308,17 +376,22 @@ export async function createRazorpayOrder(workerId, payload = {}) {
 export async function captureRazorpayPayment(workerId, payload = {}) {
   const {
     orderId,
-    planId = "pro",
-    autoRenew = true,
     upiId,
+    razorpay_order_id,
     razorpay_payment_id,
     razorpay_signature
   } = payload;
   const order = store.paymentOrders.find((item) => item.id === orderId && item.workerId === workerId);
   if (!order) throw createError(404, `Payment order ${orderId} not found`);
   if (order.status === "paid") throw createError(409, "Payment order already completed");
+  if (razorpay_order_id && razorpay_order_id !== order.id) {
+    throw createError(400, "Razorpay order ID does not match checkout session");
+  }
 
-  if (process.env.RAZORPAY_KEY_SECRET && razorpay_signature) {
+  if (process.env.RAZORPAY_KEY_SECRET) {
+    if (!razorpay_payment_id || !razorpay_signature) {
+      throw createError(400, "Missing Razorpay payment verification fields");
+    }
     const body = order.id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
@@ -349,13 +422,13 @@ export async function captureRazorpayPayment(workerId, payload = {}) {
   store.paymentTransactions.unshift(payment);
 
   const purchase = buyPolicy(workerId, {
-    planId,
-    autoRenew,
+    planId: order.planId,
+    autoRenew: order.autoRenewRequested,
     upiId: payment.upiId
   });
 
   let mandate = null;
-  if (autoRenew) {
+  if (order.autoRenewRequested) {
     mandate = createOrUpdatePaymentMandate(workerId, {
       upiId: payment.upiId,
       maxAmount: Math.max(order.amount, 15000),
@@ -653,7 +726,7 @@ export function runZoneMonitor() {
         totalPayout: 0
       };
       store.disruptionEvents.unshift(event);
-      store.liveFeed.unshift({
+      const liveItem = {
         id: `LIVE-${store.liveFeed.length + 1}`,
         time: event.triggeredAt,
         zoneId: zone.id,
@@ -662,11 +735,36 @@ export function runZoneMonitor() {
         payout: 0,
         status: trigger.sustainedMinutes ? "monitoring" : "auto-approved",
         type: trigger.key
-      });
+      };
+      store.liveFeed.unshift(liveItem);
       if (!trigger.sustainedMinutes) {
         const workersInZone = store.workers.filter((worker) => worker.zoneId === zone.id);
         for (const worker of workersInZone) {
           sendPush({ workerId: worker.id, message: `${trigger.label} active in ${zone.name}. Policy status is being checked.` });
+        }
+      }
+      const workersInZone = store.workers.filter((worker) => worker.zoneId === zone.id);
+      for (const worker of workersInZone) {
+        const policy = getWorkerPolicy(worker.id);
+        if (!policy || policy.status !== "active") continue;
+        try {
+          const result = processClaimPayout(worker.id, event.id);
+          liveItem.claims += 1;
+          liveItem.payout += result.claim.payoutAmount;
+          liveItem.status = "auto-approved";
+        } catch (error) {
+          if (error.statusCode === 409) {
+            store.liveFeed.unshift({
+              id: `LIVE-${store.liveFeed.length + 1}`,
+              time: new Date().toISOString(),
+              zoneId: zone.id,
+              event: `${worker.name} claim ${error.details?.softHold ? "soft hold" : "blocked"}`,
+              claims: 1,
+              payout: 0,
+              status: error.details?.softHold ? "review" : "blocked",
+              type: "fraud"
+            });
+          }
         }
       }
       newEvents.push(event);
@@ -702,6 +800,97 @@ export function generateCertificate(workerId) {
     "- Flash Flood Alert",
     "- Local Curfew"
   ].join("\n");
+}
+
+function collectPdf(document) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    document.on("data", (chunk) => chunks.push(chunk));
+    document.on("end", () => resolve(Buffer.concat(chunks)));
+    document.on("error", reject);
+  });
+}
+
+export async function generateCertificatePdf(workerId) {
+  const worker = getWorker(workerId);
+  const policy = getWorkerPolicy(workerId);
+  if (!policy) throw createError(404, "No policy found for certificate");
+  const zone = getZone(worker.zoneId);
+  const plan = getPlan(policy.planId);
+  const tier = getTier(worker.points);
+
+  const document = new PDFDocument({ size: "A4", margin: 48, info: { Title: `GigShield Certificate ${policy.certificateId}` } });
+  const ready = collectPdf(document);
+
+  document
+    .fontSize(22)
+    .fillColor("#123")
+    .text("GigShield Policy Certificate", { align: "center" });
+
+  document
+    .moveDown(0.5)
+    .fontSize(10)
+    .fillColor("#666")
+    .text("AI-powered parametric income protection for Q-Commerce delivery partners", { align: "center" });
+
+  document.moveDown(1.5);
+  document
+    .roundedRect(48, document.y, 499, 96, 8)
+    .fillAndStroke("#f6f8fb", "#d9e2ec");
+
+  document
+    .fillColor("#123")
+    .fontSize(11)
+    .text(`Certificate ID: ${policy.certificateId}`, 68, document.y + 18)
+    .text(`Policy ID: ${policy.id}`)
+    .text(`Issued To: ${worker.name}`)
+    .text(`Mobile: ${worker.mobile}`);
+
+  document.moveDown(2.5);
+  const rows = [
+    ["Plan", plan.name],
+    ["Zone", `${zone.name}, ${zone.city}`],
+    ["Dark Store", zone.darkStore],
+    ["Coverage", `Rs ${plan.payoutPerDay}/disruption day`],
+    ["Coverage Hours", `${plan.coverageHours} hrs/day`],
+    ["Valid From", policy.startsAt],
+    ["Valid Until", policy.endsAt],
+    ["Premium Paid", `Rs ${policy.finalPremium}`],
+    ["GigPoints Tier", `${tier.name} (${tier.discountPercent}% discount)`],
+    ["Auto Renew", policy.autoRenew ? "Enabled" : "Disabled"]
+  ];
+
+  document.fontSize(14).fillColor("#123").text("Policy Details");
+  document.moveDown(0.5);
+  for (const [label, value] of rows) {
+    const y = document.y;
+    document.fontSize(10).fillColor("#667").text(label, 68, y, { width: 140 });
+    document.fontSize(10).fillColor("#123").text(value, 220, y, { width: 290 });
+    document.moveDown(0.7);
+  }
+
+  document.moveDown(1);
+  document.fontSize(14).fillColor("#123").text("Covered Triggers");
+  document.moveDown(0.5);
+  [
+    "Rainfall > 15 mm/hr sustained for 10 minutes",
+    "AQI > 300 sustained for 10 minutes",
+    "Temperature > 43 C sustained for 10 minutes",
+    "Dark store closure",
+    "Flash flood alert",
+    "Local curfew"
+  ].forEach((trigger) => {
+    document.fontSize(10).fillColor("#123").text(`- ${trigger}`, { indent: 12 });
+  });
+
+  document.moveDown(1.5);
+  document
+    .fontSize(9)
+    .fillColor("#667")
+    .text("This demo certificate is generated from the GigShield policy state and is intended for prototype/testing use.", { align: "center" });
+
+  document.end();
+  return ready;
 }
 
 export function generateClaimStatement(workerId, claimId) {
@@ -838,7 +1027,22 @@ export function processClaimPayout(workerId, eventId) {
   const policy = getWorkerPolicy(workerId);
   if (!policy || policy.status !== "active") throw createError(409, "Worker does not have an active policy");
   const validation = evaluateFraud(workerId, eventId);
-  if (!validation.autoApproved) throw createError(409, "Fraud checks failed", validation);
+  if (!validation.autoApproved) {
+    const fraudCase = {
+      id: `FRD-${String(store.fraudCases.length + 1).padStart(3, "0")}`,
+      workerId,
+      eventId,
+      zoneId: worker.zoneId,
+      status: validation.softHold ? "review" : "blocked",
+      reviewNotes: validation.softHold ? "Soft hold from composite fraud score." : "Auto-blocked by composite fraud score.",
+      validation
+    };
+    store.fraudCases.unshift(fraudCase);
+    if (validation.softHold) {
+      sendPush({ workerId, message: "Your claim is being verified. This usually takes 5-10 minutes." });
+    }
+    throw createError(409, validation.softHold ? "Claim placed on soft hold" : "Fraud checks failed", validation);
+  }
   const plan = getPlan(policy.planId);
   const payment = simulatePayout({ workerId, amount: plan.payoutPerDay, reason: event.type });
   const claim = {

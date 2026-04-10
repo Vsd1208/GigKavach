@@ -18,6 +18,7 @@ import {
   getNotifications,
   getPaymentState,
   generateCertificate,
+  generateCertificatePdf,
   generateClaimStatement,
   getCoverageGap,
   getTier,
@@ -40,8 +41,9 @@ import {
   workerClaims,
   workerHistorySummary
 } from "./services/domain.js";
+import { getDatabaseState, persistStore } from "./db.js";
 import { store } from "./store.js";
-import { createError, readJson, sendJson, sendText } from "./utils/http.js";
+import { createError, readJson, sendBuffer, sendJson, sendText } from "./utils/http.js";
 
 function routeMatch(pathname, pattern) {
   const pathParts = pathname.split("/").filter(Boolean);
@@ -147,7 +149,7 @@ export async function handleRequest(req, res) {
       sendText(res, 200, renderHomePage(), "text/html; charset=utf-8");
       return null;
     }],
-    ["GET", "/health", async () => ({ ok: true, service: "gigshield-backend", now: new Date().toISOString() })],
+    ["GET", "/health", async () => ({ ok: true, service: "gigshield-backend", now: new Date().toISOString(), database: getDatabaseState() })],
     ["GET", "/api/plans", async () => ({ plans: listPlans() })],
     ["POST", "/api/auth/request-otp", async () => issueOtp((await readJson(req)).mobile)],
     ["POST", "/api/auth/verify-otp", async () => {
@@ -206,7 +208,12 @@ export async function handleRequest(req, res) {
     ["POST", "/api/workers/:workerId/gigbot", async ({ workerId }) => buildGigBotReply(workerId, (await readJson(req)).message ?? "")],
     ["POST", "/api/workers/:workerId/payouts/process", async ({ workerId }) => processClaimPayout(workerId, (await readJson(req)).eventId)],
     ["GET", "/api/workers/:workerId/certificate", async ({ workerId }) => {
-      sendText(res, 200, generateCertificate(workerId));
+      if (url.searchParams.get("format") === "text") {
+        sendText(res, 200, generateCertificate(workerId));
+        return null;
+      }
+      const pdf = await generateCertificatePdf(workerId);
+      sendBuffer(res, 200, pdf, "application/pdf", `gigshield-certificate-${workerId}.pdf`);
       return null;
     }],
     ["GET", "/api/workers/:workerId/claims/:claimId/statement", async ({ workerId, claimId }) => {
@@ -239,6 +246,9 @@ export async function handleRequest(req, res) {
     const params = routeMatch(url.pathname, pattern);
     if (!params) continue;
     const result = await handler(params);
+    if (!["GET", "OPTIONS"].includes(req.method)) {
+      await persistStore();
+    }
     if (result !== null) sendJson(res, 200, result);
     return;
   }
