@@ -277,6 +277,26 @@ export function buildWorkerDashboard(workerId) {
   };
 }
 
+async function notifyPolicyActivated(workerId, policy) {
+  try {
+    const worker = getWorker(workerId);
+    const zone = getZone(worker.zoneId);
+    const plan = getPlan(policy.planId);
+    await sendPush({
+      workerId,
+      title: "Cover is active",
+      type: "policy",
+      message: `${plan.name} is live in ${zone.name}. Certificate ${policy.certificateId}.`
+    });
+    await sendSms({
+      workerId,
+      message: `GigShield: ${plan.name} active in ${zone.name}. Cert ${policy.certificateId}. Premium Rs ${policy.finalPremium}/week.`
+    });
+  } catch (err) {
+    console.warn("[notifyPolicyActivated]", err?.message || err);
+  }
+}
+
 export function buyPolicy(workerId, payload) {
   const worker = getWorker(workerId);
   const zone = getZone(worker.zoneId);
@@ -311,6 +331,7 @@ export function buyPolicy(workerId, payload) {
     at: now.toISOString()
   });
   store.policies.unshift(policy);
+  void notifyPolicyActivated(workerId, policy);
   return { policy, pricing };
 }
 
@@ -501,27 +522,43 @@ export function getPaymentState(workerId) {
   };
 }
 
+export function normalizeIndianMobile(input) {
+  const raw = String(input ?? "").trim();
+  const digits = raw.replace(/\D/g, "");
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length === 12 && digits.startsWith("91")) return `+${digits}`;
+  if (digits.length === 11 && digits.startsWith("0")) return `+91${digits.slice(1)}`;
+  if (raw.startsWith("+") && digits.length >= 10) return `+${digits}`;
+  return null;
+}
+
 export function issueOtp(mobile) {
+  const normalized = normalizeIndianMobile(mobile);
+  if (!normalized) throw createError(400, "Enter a valid 10-digit mobile number");
   const code = "1234";
-  store.otps.set(mobile, { code, issuedAt: Date.now() });
-  return { mobile, otp: code, expiresInSeconds: 300 };
+  store.otps.set(normalized, { code, issuedAt: Date.now() });
+  return { mobile: normalized, otp: code, expiresInSeconds: 300 };
 }
 
 export function verifyOtp(mobile, otp) {
-  const record = store.otps.get(mobile);
-  if (!record || record.code !== otp) throw createError(401, "Invalid OTP");
-  const worker = store.workers.find((item) => item.mobile === mobile) ?? null;
+  const normalized = normalizeIndianMobile(mobile);
+  if (!normalized) throw createError(400, "Enter a valid 10-digit mobile number");
+  const record = store.otps.get(normalized);
+  if (!record || record.code !== String(otp ?? "").trim()) throw createError(401, "Invalid OTP");
+  const worker = store.workers.find((item) => item.mobile === normalized) ?? null;
   return { verified: true, workerId: worker?.id ?? null, isNewUser: !worker };
 }
 
 export function createOrUpdateWorkerProfile({ mobile, name, platform, lat, lng, avgDailyHours, shiftPattern, upiId }) {
-  let worker = store.workers.find((item) => item.mobile === mobile);
+  const normalized = normalizeIndianMobile(mobile);
+  if (!normalized) throw createError(400, "Enter a valid 10-digit mobile number");
+  let worker = store.workers.find((item) => item.mobile === normalized);
   const nearestZone = findNearestZone(Number(lat), Number(lng));
   if (!worker) {
     worker = {
       id: `WRK-${String(store.workers.length + 1).padStart(3, "0")}`,
       name: name ?? "New Partner",
-      mobile,
+      mobile: normalized,
       platform: platform ?? "Zepto",
       zoneId: nearestZone.id,
       avgDailyHours: Number(avgDailyHours) || 8,
@@ -704,7 +741,7 @@ export function reviewFraudCase(caseId, decision) {
   return fraudCase;
 }
 
-export function runZoneMonitor() {
+export async function runZoneMonitor() {
   const newEvents = [];
   for (const zone of store.zones) {
     const matchingTriggers = triggerDefinitions.filter((trigger) => trigger.check(zone));
@@ -740,7 +777,12 @@ export function runZoneMonitor() {
       if (!trigger.sustainedMinutes) {
         const workersInZone = store.workers.filter((worker) => worker.zoneId === zone.id);
         for (const worker of workersInZone) {
-          sendPush({ workerId: worker.id, message: `${trigger.label} active in ${zone.name}. Policy status is being checked.` });
+          await sendPush({
+            workerId: worker.id,
+            title: `Zone alert · ${zone.name}`,
+            type: "zone_disruption",
+            message: `${trigger.label} active in ${zone.name}. Policy status is being checked.`
+          });
         }
       }
       const workersInZone = store.workers.filter((worker) => worker.zoneId === zone.id);
@@ -748,7 +790,7 @@ export function runZoneMonitor() {
         const policy = getWorkerPolicy(worker.id);
         if (!policy || policy.status !== "active") continue;
         try {
-          const result = processClaimPayout(worker.id, event.id);
+          const result = await processClaimPayout(worker.id, event.id);
           liveItem.claims += 1;
           liveItem.payout += result.claim.payoutAmount;
           liveItem.status = "auto-approved";
@@ -934,9 +976,31 @@ export function getNotifications(workerId) {
   return store.notifications.filter((item) => item.workerId === workerId);
 }
 
-export function sendManualNotification(workerId, channel, message) {
+export async function sendManualNotification(workerId, channel, message) {
   if (channel === "sms") return sendSms({ workerId, message });
   return sendPush({ workerId, message });
+}
+
+export function registerPushSubscription(workerId, subscription) {
+  getWorker(workerId);
+  const sub = subscription && typeof subscription === "object" ? subscription : {};
+  if (!sub.endpoint) throw createError(400, "Invalid push subscription: missing endpoint");
+  const keys = sub.keys && typeof sub.keys === "object" ? sub.keys : {};
+  store.pushSubscriptions = store.pushSubscriptions.filter(
+    (s) => !(s.workerId === workerId && s.endpoint === sub.endpoint)
+  );
+  const record = {
+    id: `PSUB-${workerId}-${Date.now()}`,
+    workerId,
+    endpoint: sub.endpoint,
+    keys: {
+      p256dh: keys.p256dh ?? "",
+      auth: keys.auth ?? ""
+    },
+    createdAt: new Date().toISOString()
+  };
+  store.pushSubscriptions.unshift(record);
+  return { ok: true, subscriptionId: record.id };
 }
 
 export function createReferral(referrerWorkerId, payload) {
@@ -1020,7 +1084,7 @@ export function votePoolMotion(motionId, vote) {
   return motion;
 }
 
-export function processClaimPayout(workerId, eventId) {
+export async function processClaimPayout(workerId, eventId) {
   const worker = getWorker(workerId);
   const event = store.disruptionEvents.find((item) => item.id === eventId);
   if (!event) throw createError(404, `Event ${eventId} not found`);
@@ -1039,7 +1103,12 @@ export function processClaimPayout(workerId, eventId) {
     };
     store.fraudCases.unshift(fraudCase);
     if (validation.softHold) {
-      sendPush({ workerId, message: "Your claim is being verified. This usually takes 5-10 minutes." });
+      await sendPush({
+        workerId,
+        title: "Claim update",
+        type: "claim",
+        message: "Your claim is being verified. This usually takes 5-10 minutes."
+      });
     }
     throw createError(409, validation.softHold ? "Claim placed on soft hold" : "Fraud checks failed", validation);
   }
@@ -1061,6 +1130,12 @@ export function processClaimPayout(workerId, eventId) {
   store.claims.unshift(claim);
   worker.points += 300;
   event.totalPayout += plan.payoutPerDay;
-  sendSms({ workerId, message: `Rs ${plan.payoutPerDay} credited - ${event.type} trigger, ${worker.zoneId}.` });
+  await sendSms({ workerId, message: `Rs ${plan.payoutPerDay} credited - ${event.type} trigger, ${worker.zoneId}.` });
+  await sendPush({
+    workerId,
+    title: "Payout sent",
+    type: "payout",
+    message: `Rs ${plan.payoutPerDay} credited for ${event.type} in your zone. Check SMS for details.`
+  });
   return { claim, payment };
 }

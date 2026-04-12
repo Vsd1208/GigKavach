@@ -5,7 +5,7 @@ import { sendPush, sendSms } from "./integrations.js";
 
 let intervals = [];
 
-function dispatchDueReminders() {
+async function dispatchDueReminders() {
   let changed = false;
   const now = Date.now();
   for (const reminder of store.reminders) {
@@ -19,8 +19,8 @@ function dispatchDueReminders() {
       coverageGap ? `Coverage gap risk: Rs ${coverageGap.wouldHaveReceived}` : null
     ].filter(Boolean).join(" | ");
 
-    if (reminder.channel === "sms") sendSms({ workerId: reminder.workerId, message: enrichedMessage });
-    else sendPush({ workerId: reminder.workerId, message: enrichedMessage });
+    if (reminder.channel === "sms") await sendSms({ workerId: reminder.workerId, message: enrichedMessage });
+    else await sendPush({ workerId: reminder.workerId, title: "GigShield reminder", type: "reminder", message: enrichedMessage });
 
     reminder.dispatchedAt = new Date().toISOString();
     changed = true;
@@ -39,7 +39,7 @@ async function persistSchedulerChanges(task) {
 
 export function startSchedulers() {
   if (intervals.length) return;
-  intervals.push(setInterval(() => persistSchedulerChanges(() => runZoneMonitor().length > 0), 5 * 60 * 1000));
+  intervals.push(setInterval(() => persistSchedulerChanges(async () => (await runZoneMonitor()).length > 0), 5 * 60 * 1000));
   intervals.push(setInterval(() => persistSchedulerChanges(() => dispatchDueReminders()), 60 * 1000));
 }
 

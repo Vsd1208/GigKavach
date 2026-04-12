@@ -8,6 +8,7 @@ const COLLECTIONS = [
   { name: "zones", kind: "array", key: (item) => item.id },
   { name: "workers", kind: "array", key: (item) => item.id },
   { name: "policies", kind: "array", key: (item) => item.id },
+  { name: "pushSubscriptions", kind: "array", key: (item) => item.id },
   { name: "claims", kind: "array", key: (item) => item.id },
   { name: "disruptionEvents", kind: "array", key: (item) => item.id },
   { name: "fraudCases", kind: "array", key: (item) => item.id },

@@ -38,20 +38,32 @@ const weeklyPayouts = [
 ]
 
 const zones = [
-  { name: 'HSR Layout', id: 'HSR-01', risk: 0.74, workers: 34, status: 'safe', rainfall: 3, aqi: 142, temp: 32, lat: 12.9116, lng: 77.6389 },
-  { name: 'Koramangala', id: 'KOR-02', risk: 0.68, workers: 28, status: 'watch', rainfall: 12, aqi: 180, temp: 33, lat: 12.9352, lng: 77.6245 },
-  { name: 'Indiranagar', id: 'IND-03', risk: 0.45, workers: 22, status: 'safe', rainfall: 1, aqi: 120, temp: 31, lat: 12.9784, lng: 77.6408 },
-  { name: 'Whitefield', id: 'WF-04', risk: 0.22, workers: 18, status: 'safe', rainfall: 0, aqi: 95, temp: 30, lat: 12.9698, lng: 77.7500 },
-  { name: 'BTM Layout', id: 'BTM-05', risk: 0.81, workers: 40, status: 'disrupted', rainfall: 22, aqi: 210, temp: 29, lat: 12.9166, lng: 77.6101 },
+  { name: 'HSR Layout', id: 'HSR-01', risk: 0.74, workers: 34, status: 'watch', rainfall: 7, aqi: 158, temp: 31, lat: 12.9116, lng: 77.6389 },
+  { name: 'Koramangala', id: 'KOR-02', risk: 0.68, workers: 28, status: 'disrupted', rainfall: 5, aqi: 168, temp: 32, lat: 12.9352, lng: 77.6245 },
+  { name: 'Indiranagar', id: 'IND-03', risk: 0.45, workers: 22, status: 'safe', rainfall: 1, aqi: 118, temp: 30, lat: 12.9784, lng: 77.6408 },
+  { name: 'Whitefield', id: 'WF-04', risk: 0.22, workers: 18, status: 'safe', rainfall: 0, aqi: 92, temp: 29, lat: 12.9698, lng: 77.75 },
+  { name: 'BTM Layout', id: 'BTM-05', risk: 0.81, workers: 40, status: 'disrupted', rainfall: 18, aqi: 198, temp: 28, lat: 12.9166, lng: 77.6101 },
+  { name: 'JP Nagar', id: 'JP-06', risk: 0.36, workers: 26, status: 'safe', rainfall: 2, aqi: 105, temp: 30, lat: 12.9063, lng: 77.5857 },
+  { name: 'Marathahalli', id: 'MTH-07', risk: 0.58, workers: 31, status: 'watch', rainfall: 4, aqi: 196, temp: 32, lat: 12.9591, lng: 77.6974 },
+  { name: 'Electronic City', id: 'EC-08', risk: 0.29, workers: 45, status: 'safe', rainfall: 0, aqi: 88, temp: 31, lat: 12.8456, lng: 77.6603 },
+  { name: 'Yelahanka', id: 'YLK-09', risk: 0.52, workers: 19, status: 'disrupted', rainfall: 0, aqi: 132, temp: 44.2, lat: 13.1007, lng: 77.5963 },
+  { name: 'Jayanagar', id: 'JYN-10', risk: 0.41, workers: 24, status: 'safe', rainfall: 3, aqi: 112, temp: 30, lat: 12.925, lng: 77.5938 },
+  { name: 'CV Raman Nagar', id: 'CVR-11', risk: 0.47, workers: 16, status: 'watch', rainfall: 13, aqi: 128, temp: 29, lat: 12.985, lng: 77.654 },
+  { name: 'Rajajinagar', id: 'RAJ-12', risk: 0.55, workers: 21, status: 'disrupted', rainfall: 1, aqi: 142, temp: 31, lat: 12.9915, lng: 77.5544 },
+  { name: 'Banaswadi', id: 'BAN-13', risk: 0.48, workers: 27, status: 'disrupted', rainfall: 2, aqi: 318, temp: 30, lat: 13.0358, lng: 77.5975 },
 ]
 
 const liveFeed = [
-  { time: '12:11 PM', zone: 'HSR-01', event: 'Rainfall 19mm/hr', claims: 34, payout: '₹20,400', status: 'auto-approved', type: 'rain' },
-  { time: '12:10 PM', zone: 'HSR-01', event: 'Trigger breach detected', claims: null, payout: null, status: 'monitoring', type: 'alert' },
-  { time: '11:45 AM', zone: 'BTM-05', event: 'Rainfall 22mm/hr', claims: 40, payout: '₹24,000', status: 'auto-approved', type: 'rain' },
-  { time: '11:30 AM', zone: 'KOR-02', event: 'AQI approaching 300', claims: null, payout: null, status: 'watch', type: 'aqi' },
-  { time: '10:15 AM', zone: 'BTM-05', event: 'Dark Store Closure', claims: 38, payout: '₹22,800', status: 'auto-approved', type: 'store' },
-  { time: '09:00 AM', zone: 'IND-03', event: 'System health check', claims: null, payout: null, status: 'ok', type: 'system' },
+  { time: '12:11 PM', zone: 'HSR-01', event: 'Rainfall 19 mm/hr sustained — claims batch', claims: 34, payout: '₹20,400', status: 'auto-approved', type: 'rainfall' },
+  { time: '12:10 PM', zone: 'HSR-01', event: '10-minute sustained breach window', claims: null, payout: null, status: 'monitoring', type: 'alert' },
+  { time: '11:52 AM', zone: 'BAN-13', event: 'Severe AQI 318 — outdoor advisory', claims: 27, payout: '₹16,200', status: 'auto-approved', type: 'aqi' },
+  { time: '11:30 AM', zone: 'KOR-02', event: 'Dark store closure — inventory sync', claims: 28, payout: '₹16,800', status: 'auto-approved', type: 'dark_store_closure' },
+  { time: '11:18 AM', zone: 'YLK-09', event: 'Heat index 44°C — shift guidance sent', claims: 19, payout: '₹11,400', status: 'auto-approved', type: 'temperature' },
+  { time: '11:05 AM', zone: 'RAJ-12', event: 'District curfew order — instant trigger', claims: 21, payout: '₹12,600', status: 'auto-approved', type: 'curfew' },
+  { time: '10:45 AM', zone: 'BTM-05', event: 'IMD flash-flood corridor alert', claims: 40, payout: '₹24,000', status: 'auto-approved', type: 'flash_flood' },
+  { time: '10:22 AM', zone: 'MTH-07', event: 'AQI 196 — watch band (no auto payout)', claims: null, payout: null, status: 'monitoring', type: 'aqi' },
+  { time: '09:55 AM', zone: 'CVR-11', event: 'Steady rain 13 mm/hr — monitoring', claims: null, payout: null, status: 'monitoring', type: 'rainfall' },
+  { time: '09:20 AM', zone: 'IND-03', event: 'Telemetry heartbeat OK', claims: null, payout: null, status: 'ok', type: 'system' },
 ]
 
 const fraudCases = [
@@ -61,12 +73,22 @@ const fraudCases = [
 ]
 
 const forecastData = [
-  { zone: 'HSR Layout', days: [{ day: 'Mon', risk: 0.3, label: 'Low' }, { day: 'Tue', risk: 0.5, label: 'Med' }, { day: 'Wed', risk: 0.7, label: 'High' }, { day: 'Thu', risk: 0.74, label: 'High' }, { day: 'Fri', risk: 0.6, label: 'Med' }, { day: 'Sat', risk: 0.4, label: 'Low' }, { day: 'Sun', risk: 0.3, label: 'Low' }] },
-  { zone: 'Koramangala', days: [{ day: 'Mon', risk: 0.4, label: 'Low' }, { day: 'Tue', risk: 0.6, label: 'Med' }, { day: 'Wed', risk: 0.8, label: 'High' }, { day: 'Thu', risk: 0.5, label: 'Med' }, { day: 'Fri', risk: 0.3, label: 'Low' }, { day: 'Sat', risk: 0.2, label: 'Low' }, { day: 'Sun', risk: 0.4, label: 'Low' }] },
-  { zone: 'BTM Layout', days: [{ day: 'Mon', risk: 0.7, label: 'High' }, { day: 'Tue', risk: 0.85, label: 'High' }, { day: 'Wed', risk: 0.9, label: 'Critical' }, { day: 'Thu', risk: 0.6, label: 'Med' }, { day: 'Fri', risk: 0.5, label: 'Med' }, { day: 'Sat', risk: 0.3, label: 'Low' }, { day: 'Sun', risk: 0.35, label: 'Low' }] },
+  { zone: 'HSR Layout', days: [{ day: 'Mon', risk: 0.52, label: 'Med' }, { day: 'Tue', risk: 0.58, label: 'Med' }, { day: 'Wed', risk: 0.71, label: 'High' }, { day: 'Thu', risk: 0.76, label: 'High' }, { day: 'Fri', risk: 0.64, label: 'Med' }, { day: 'Sat', risk: 0.48, label: 'Low' }, { day: 'Sun', risk: 0.44, label: 'Low' }] },
+  { zone: 'Koramangala', days: [{ day: 'Mon', risk: 0.55, label: 'Med' }, { day: 'Tue', risk: 0.62, label: 'Med' }, { day: 'Wed', risk: 0.69, label: 'High' }, { day: 'Thu', risk: 0.58, label: 'Med' }, { day: 'Fri', risk: 0.5, label: 'Med' }, { day: 'Sat', risk: 0.42, label: 'Low' }, { day: 'Sun', risk: 0.46, label: 'Low' }] },
+  { zone: 'Indiranagar', days: [{ day: 'Mon', risk: 0.32, label: 'Low' }, { day: 'Tue', risk: 0.36, label: 'Low' }, { day: 'Wed', risk: 0.41, label: 'Low' }, { day: 'Thu', risk: 0.45, label: 'Med' }, { day: 'Fri', risk: 0.4, label: 'Low' }, { day: 'Sat', risk: 0.35, label: 'Low' }, { day: 'Sun', risk: 0.33, label: 'Low' }] },
+  { zone: 'Whitefield', days: [{ day: 'Mon', risk: 0.18, label: 'Low' }, { day: 'Tue', risk: 0.2, label: 'Low' }, { day: 'Wed', risk: 0.22, label: 'Low' }, { day: 'Thu', risk: 0.24, label: 'Low' }, { day: 'Fri', risk: 0.21, label: 'Low' }, { day: 'Sat', risk: 0.19, label: 'Low' }, { day: 'Sun', risk: 0.17, label: 'Low' }] },
+  { zone: 'BTM Layout', days: [{ day: 'Mon', risk: 0.78, label: 'High' }, { day: 'Tue', risk: 0.84, label: 'High' }, { day: 'Wed', risk: 0.88, label: 'Critical' }, { day: 'Thu', risk: 0.81, label: 'High' }, { day: 'Fri', risk: 0.7, label: 'High' }, { day: 'Sat', risk: 0.55, label: 'Med' }, { day: 'Sun', risk: 0.5, label: 'Med' }] },
+  { zone: 'JP Nagar', days: [{ day: 'Mon', risk: 0.28, label: 'Low' }, { day: 'Tue', risk: 0.31, label: 'Low' }, { day: 'Wed', risk: 0.34, label: 'Low' }, { day: 'Thu', risk: 0.36, label: 'Low' }, { day: 'Fri', risk: 0.33, label: 'Low' }, { day: 'Sat', risk: 0.3, label: 'Low' }, { day: 'Sun', risk: 0.29, label: 'Low' }] },
+  { zone: 'Marathahalli', days: [{ day: 'Mon', risk: 0.48, label: 'Low' }, { day: 'Tue', risk: 0.52, label: 'Med' }, { day: 'Wed', risk: 0.57, label: 'Med' }, { day: 'Thu', risk: 0.6, label: 'Med' }, { day: 'Fri', risk: 0.54, label: 'Med' }, { day: 'Sat', risk: 0.46, label: 'Low' }, { day: 'Sun', risk: 0.44, label: 'Low' }] },
+  { zone: 'Electronic City', days: [{ day: 'Mon', risk: 0.24, label: 'Low' }, { day: 'Tue', risk: 0.26, label: 'Low' }, { day: 'Wed', risk: 0.29, label: 'Low' }, { day: 'Thu', risk: 0.31, label: 'Low' }, { day: 'Fri', risk: 0.28, label: 'Low' }, { day: 'Sat', risk: 0.25, label: 'Low' }, { day: 'Sun', risk: 0.23, label: 'Low' }] },
+  { zone: 'Yelahanka', days: [{ day: 'Mon', risk: 0.46, label: 'Low' }, { day: 'Tue', risk: 0.49, label: 'Med' }, { day: 'Wed', risk: 0.52, label: 'Med' }, { day: 'Thu', risk: 0.55, label: 'Med' }, { day: 'Fri', risk: 0.53, label: 'Med' }, { day: 'Sat', risk: 0.48, label: 'Low' }, { day: 'Sun', risk: 0.45, label: 'Low' }] },
+  { zone: 'Jayanagar', days: [{ day: 'Mon', risk: 0.35, label: 'Low' }, { day: 'Tue', risk: 0.38, label: 'Low' }, { day: 'Wed', risk: 0.4, label: 'Low' }, { day: 'Thu', risk: 0.42, label: 'Low' }, { day: 'Fri', risk: 0.39, label: 'Low' }, { day: 'Sat', risk: 0.36, label: 'Low' }, { day: 'Sun', risk: 0.34, label: 'Low' }] },
+  { zone: 'CV Raman Nagar', days: [{ day: 'Mon', risk: 0.4, label: 'Low' }, { day: 'Tue', risk: 0.43, label: 'Low' }, { day: 'Wed', risk: 0.46, label: 'Med' }, { day: 'Thu', risk: 0.48, label: 'Med' }, { day: 'Fri', risk: 0.45, label: 'Med' }, { day: 'Sat', risk: 0.41, label: 'Low' }, { day: 'Sun', risk: 0.39, label: 'Low' }] },
+  { zone: 'Rajajinagar', days: [{ day: 'Mon', risk: 0.5, label: 'Med' }, { day: 'Tue', risk: 0.53, label: 'Med' }, { day: 'Wed', risk: 0.56, label: 'Med' }, { day: 'Thu', risk: 0.58, label: 'Med' }, { day: 'Fri', risk: 0.54, label: 'Med' }, { day: 'Sat', risk: 0.48, label: 'Low' }, { day: 'Sun', risk: 0.46, label: 'Low' }] },
+  { zone: 'Banaswadi', days: [{ day: 'Mon', risk: 0.62, label: 'Med' }, { day: 'Tue', risk: 0.68, label: 'High' }, { day: 'Wed', risk: 0.74, label: 'High' }, { day: 'Thu', risk: 0.7, label: 'High' }, { day: 'Fri', risk: 0.58, label: 'Med' }, { day: 'Sat', risk: 0.48, label: 'Low' }, { day: 'Sun', risk: 0.45, label: 'Low' }] },
 ]
 
-const COLORS = ['#a45b33', '#8a6a52', '#bf5b45', '#c38a2e', '#bc8750']
+const COLORS = ['#a45b33', '#8a6a52', '#bf5b45', '#c38a2e', '#bc8750', '#6C5CE7', '#2d9cdb', '#27ae60', '#e67e22', '#9b59b6', '#1abc9c', '#34495e', '#e74c3c']
 const FRAUD_RING_POINTS = Array.from({ length: 20 }, (_, i) => {
   const angle = (i / 20) * Math.PI * 2
   const radius = 40 + ((i * 17) % 25)
@@ -300,8 +322,8 @@ function MapPanel() {
     if (mapInstanceRef.current) return // already initialized
 
     const map = L.map(mapRef.current, {
-      center: [12.9352, 77.6245],
-      zoom: 12,
+      center: [12.92, 77.62],
+      zoom: 11,
       zoomControl: true,
       scrollWheelZoom: true,
     })
@@ -430,6 +452,19 @@ function MapPanel() {
   )
 }
 
+function liveFeedIconMeta(type) {
+  const t = type ?? ''
+  if (t === 'rain' || t === 'rainfall') return { box: 'bg-primary/20', Icon: CloudRain, iconClass: 'text-primary' }
+  if (t === 'aqi') return { box: 'bg-warning/20', Icon: Wind, iconClass: 'text-warning' }
+  if (t === 'store' || t === 'dark_store_closure') return { box: 'bg-danger/20', Icon: AlertTriangle, iconClass: 'text-danger' }
+  if (t === 'flood' || t === 'flash_flood') return { box: 'bg-primary/20', Icon: CloudRain, iconClass: 'text-primary' }
+  if (t === 'temperature') return { box: 'bg-danger/20', Icon: Thermometer, iconClass: 'text-danger' }
+  if (t === 'curfew') return { box: 'bg-warning/20', Icon: Moon, iconClass: 'text-warning' }
+  if (t === 'alert') return { box: 'bg-warning/20', Icon: Zap, iconClass: 'text-warning' }
+  if (t === 'system') return { box: 'bg-success/20', Icon: CheckCircle2, iconClass: 'text-success' }
+  return { box: 'bg-dark-surface', Icon: Radio, iconClass: 'text-text-muted' }
+}
+
 // LIVE FEED PANEL
 function LiveFeedPanel() {
   const [autoRefresh, setAutoRefresh] = useState(true)
@@ -451,21 +486,13 @@ function LiveFeedPanel() {
       </div>
 
       <div className="space-y-3">
-        {liveFeed.map((event, i) => (
+        {liveFeed.map((event, i) => {
+          const { box, Icon, iconClass } = liveFeedIconMeta(event.type)
+          return (
           <div key={i} className="glass rounded-2xl p-4 hover:border-primary/20 transition-all">
             <div className="flex items-start gap-4">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                event.type === 'rain' ? 'bg-primary/20' :
-                event.type === 'aqi' ? 'bg-warning/20' :
-                event.type === 'store' ? 'bg-danger/20' :
-                event.type === 'alert' ? 'bg-warning/20' :
-                'bg-dark-surface'
-              }`}>
-                {event.type === 'rain' ? <CloudRain size={18} className="text-primary" /> :
-                 event.type === 'aqi' ? <Wind size={18} className="text-warning" /> :
-                 event.type === 'store' ? <AlertTriangle size={18} className="text-danger" /> :
-                 event.type === 'alert' ? <Zap size={18} className="text-warning" /> :
-                 <CheckCircle2 size={18} className="text-success" />}
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${box}`}>
+                <Icon size={18} className={iconClass} />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-1">
@@ -474,7 +501,7 @@ function LiveFeedPanel() {
                 </div>
                 <p className="text-xs text-text-secondary mb-2">Zone: {event.zone}</p>
                 <div className="flex items-center gap-4">
-                  {event.claims && (
+                  {event.claims != null && event.claims > 0 && (
                     <span className="text-xs text-text-secondary">
                       <Users size={10} className="inline mr-1" />{event.claims} claims
                     </span>
@@ -486,6 +513,7 @@ function LiveFeedPanel() {
                     event.status === 'auto-approved' ? 'bg-success/20 text-success' :
                     event.status === 'watch' ? 'bg-warning/20 text-warning' :
                     event.status === 'monitoring' ? 'bg-primary/20 text-primary' :
+                    event.status === 'ok' ? 'bg-success/20 text-success' :
                     'bg-dark-surface text-text-muted'
                   }`}>
                     {event.status}
@@ -494,7 +522,8 @@ function LiveFeedPanel() {
               </div>
             </div>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
@@ -1021,8 +1050,18 @@ function PoolMonitorPanel() {
 
   const sourcePools = pools.length ? pools : [
     { zoneId: 'HSR-01', members: 34, weeklyContribution: 10, balance: 1240, contributionRate: 0.88, health: 'strong', lifetimeDisbursed: 200 },
-    { zoneId: 'KOR-02', members: 22, weeklyContribution: 10, balance: 640, contributionRate: 0.79, health: 'stable', lifetimeDisbursed: 0 },
-    { zoneId: 'BTM-05', members: 27, weeklyContribution: 10, balance: 940, contributionRate: 0.67, health: 'watch', lifetimeDisbursed: 500 },
+    { zoneId: 'KOR-02', members: 24, weeklyContribution: 10, balance: 580, contributionRate: 0.76, health: 'stable', lifetimeDisbursed: 120 },
+    { zoneId: 'IND-03', members: 20, weeklyContribution: 10, balance: 720, contributionRate: 0.91, health: 'strong', lifetimeDisbursed: 0 },
+    { zoneId: 'WF-04', members: 16, weeklyContribution: 10, balance: 510, contributionRate: 0.84, health: 'stable', lifetimeDisbursed: 80 },
+    { zoneId: 'BTM-05', members: 36, weeklyContribution: 12, balance: 890, contributionRate: 0.64, health: 'watch', lifetimeDisbursed: 1240 },
+    { zoneId: 'JP-06', members: 25, weeklyContribution: 10, balance: 680, contributionRate: 0.87, health: 'strong', lifetimeDisbursed: 40 },
+    { zoneId: 'MTH-07', members: 29, weeklyContribution: 10, balance: 540, contributionRate: 0.72, health: 'stable', lifetimeDisbursed: 360 },
+    { zoneId: 'EC-08', members: 41, weeklyContribution: 10, balance: 1120, contributionRate: 0.82, health: 'strong', lifetimeDisbursed: 600 },
+    { zoneId: 'YLK-09', members: 17, weeklyContribution: 10, balance: 420, contributionRate: 0.71, health: 'watch', lifetimeDisbursed: 280 },
+    { zoneId: 'JYN-10', members: 23, weeklyContribution: 10, balance: 590, contributionRate: 0.85, health: 'stable', lifetimeDisbursed: 0 },
+    { zoneId: 'CVR-11', members: 15, weeklyContribution: 10, balance: 380, contributionRate: 0.68, health: 'watch', lifetimeDisbursed: 150 },
+    { zoneId: 'RAJ-12', members: 19, weeklyContribution: 10, balance: 455, contributionRate: 0.74, health: 'stable', lifetimeDisbursed: 210 },
+    { zoneId: 'BAN-13', members: 26, weeklyContribution: 10, balance: 610, contributionRate: 0.69, health: 'watch', lifetimeDisbursed: 420 },
   ]
 
   return (

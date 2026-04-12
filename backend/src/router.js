@@ -31,6 +31,7 @@ import {
   listPlans,
   listReferrals,
   processClaimPayout,
+  registerPushSubscription,
   reviewFraudCase,
   runSimulator,
   runZoneMonitor,
@@ -42,6 +43,7 @@ import {
   workerHistorySummary
 } from "./services/domain.js";
 import { getDatabaseState, persistStore } from "./db.js";
+import { getWebPushPublicKey } from "./services/integrations.js";
 import { store } from "./store.js";
 import { createError, readJson, sendBuffer, sendJson, sendText } from "./utils/http.js";
 
@@ -151,6 +153,7 @@ export async function handleRequest(req, res) {
     }],
     ["GET", "/health", async () => ({ ok: true, service: "gigshield-backend", now: new Date().toISOString(), database: getDatabaseState() })],
     ["GET", "/api/plans", async () => ({ plans: listPlans() })],
+    ["GET", "/api/push/vapid-public-key", async () => ({ publicKey: getWebPushPublicKey() })],
     ["POST", "/api/auth/request-otp", async () => issueOtp((await readJson(req)).mobile)],
     ["POST", "/api/auth/verify-otp", async () => {
       const body = await readJson(req);
@@ -201,6 +204,7 @@ export async function handleRequest(req, res) {
       const body = await readJson(req);
       return sendManualNotification(workerId, body.channel ?? "push", body.message ?? "GigShield alert");
     }],
+    ["POST", "/api/workers/:workerId/push/subscribe", async ({ workerId }) => registerPushSubscription(workerId, await readJson(req))],
     ["GET", "/api/workers/:workerId/referrals", async ({ workerId }) => ({ referrals: listReferrals(workerId) })],
     ["POST", "/api/workers/:workerId/referrals", async ({ workerId }) => createReferral(workerId, await readJson(req))],
     ["GET", "/api/workers/:workerId/pool", async ({ workerId }) => ({ pool: getZonePool(getWorker(workerId).zoneId) })],
@@ -234,7 +238,7 @@ export async function handleRequest(req, res) {
     ["GET", "/api/admin/pools/:zoneId", async ({ zoneId }) => getZonePool(zoneId)],
     ["POST", "/api/admin/pools/motions/:motionId/vote", async ({ motionId }) => votePoolMotion(motionId, (await readJson(req)).vote ?? "for")],
     ["POST", "/api/admin/referrals/:referralId/confirm", async ({ referralId }) => confirmReferral(referralId)],
-    ["POST", "/api/system/monitor/run", async () => ({ events: runZoneMonitor() })],
+    ["POST", "/api/system/monitor/run", async () => ({ events: await runZoneMonitor() })],
     ["POST", "/api/system/fraud/evaluate", async () => {
       const body = await readJson(req);
       return evaluateFraud(body.workerId, body.eventId);

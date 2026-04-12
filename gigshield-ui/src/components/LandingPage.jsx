@@ -147,7 +147,7 @@ export default function LandingPage({ onNavigate }) {
               onClick={() => onNavigate('worker')}
               className="rounded-full bg-[linear-gradient(145deg,#a45b33,#d49a59)] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(164,91,51,0.24)] transition-transform hover:-translate-y-0.5"
             >
-              Open worker app
+              Sign in
             </button>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default function LandingPage({ onNavigate }) {
                 onClick={() => onNavigate('worker')}
                 className="group inline-flex items-center gap-2 rounded-full bg-[linear-gradient(145deg,#a45b33,#d49a59)] px-6 py-3 text-sm font-semibold text-white shadow-[0_18px_32px_rgba(164,91,51,0.24)] transition-transform hover:-translate-y-0.5"
               >
-                Try the worker flow
+                Sign in or create account
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
               </button>
               <button
@@ -296,7 +296,7 @@ export default function LandingPage({ onNavigate }) {
                         : 'border border-dark-border bg-dark-surface text-text-primary'
                     }`}
                   >
-                    Open this plan in app
+                    Sign in to choose this plan
                   </button>
                 </article>
               ))}

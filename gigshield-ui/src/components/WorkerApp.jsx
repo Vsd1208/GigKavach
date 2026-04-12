@@ -5,6 +5,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useTheme } from '../Context/ThemeContext'
 import { apiFetch, getApiBaseUrl } from '../lib/api'
+import { registerGigShieldPush } from '../lib/pushNotifications'
 
 // Fix Leaflet default icon issue with bundlers
 delete L.Icon.Default.prototype._getIconUrl
@@ -135,8 +136,21 @@ const StatusPill = ({ status, children }) => {
 
 
 // ─── MAIN COMPONENT ───────────────────────────────────
+function readStoredSession() {
+  if (typeof localStorage === 'undefined') {
+    return { registered: false, workerId: 'WRK-001', screen: 'login' }
+  }
+  const registered = localStorage.getItem('gigshield_registered') === 'true'
+  const storedId = localStorage.getItem('gigshield_worker_id')
+  return {
+    registered,
+    workerId: storedId || 'WRK-001',
+    screen: registered ? 'app' : 'login'
+  }
+}
+
 export default function WorkerApp({ onBack }) {
-  const [screen, setScreen] = useState('splash')
+  const [screen, setScreen] = useState(() => readStoredSession().screen)
   const [activeTab, setActiveTab] = useState('home')
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [onboardStep, setOnboardStep] = useState(0)
@@ -147,7 +161,9 @@ export default function WorkerApp({ onBack }) {
   const [showGigBot, setShowGigBot] = useState(false)
 
   // Registration state
-  const [isRegistered, setIsRegistered] = useState(false)
+  const [isRegistered, setIsRegistered] = useState(() => readStoredSession().registered)
+  /** 'login' = existing user sign-in, 'signup' = first-time account */
+  const [authMode, setAuthMode] = useState('login')
   const [registrationStep, setRegistrationStep] = useState('mobile')
   const [mobile, setMobile] = useState('')
   const [otp, setOtp] = useState('')
@@ -161,7 +177,7 @@ export default function WorkerApp({ onBack }) {
   const [location, setLocation] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [workerId, setWorkerId] = useState('WRK-001')
+  const [workerId, setWorkerId] = useState(() => readStoredSession().workerId)
   const [paymentLoading, setPaymentLoading] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [paymentSuccess, setPaymentSuccess] = useState(null)
@@ -170,17 +186,6 @@ export default function WorkerApp({ onBack }) {
   const [paymentSession, setPaymentSession] = useState(null)
   const [paymentUpiId, setPaymentUpiId] = useState('')
   const [mandateConsent, setMandateConsent] = useState(true)
-
-  // Check if user is registered (in real app, check localStorage or API)
-  useEffect(() => {
-    const registered = localStorage.getItem('gigshield_registered')
-    const savedWorkerId = localStorage.getItem('gigshield_worker_id')
-    if (registered) {
-      setWorkerId(savedWorkerId || 'WRK-001')
-      setIsRegistered(true)
-      setScreen('app')
-    }
-  }, [])
 
   useEffect(() => {
     if (!isRegistered || !workerId) return
@@ -215,6 +220,36 @@ export default function WorkerApp({ onBack }) {
     }
   }, [paymentUpiId, profile.upiId])
 
+  useEffect(() => {
+    if (!isRegistered || !workerId) return
+    let cancelled = false
+    registerGigShieldPush(workerId)
+      .then((result) => {
+        if (!cancelled && result.ok) {
+          console.info('[GigShield] Device push registered for zone and policy alerts')
+        }
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [isRegistered, workerId])
+
+  const resetAuthSession = () => {
+    localStorage.removeItem('gigshield_registered')
+    localStorage.removeItem('gigshield_worker_id')
+    setIsRegistered(false)
+    setWorkerId('WRK-001')
+    setScreen('login')
+    setAuthMode('login')
+    setRegistrationStep('mobile')
+    setMobile('')
+    setOtp('')
+    setError('')
+    setShowOnboarding(false)
+    setActiveTab('home')
+  }
+
   // Get user location for zone detection
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -244,8 +279,8 @@ export default function WorkerApp({ onBack }) {
         body: JSON.stringify({ mobile })
       })
       setRegistrationStep('otp')
-    } catch {
-      setError('Network error. Please try again.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not send OTP. Try again.')
     }
     setLoading(false)
   }
@@ -259,6 +294,11 @@ export default function WorkerApp({ onBack }) {
         body: JSON.stringify({ mobile, otp })
       })
       if (data.isNewUser) {
+        if (authMode === 'login') {
+          setError('No account found for this number. Tap "Create an account" or check the number.')
+          setLoading(false)
+          return
+        }
         setRegistrationStep('profile')
         getLocation()
       } else {
@@ -269,8 +309,8 @@ export default function WorkerApp({ onBack }) {
         setIsRegistered(true)
         setScreen('app')
       }
-    } catch {
-      setError('Network error. Please try again.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Verification failed. Try again.')
     }
     setLoading(false)
   }
@@ -295,8 +335,8 @@ export default function WorkerApp({ onBack }) {
       setScreen('app')
       setShowOnboarding(true)
       setOnboardStep(0)
-    } catch {
-      setError('Network error. Please try again.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not create your account. Try again.')
     }
     setLoading(false)
   }
@@ -470,7 +510,23 @@ export default function WorkerApp({ onBack }) {
     }
   }
 
-  // Registration screens
+  const handleRegisterBack = () => {
+    setError('')
+    if (registrationStep === 'mobile') {
+      setScreen('login')
+      return
+    }
+    if (registrationStep === 'otp') {
+      setRegistrationStep('mobile')
+      setOtp('')
+      return
+    }
+    if (registrationStep === 'profile') {
+      setRegistrationStep('otp')
+    }
+  }
+
+  // Registration / sign-in (mobile → OTP → profile for new users)
   if (!isRegistered && screen === 'register') {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
@@ -487,8 +543,14 @@ export default function WorkerApp({ onBack }) {
                     <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-6">
                       <Phone size={32} className="text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-text-primary mb-2">Welcome to GigShield</h2>
-                    <p className="text-text-secondary text-sm mb-8">Enter your mobile number to get started</p>
+                    <h2 className="text-2xl font-bold text-text-primary mb-2">
+                      {authMode === 'signup' ? 'Create your account' : 'Sign in'}
+                    </h2>
+                    <p className="text-text-secondary text-sm mb-8">
+                      {authMode === 'signup'
+                        ? 'We will send a code to verify your number, then set up your profile.'
+                        : 'Use the mobile number already registered on GigShield.'}
+                    </p>
 
                     <div className="space-y-4">
                       <div className="relative">
@@ -523,9 +585,10 @@ export default function WorkerApp({ onBack }) {
                     <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-6">
                       <Shield size={32} className="text-white" />
                     </div>
-                    <h2 className="text-2xl font-bold text-text-primary mb-2">Verify Your Number</h2>
-                    <p className="text-text-secondary text-sm mb-2">We sent an OTP to +91 {mobile}</p>
-                    <p className="text-text-muted text-xs mb-8">Enter the 4-digit code</p>
+                    <h2 className="text-2xl font-bold text-text-primary mb-2">Verify your number</h2>
+                    <p className="text-text-secondary text-sm mb-2">We sent a code to +91 {mobile}</p>
+                    <p className="text-text-muted text-xs mb-2">Enter the 4-digit OTP</p>
+                    <p className="text-[11px] text-primary/90 mb-6 font-medium">Demo: use OTP 1234</p>
 
                     <div className="space-y-4">
                       <input
@@ -638,7 +701,7 @@ export default function WorkerApp({ onBack }) {
                   </div>
                 )}
 
-                <button onClick={onBack} className="absolute top-4 left-4 text-text-muted hover:text-text-secondary">
+                <button type="button" onClick={handleRegisterBack} className="absolute top-4 left-4 text-text-muted hover:text-text-secondary">
                   <ArrowLeft size={20} />
                 </button>
               </div>
@@ -649,7 +712,7 @@ export default function WorkerApp({ onBack }) {
     )
   }
 
-  if (screen === 'splash') {
+  if (!isRegistered && screen === 'login') {
     return (
       <div className="flex items-center justify-center min-h-screen p-4">
         <div className="relative w-full max-w-[375px]">
@@ -664,18 +727,43 @@ export default function WorkerApp({ onBack }) {
                   <Shield size={40} className="text-white" />
                 </div>
                 <h1 className="text-3xl font-extrabold text-text-primary mb-1">GigShield</h1>
-                <p className="text-text-secondary text-sm mb-1">Parametric Income Protection</p>
-                <p className="text-text-muted text-[11px] mb-10 tracking-wide">for Q-Commerce Delivery Partners</p>
-                <button onClick={() => { setScreen('register'); setRegistrationStep('mobile') }}
-                        className="w-full py-3.5 gradient-primary rounded-2xl text-white font-bold text-base shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform mb-3">
-                  Get Started
+                <p className="text-text-secondary text-sm mb-1">Sign in to open your cover</p>
+                <p className="text-text-muted text-[11px] mb-8 tracking-wide">OTP verification · same flow for new and returning partners</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('login')
+                    setScreen('register')
+                    setRegistrationStep('mobile')
+                    setError('')
+                    setMobile('')
+                    setOtp('')
+                  }}
+                  className="w-full py-3.5 gradient-primary rounded-2xl text-white font-bold text-base shadow-xl shadow-primary/30 active:scale-[0.98] transition-transform mb-3"
+                >
+                  Sign in
                 </button>
-                <button onClick={() => { setScreen('register'); setRegistrationStep('mobile') }}
-                        className="w-full py-3.5 bg-dark-card border border-dark-border rounded-2xl text-text-primary font-semibold text-base active:scale-[0.98] transition-transform mb-6">
-                  I Have an Account
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAuthMode('signup')
+                    setScreen('register')
+                    setRegistrationStep('mobile')
+                    setError('')
+                    setMobile('')
+                    setOtp('')
+                  }}
+                  className="w-full py-3.5 bg-dark-card border border-dark-border rounded-2xl text-text-primary font-semibold text-base active:scale-[0.98] transition-transform mb-6"
+                >
+                  New user? Create an account
                 </button>
-                <button onClick={onBack} className="text-sm text-text-muted hover:text-text-secondary transition-colors">
-                  ← Back to Landing
+                <p className="text-[10px] text-text-muted mb-4 leading-relaxed px-1">
+                  Demo accounts: try <span className="text-text-secondary font-medium">9876543210</span> (Ravi) or{' '}
+                  <span className="text-text-secondary font-medium">9900001111</span> (Priya). OTP is always{' '}
+                  <span className="text-primary font-semibold">1234</span>.
+                </p>
+                <button type="button" onClick={onBack} className="text-sm text-text-muted hover:text-text-secondary transition-colors">
+                  ← Back to landing
                 </button>
               </div>
             </div>
@@ -1060,7 +1148,7 @@ export default function WorkerApp({ onBack }) {
       case 'policy': return <PolicyTab autoRenew={autoRenew} onToggleAutoRenew={handleAutoRenewToggle} paymentMandate={paymentMandate} paymentSuccess={paymentSuccess} paymentError={paymentError} workerId={workerId} />
       case 'points': return <PointsTab workerId={workerId} />
       case 'history': return <HistoryTab />
-      case 'profile': return <ProfileTab onBack={onBack} setActiveTab={setActiveTab} workerId={workerId} />
+      case 'profile': return <ProfileTab onBack={onBack} onLogout={resetAuthSession} setActiveTab={setActiveTab} workerId={workerId} onEnableDevicePush={() => registerGigShieldPush(workerId)} />
       default: return null
     }
   }
@@ -2399,12 +2487,10 @@ function TimelineSubTab() {
 
 
 // ─── PROFILE TAB (Enhanced) ──────────────────────────
-function ProfileTab({ onBack, setActiveTab, workerId }) {
+function ProfileTab({ onBack, onLogout, setActiveTab, workerId, onEnableDevicePush }) {
   const { isDark, toggleTheme } = useTheme()
   const handleLogout = () => {
-    localStorage.removeItem('gigshield_registered')
-    localStorage.removeItem('gigshield_worker_id')
-    onBack()
+    onLogout?.()
   }
 
   return (
@@ -2492,7 +2578,18 @@ function ProfileTab({ onBack, setActiveTab, workerId }) {
 
       <div className="glass rounded-2xl p-3 space-y-2">
         {[
-          { label: 'Notification Settings', icon: Bell, action: () => setActiveTab('home') },
+          { label: 'Phone / lock-screen alerts', icon: Bell, action: async () => {
+            try {
+              const r = await onEnableDevicePush?.()
+              if (r?.ok) alert('Lock-screen alerts are on. You will get zone and cover updates here.')
+              else if (r?.reason === 'permission_denied') alert('Enable notifications in your browser settings, then tap this again.')
+              else if (r?.reason === 'vapid_not_configured') alert('Server push keys are not set (WEB_PUSH_* in backend .env). In-app history still works.')
+              else alert(r?.reason ? `Could not enable: ${r.reason}` : 'Could not enable alerts right now.')
+            } catch {
+              alert('Could not enable alerts.')
+            }
+          } },
+          { label: 'Notification Settings', icon: BellRing, action: () => setActiveTab('home') },
           { label: 'Payment Methods', icon: CreditCard, action: () => setActiveTab('policy') },
           { label: 'Language / भाषा', icon: Languages, action: () => {} },
           { label: 'Help & Support', icon: Headphones, action: () => {} },
