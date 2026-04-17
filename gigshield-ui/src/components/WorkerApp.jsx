@@ -6,6 +6,7 @@ import 'leaflet/dist/leaflet.css'
 import { useTheme } from '../Context/ThemeContext'
 import { apiFetch, getApiBaseUrl } from '../lib/api'
 import { registerGigShieldPush } from '../lib/pushNotifications'
+import { getWorkerInsights } from '../api/mlApi'
 
 // Fix Leaflet default icon issue with bundlers
 delete L.Icon.Default.prototype._getIconUrl
@@ -178,6 +179,8 @@ export default function WorkerApp({ onBack }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [workerId, setWorkerId] = useState(() => readStoredSession().workerId)
+  const [profileSnapshot, setProfileSnapshot] = useState(null)
+  const [profileLoading, setProfileLoading] = useState(false)
   const [paymentLoading, setPaymentLoading] = useState(false)
   const [paymentError, setPaymentError] = useState('')
   const [paymentSuccess, setPaymentSuccess] = useState(null)
@@ -230,6 +233,45 @@ export default function WorkerApp({ onBack }) {
         }
       })
       .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [isRegistered, workerId])
+
+  useEffect(() => {
+    if (!isRegistered || !workerId) return
+
+    let cancelled = false
+
+    const loadProfileSnapshot = async () => {
+      setProfileLoading(true)
+      try {
+        const [profileData, historyData, pointsData, insightData] = await Promise.all([
+          apiFetch(`/api/workers/${workerId}/profile`),
+          apiFetch(`/api/workers/${workerId}/history`),
+          apiFetch(`/api/workers/${workerId}/points`),
+          getWorkerInsights(workerId).catch(() => null)
+        ])
+
+        if (!cancelled) {
+          setProfileSnapshot({
+            profile: profileData,
+            history: historyData,
+            points: pointsData,
+            ml: insightData
+          })
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error('Failed to load worker snapshot', err)
+          setProfileSnapshot(null)
+        }
+      } finally {
+        if (!cancelled) setProfileLoading(false)
+      }
+    }
+
+    loadProfileSnapshot()
     return () => {
       cancelled = true
     }
@@ -1148,7 +1190,7 @@ export default function WorkerApp({ onBack }) {
       case 'policy': return <PolicyTab autoRenew={autoRenew} onToggleAutoRenew={handleAutoRenewToggle} paymentMandate={paymentMandate} paymentSuccess={paymentSuccess} paymentError={paymentError} workerId={workerId} />
       case 'points': return <PointsTab workerId={workerId} />
       case 'history': return <HistoryTab />
-      case 'profile': return <ProfileTab onBack={onBack} onLogout={resetAuthSession} setActiveTab={setActiveTab} workerId={workerId} onEnableDevicePush={() => registerGigShieldPush(workerId)} />
+      case 'profile': return <ProfileTab onBack={onBack} onLogout={resetAuthSession} setActiveTab={setActiveTab} workerId={workerId} onEnableDevicePush={() => registerGigShieldPush(workerId)} profileData={profileSnapshot} loading={profileLoading} />
       default: return null
     }
   }
@@ -2487,11 +2529,28 @@ function TimelineSubTab() {
 
 
 // ─── PROFILE TAB (Enhanced) ──────────────────────────
-function ProfileTab({ onBack, onLogout, setActiveTab, workerId, onEnableDevicePush }) {
+function ProfileTab({ onBack, onLogout, setActiveTab, workerId, onEnableDevicePush, profileData, loading }) {
   const { isDark, toggleTheme } = useTheme()
   const handleLogout = () => {
     onLogout?.()
   }
+  const worker = profileData?.profile?.worker
+  const zone = profileData?.profile?.zone
+  const history = profileData?.history
+  const points = profileData?.points
+  const ml = profileData?.ml
+  const initials = (worker?.name || 'R').split(' ').map(part => part[0]).join('').slice(0, 2).toUpperCase()
+  const memberSince = worker?.memberSince
+    ? new Date(worker.memberSince).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })
+    : 'Jan 2026'
+  const infoRows = [
+    ['Mobile', worker?.mobile || '+91 98765 43210'],
+    ['Platform', worker?.platform || 'Zepto'],
+    ['Zone', zone ? `${zone.id}, ${zone.city}` : 'HSR-01, Bangalore'],
+    ['Shift', worker?.shiftPattern ? `${worker.shiftPattern} (${worker.avgDailyHours || 8} hrs)` : 'Full Day (10 hrs)'],
+    ['Member Since', memberSince],
+    ['UPI', worker?.upiId || ml?.worker?.upi_id || 'ravi@okicici'],
+  ]
 
   return (
     <div className="space-y-3.5 mt-2">
@@ -2501,23 +2560,24 @@ function ProfileTab({ onBack, onLogout, setActiveTab, workerId, onEnableDevicePu
         <div className="absolute inset-0 pattern-dots opacity-20" />
         <div className="relative">
           <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center mx-auto mb-2">
-            <span className="text-2xl font-bold text-white">R</span>
+            <span className="text-2xl font-bold text-white">{initials}</span>
           </div>
-          <h3 className="text-base font-bold text-text-primary">Ravi Kumar</h3>
-          <p className="text-xs text-text-secondary">Zepto Partner · HSR Layout</p>
+          <h3 className="text-base font-bold text-text-primary">{worker?.name || 'Ravi Kumar'}</h3>
+          <p className="text-xs text-text-secondary">{worker?.platform || 'Zepto'} Partner · {zone?.name || 'HSR Layout'}</p>
           <div className="flex items-center justify-center gap-2 mt-1">
-            <span className="text-[12px]">🥈</span>
-            <p className="text-[10px] text-primary font-semibold">Reliable · 2,450 pts</p>
+            <span className="text-[12px]">🏆</span>
+            <p className="text-[10px] text-primary font-semibold">{points?.tier?.name || 'Reliable'} · {points?.balance ?? worker?.points ?? 2450} pts</p>
           </div>
+          {loading && <p className="text-[10px] text-text-muted mt-2">Refreshing live worker details...</p>}
         </div>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-3 gap-2">
         {[
-          { label: 'Policies', value: '8', bg: 'bg-primary/10', color: 'text-primary' },
-          { label: 'Claims', value: '5', bg: 'bg-success/10', color: 'text-success' },
-          { label: 'Streak', value: '7w', bg: 'bg-warning/10', color: 'text-warning' },
+          { label: 'Claims', value: String(history?.claims?.length ?? 0), bg: 'bg-success/10', color: 'text-success' },
+          { label: 'Points', value: String(points?.balance ?? worker?.points ?? 0), bg: 'bg-primary/10', color: 'text-primary' },
+          { label: 'Streak', value: `${worker?.streakWeeks ?? 0}w`, bg: 'bg-warning/10', color: 'text-warning' },
         ].map((s, i) => (
           <div key={i} className="glass rounded-xl p-3 text-center">
             <p className={`text-[17px] font-bold ${s.color}`}>{s.value}</p>
@@ -2531,11 +2591,11 @@ function ProfileTab({ onBack, onLogout, setActiveTab, workerId, onEnableDevicePu
         <SectionLabel>Achievements</SectionLabel>
         <div className="flex gap-2 overflow-x-auto pb-1">
           {[
-            { emoji: '🛡️', label: '8 Policies', bg: 'bg-primary/10' },
-            { emoji: '🔥', label: '7w Streak', bg: 'bg-warning/10' },
-            { emoji: '💰', label: '5 Claims', bg: 'bg-success/10' },
-            { emoji: '👥', label: '3 Referrals', bg: 'bg-accent/10' },
-            { emoji: '⚡', label: '556% ROI', bg: 'bg-danger/10' },
+            { emoji: '🛡️', label: `${points?.tier?.name || 'Starter'} Tier`, bg: 'bg-primary/10' },
+            { emoji: '🔥', label: `${worker?.streakWeeks ?? 0}w Streak`, bg: 'bg-warning/10' },
+            { emoji: '💰', label: `${history?.summary?.roiPercent ?? 0}% ROI`, bg: 'bg-success/10' },
+            { emoji: '👥', label: `${worker?.referralCount ?? 0} Referrals`, bg: 'bg-accent/10' },
+            { emoji: '⚡', label: ml?.insights?.predictedRisk !== null && ml?.insights?.predictedRisk !== undefined ? `${Math.round(ml.insights.predictedRisk * 100)}% Risk` : 'ML Ready', bg: 'bg-danger/10' },
           ].map((a, i) => (
             <div key={i} className={`flex-shrink-0 w-[68px] ${a.bg} rounded-xl p-2.5 text-center`}>
               <span className="text-lg">{a.emoji}</span>
@@ -2546,13 +2606,20 @@ function ProfileTab({ onBack, onLogout, setActiveTab, workerId, onEnableDevicePu
       </div>
 
       <div className="glass rounded-2xl p-3.5 space-y-2">
+        {infoRows.map(([k, v], i) => (
+          <div key={i} className="flex justify-between text-xs">
+            <span className="text-text-muted">{k}</span>
+            <span className="text-text-primary">{v}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="glass rounded-2xl p-3.5 space-y-2">
+        <SectionLabel>ML Insights</SectionLabel>
         {[
-          ['Mobile', '+91 98765 43210'],
-          ['Platform', 'Zepto'],
-          ['Zone', 'HSR-01, Bangalore'],
-          ['Shift', 'Full Day (10 hrs)'],
-          ['Member Since', 'Jan 2026'],
-          ['UPI', 'ravi@okicici'],
+          ['Predicted Risk', ml?.insights?.predictedRisk !== null && ml?.insights?.predictedRisk !== undefined ? `${(ml.insights.predictedRisk * 100).toFixed(1)}%` : 'Not available'],
+          ['Estimated Weekly Price', ml?.insights?.estimatedWeeklyPrice !== null && ml?.insights?.estimatedWeeklyPrice !== undefined ? `Rs ${ml.insights.estimatedWeeklyPrice}` : 'Not available'],
+          ['Protected Income', history?.summary?.weeklyProtectedIncome !== undefined ? `Rs ${history.summary.weeklyProtectedIncome}` : 'Rs 0'],
         ].map(([k, v], i) => (
           <div key={i} className="flex justify-between text-xs">
             <span className="text-text-muted">{k}</span>

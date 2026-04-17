@@ -1,3 +1,501 @@
-feature1,feature2,target
-1,2,1
-3,4,0
+age	gig_platform	monthly_income	work_hours_per_week	policy_type	claim_type	claim_amount	days_since_policy_start	previous_claims	incident_severity	target
+32	Zepto	56659	29	Standard	Vehicle Damage	2931.01	568	2	Low	0
+40	Zepto	53797	69	Basic	Third-party Liability	6224.04	368	3	Medium	0
+57	Zepto	14091	58	Premium	Health	5933.34	310	3	Low	1
+54	Zepto	35608	56	Premium	Third-party Liability	18105.06	848	0	Critical	1
+51	Ola	36285	58	Basic	Third-party Liability	8043.82	105	4	Low	0
+33	Urban Company	30998	40	Basic	Accident	19163.18	18	4	High	0
+58	Uber	58673	47	Premium	Accident	17573.92	205	0	Critical	1
+49	Urban Company	56634	57	Premium	Death Benefit	11361.83	43	1	Critical	1
+55	Ola	48289	75	Premium	Third-party Liability	22513.99	89	0	Low	0
+57	Zomato	30943	52	Basic	Vehicle Damage	3612.62	586	1	Medium	1
+22	Porter	56178	30	Premium	Accident	3118.13	157	2	Low	0
+34	Urban Company	26007	64	Premium	Accident	17666.79	266	2	Low	0
+39	Ola	33257	63	Premium	Vehicle Damage	4369.23	134	0	Critical	1
+56	Porter	27518	20	Standard	Accident	1033.58	464	2	High	1
+58	Blinkit	37784	72	Standard	Vehicle Damage	30159.59	601	4	Medium	0
+35	Zepto	46588	66	Basic	Health	12704.12	748	1	Low	0
+45	Ola	52221	52	Premium	Vehicle Damage	8064.1	132	3	High	1
+30	Urban Company	29378	22	Premium	Health	16523.99	741	3	High	1
+59	Uber	12696	45	Basic	Death Benefit	5865.55	34	2	Medium	0
+18	Urban Company	35995	34	Basic	Death Benefit	37862.57	83	1	High	0
+36	Zepto	42635	60	Basic	Accident	1853.06	929	4	Low	0
+51	Urban Company	23723	33	Premium	Vehicle Damage	13291.46	132	3	Critical	1
+21	Swiggy	27207	42	Standard	Accident	19022.59	428	4	High	1
+20	Zomato	35524	79	Basic	Vehicle Damage	8598.76	866	4	Critical	1
+58	Blinkit	36554	73	Premium	Accident	17876.41	204	3	Medium	1
+27	Uber	19817	75	Basic	Death Benefit	32392.83	799	3	Medium	0
+45	Zomato	8168	27	Premium	Death Benefit	17350.65	336	2	High	1
+51	Ola	50981	73	Basic	Accident	5441.76	962	1	Critical	1
+56	Zomato	34770	55	Premium	Vehicle Damage	10902.23	497	0	Low	1
+36	Zepto	23223	39	Basic	Third-party Liability	30111.08	442	1	Critical	1
+59	Zepto	52220	71	Standard	Vehicle Damage	8154.37	828	0	High	1
+53	Swiggy	16027	25	Basic	Accident	14737.07	258	3	Critical	1
+20	Porter	24291	52	Basic	Vehicle Damage	8517.41	292	4	Critical	0
+40	Zomato	51409	47	Standard	Health	2552.34	966	1	Medium	1
+34	Urban Company	33439	69	Basic	Vehicle Damage	1724.62	125	4	High	0
+24	Zomato	29521	57	Standard	Death Benefit	37507.34	956	1	Critical	1
+43	Zepto	32715	49	Premium	Death Benefit	12377.77	663	1	High	1
+35	Porter	29618	65	Standard	Health	2315.3	871	4	Low	1
+23	Ola	36999	62	Standard	Vehicle Damage	24375.79	759	2	High	1
+48	Ola	40992	36	Premium	Third-party Liability	9875.15	175	3	Low	0
+46	Blinkit	49517	28	Standard	Vehicle Damage	18737.34	884	2	High	1
+26	Urban Company	47350	47	Standard	Death Benefit	2626.49	492	2	High	1
+52	Urban Company	9573	73	Premium	Death Benefit	29490.32	869	1	Critical	1
+34	Ola	16577	26	Basic	Accident	11714.86	814	3	Critical	1
+29	Zomato	16712	65	Basic	Death Benefit	17084.87	80	1	Low	0
+53	Swiggy	37948	47	Standard	Accident	1382.59	619	0	Low	1
+41	Ola	47531	36	Basic	Death Benefit	5545.38	812	1	Medium	1
+27	Urban Company	20164	59	Basic	Death Benefit	4734.61	915	4	Critical	1
+47	Urban Company	13217	79	Standard	Third-party Liability	36851.98	305	1	Low	0
+46	Zepto	27526	67	Premium	Accident	3459.79	510	0	Critical	1
+56	Zepto	39270	63	Basic	Accident	15733.11	344	1	High	0
+27	Blinkit	34409	63	Standard	Death Benefit	1524.33	570	0	Medium	1
+56	Porter	57040	79	Premium	Accident	3643.03	91	3	Critical	1
+45	Blinkit	20734	79	Basic	Death Benefit	5960.71	647	1	Critical	1
+35	Zomato	52121	24	Premium	Death Benefit	19988.05	862	0	Critical	1
+58	Ola	44269	24	Standard	Vehicle Damage	19726.43	169	3	Critical	1
+34	Ola	21530	33	Premium	Accident	37590.07	334	4	Low	0
+28	Blinkit	20394	25	Premium	Health	30833.41	634	2	Low	1
+18	Ola	9499	26	Standard	Accident	2020.35	236	0	Medium	1
+34	Zomato	35539	74	Basic	Accident	22254.15	399	4	High	0
+53	Swiggy	17669	72	Basic	Third-party Liability	8199.68	588	3	High	1
+53	Porter	36562	36	Premium	Health	25108.79	821	4	Medium	1
+26	Zepto	29629	78	Premium	Health	2122.32	477	1	High	1
+45	Zomato	33746	28	Premium	Third-party Liability	21763.62	535	2	Low	1
+50	Ola	51287	50	Premium	Third-party Liability	3087.13	845	0	Critical	1
+20	Zomato	54007	41	Basic	Accident	5874.73	585	3	High	1
+25	Zepto	26128	64	Standard	Vehicle Damage	1351.27	88	2	Critical	1
+23	Uber	10039	28	Standard	Third-party Liability	2584.95	615	3	Critical	1
+23	Urban Company	49079	78	Standard	Health	8081.15	606	4	Low	0
+46	Zepto	11857	35	Premium	Health	21467.31	961	3	Critical	1
+54	Urban Company	33896	55	Premium	Accident	18829.12	828	3	High	1
+29	Zepto	12950	53	Standard	Vehicle Damage	4219.23	778	4	Low	0
+26	Uber	31471	64	Basic	Death Benefit	2974.12	253	4	Medium	0
+58	Ola	23441	32	Standard	Third-party Liability	6917.08	358	2	Low	0
+36	Ola	20735	38	Basic	Third-party Liability	26774.53	58	0	High	0
+34	Porter	30415	31	Premium	Accident	2150.54	943	4	Low	1
+49	Swiggy	42511	55	Standard	Vehicle Damage	10394.6	399	2	High	1
+52	Zepto	54051	29	Standard	Health	2116.01	521	3	High	1
+31	Zomato	50406	35	Premium	Health	8623.34	525	3	Low	0
+33	Swiggy	11616	47	Basic	Death Benefit	2626.97	919	1	High	1
+38	Ola	23383	75	Standard	Health	2004.97	417	4	Medium	0
+29	Ola	37756	38	Standard	Third-party Liability	3541.24	393	2	High	1
+41	Porter	11894	59	Basic	Death Benefit	4536.58	643	2	Medium	1
+51	Porter	58876	25	Standard	Vehicle Damage	4879.97	222	0	Medium	1
+25	Porter	46995	23	Standard	Death Benefit	13436.71	329	2	High	1
+38	Blinkit	51232	49	Premium	Vehicle Damage	1678.61	372	4	Critical	1
+25	Swiggy	48615	58	Basic	Health	2011.14	511	2	Medium	0
+45	Ola	12281	50	Standard	Accident	3509.5	153	1	Medium	1
+33	Uber	32647	65	Standard	Death Benefit	25674.61	893	3	Low	1
+27	Urban Company	38036	46	Premium	Death Benefit	12885.87	879	3	Medium	1
+32	Blinkit	26584	64	Standard	Third-party Liability	16728.44	984	2	Medium	1
+21	Zomato	42911	40	Premium	Third-party Liability	6551.33	480	2	Medium	1
+43	Urban Company	40308	56	Standard	Vehicle Damage	3877.68	583	2	Medium	1
+32	Blinkit	55548	28	Premium	Accident	1464.41	932	2	Critical	1
+53	Porter	36333	54	Basic	Third-party Liability	9045.73	857	1	Medium	0
+49	Zepto	43949	61	Basic	Third-party Liability	11247.71	20	4	High	0
+55	Zepto	27259	66	Standard	Health	28276.64	593	1	Critical	1
+21	Zomato	39794	71	Standard	Health	26654.31	950	1	Medium	1
+58	Uber	47288	40	Premium	Third-party Liability	7634.05	228	1	High	1
+26	Zomato	21052	36	Premium	Vehicle Damage	7610.98	346	3	High	1
+52	Swiggy	20271	74	Basic	Accident	3108.29	19	1	Critical	1
+45	Urban Company	58248	43	Standard	Third-party Liability	4571.96	444	2	Critical	1
+54	Zomato	53267	50	Premium	Vehicle Damage	32189.85	677	1	High	1
+26	Zomato	40175	25	Basic	Vehicle Damage	2824.34	368	2	Critical	1
+19	Blinkit	16915	76	Basic	Third-party Liability	42569.47	899	4	Critical	1
+20	Uber	24122	54	Premium	Vehicle Damage	9432.03	619	3	Low	1
+22	Zomato	52199	69	Standard	Death Benefit	8319.06	889	4	Critical	1
+27	Swiggy	14918	56	Basic	Vehicle Damage	3303.2	860	4	Low	0
+45	Blinkit	48916	32	Premium	Third-party Liability	14000.24	726	3	Critical	1
+32	Uber	38437	44	Basic	Vehicle Damage	8390.8	751	2	Critical	1
+31	Uber	53806	51	Standard	Third-party Liability	6557.06	147	2	High	1
+40	Ola	21805	78	Premium	Health	4686.72	693	2	Low	1
+30	Zepto	27598	20	Standard	Third-party Liability	1825.6	504	3	Critical	1
+33	Urban Company	48517	68	Standard	Vehicle Damage	9790.84	430	1	Medium	1
+47	Swiggy	10871	77	Basic	Third-party Liability	5503.45	848	0	Critical	1
+57	Zepto	45257	54	Standard	Accident	15766.48	440	1	High	1
+25	Blinkit	45375	77	Basic	Third-party Liability	16427.5	198	1	High	0
+34	Blinkit	53741	38	Premium	Third-party Liability	5843.53	997	4	High	1
+47	Swiggy	52879	72	Premium	Accident	14272.02	287	0	Low	0
+34	Uber	31148	71	Basic	Accident	4591.8	565	2	Low	0
+52	Porter	13834	73	Basic	Accident	16587.04	369	1	Low	0
+18	Zomato	50680	31	Basic	Death Benefit	1194.49	240	3	Medium	0
+41	Swiggy	11399	59	Standard	Third-party Liability	2972.96	802	1	Low	1
+42	Blinkit	29762	59	Premium	Accident	4372.59	287	2	High	1
+19	Zepto	59009	66	Premium	Accident	18790.25	700	1	Low	1
+42	Urban Company	48372	62	Standard	Health	1824.18	395	4	Low	0
+31	Swiggy	18957	39	Basic	Death Benefit	3499.9	996	4	Critical	1
+56	Uber	48499	52	Premium	Third-party Liability	6329.67	518	1	Low	1
+50	Urban Company	59548	48	Standard	Vehicle Damage	1110.61	795	4	Critical	1
+34	Urban Company	36340	35	Basic	Death Benefit	18231.92	775	3	Low	0
+48	Urban Company	35138	33	Premium	Death Benefit	10854.63	561	0	Critical	1
+27	Ola	23808	26	Basic	Health	28712.83	864	1	High	1
+23	Urban Company	36243	25	Standard	Third-party Liability	1378.27	712	3	Low	1
+56	Ola	10261	40	Premium	Third-party Liability	4799.41	60	3	High	1
+42	Zomato	19809	55	Basic	Accident	16767.76	545	3	Low	0
+55	Zomato	25696	41	Basic	Accident	14492.68	303	2	Medium	0
+54	Urban Company	50824	59	Basic	Death Benefit	4341.61	244	1	Medium	0
+47	Uber	59457	73	Standard	Health	11866.81	684	1	High	1
+51	Zepto	29891	38	Basic	Third-party Liability	19944.44	207	1	High	0
+35	Zomato	27125	44	Premium	Health	1407.41	375	0	Medium	1
+41	Ola	8997	22	Premium	Vehicle Damage	16174.38	283	3	Medium	1
+44	Uber	55923	55	Basic	Third-party Liability	4485.78	478	1	Critical	1
+44	Urban Company	14353	64	Standard	Accident	36443.87	22	4	Low	0
+56	Uber	26703	72	Premium	Death Benefit	10272.01	559	2	Medium	1
+38	Uber	43975	78	Premium	Health	1407.47	349	0	High	1
+36	Swiggy	17275	53	Premium	Accident	7198.72	489	2	High	1
+56	Zepto	27965	30	Basic	Death Benefit	41687.31	944	3	Medium	0
+40	Urban Company	40419	67	Premium	Accident	16728.59	670	4	High	1
+56	Zepto	56642	61	Basic	Third-party Liability	5288.31	258	3	Low	0
+32	Zomato	43854	66	Basic	Health	11275.54	655	1	Critical	1
+19	Porter	23973	46	Basic	Vehicle Damage	11968.56	47	2	Low	0
+52	Zepto	31550	61	Basic	Accident	1283.5	27	4	Critical	0
+37	Blinkit	34878	21	Basic	Health	3364.35	967	2	Critical	1
+45	Ola	25105	25	Premium	Third-party Liability	10629.57	27	0	Medium	1
+32	Zomato	55638	65	Basic	Accident	7185.09	981	4	High	1
+33	Urban Company	41922	21	Basic	Third-party Liability	3529.21	397	0	Critical	1
+50	Zepto	24029	61	Basic	Vehicle Damage	18776.16	951	4	Medium	1
+29	Ola	47935	36	Basic	Vehicle Damage	9056.51	145	1	High	0
+56	Urban Company	40784	59	Basic	Death Benefit	5452.3	587	2	High	1
+56	Urban Company	39601	77	Basic	Death Benefit	3116.23	699	2	Critical	1
+37	Zomato	47865	67	Premium	Death Benefit	12335.15	522	3	High	1
+46	Blinkit	39545	33	Basic	Third-party Liability	14168.76	121	4	Low	0
+20	Ola	21165	29	Basic	Death Benefit	14289.31	801	4	High	1
+22	Porter	26616	64	Premium	Health	3985.96	462	0	Low	1
+19	Porter	19654	52	Premium	Third-party Liability	11856.45	677	4	High	1
+40	Porter	25830	61	Standard	Third-party Liability	29297.99	382	2	Critical	1
+43	Blinkit	24205	73	Premium	Death Benefit	6228.39	776	4	Critical	1
+43	Ola	50425	31	Premium	Death Benefit	3840.32	673	3	Medium	1
+24	Swiggy	19959	51	Basic	Third-party Liability	18748.79	903	3	Low	0
+27	Urban Company	30158	68	Standard	Vehicle Damage	3335.88	418	2	Low	0
+22	Swiggy	19819	43	Basic	Vehicle Damage	4512.31	327	2	Critical	1
+29	Ola	43851	33	Standard	Death Benefit	2272.92	391	2	Critical	1
+49	Porter	50503	24	Basic	Vehicle Damage	4741.64	297	4	Critical	1
+59	Ola	14952	70	Premium	Health	7338.41	630	4	Low	1
+48	Blinkit	32225	24	Premium	Health	1795.7	996	1	Medium	1
+39	Urban Company	55405	66	Standard	Health	25641.44	823	0	Low	0
+34	Zepto	50231	51	Basic	Third-party Liability	9650.53	775	4	Critical	1
+37	Urban Company	13391	64	Basic	Third-party Liability	11643.8	84	1	Medium	0
+37	Uber	22468	68	Premium	Third-party Liability	6568.94	146	1	High	1
+25	Ola	23091	52	Premium	Third-party Liability	14297.96	171	3	High	1
+51	Zomato	38237	79	Standard	Third-party Liability	7783	334	4	Critical	1
+40	Zomato	55732	65	Premium	Death Benefit	18191.27	424	1	Medium	1
+55	Zomato	16964	23	Standard	Vehicle Damage	21671.42	309	3	Critical	1
+45	Swiggy	48682	76	Standard	Death Benefit	14371.38	526	0	Low	0
+30	Zepto	55244	49	Standard	Vehicle Damage	9111.6	661	3	Low	0
+46	Blinkit	57634	60	Standard	Death Benefit	19293.96	881	0	Medium	1
+25	Zepto	34968	36	Premium	Health	9181.39	763	2	Critical	1
+28	Swiggy	48205	22	Standard	Accident	2418.78	569	2	Critical	1
+35	Zepto	19371	32	Premium	Third-party Liability	2484.2	347	3	High	1
+42	Zepto	50541	63	Standard	Accident	36613.47	302	2	Medium	0
+39	Urban Company	33681	67	Premium	Accident	3882.91	922	4	Critical	1
+52	Zomato	36285	55	Standard	Health	21308.94	347	3	Low	0
+46	Ola	45971	37	Premium	Accident	4399.59	408	1	Critical	1
+38	Zomato	23430	42	Basic	Accident	7761.86	133	4	Critical	0
+24	Zepto	53230	54	Standard	Health	13768.73	682	3	Low	0
+29	Ola	17033	68	Standard	Vehicle Damage	3076.07	614	0	Low	1
+53	Urban Company	27918	52	Basic	Death Benefit	17038.47	988	2	Critical	1
+41	Blinkit	26256	70	Basic	Accident	15050.83	106	2	Low	0
+49	Uber	56522	73	Standard	Third-party Liability	10399.04	171	2	High	1
+44	Ola	39188	55	Premium	Health	11013.48	640	3	High	1
+49	Swiggy	44088	36	Standard	Accident	2341.53	250	4	High	1
+49	Zomato	22979	58	Premium	Vehicle Damage	7871.33	544	0	Low	1
+49	Urban Company	10728	53	Basic	Vehicle Damage	2086.6	728	2	Low	1
+43	Urban Company	58106	31	Premium	Third-party Liability	5415.66	262	4	Low	0
+28	Zomato	9595	24	Standard	Accident	28668.54	842	1	Medium	1
+35	Zepto	40624	67	Basic	Third-party Liability	11254.83	494	1	Low	0
+56	Zepto	39568	59	Basic	Vehicle Damage	17290.31	244	0	High	1
+22	Zepto	10288	74	Standard	Vehicle Damage	11236.58	451	2	High	1
+33	Porter	47613	46	Standard	Death Benefit	3591.58	903	1	High	1
+28	Urban Company	48431	79	Basic	Vehicle Damage	11840.74	797	4	Medium	1
+52	Zepto	37011	59	Premium	Health	17896.99	290	4	Critical	1
+28	Zomato	25127	32	Premium	Death Benefit	2787.64	263	1	High	1
+59	Porter	25878	45	Premium	Third-party Liability	21373.11	849	2	Medium	1
+40	Ola	14944	33	Standard	Vehicle Damage	10726.75	845	0	Critical	1
+51	Blinkit	20302	51	Basic	Health	1051.41	314	2	Medium	0
+34	Ola	50948	30	Premium	Death Benefit	9802.09	85	3	Medium	1
+27	Swiggy	8207	57	Basic	Health	7043.65	415	1	Critical	1
+35	Porter	9083	35	Premium	Death Benefit	5219.34	329	3	Low	0
+25	Zomato	59564	74	Basic	Death Benefit	18701.89	45	1	Low	0
+43	Porter	11311	76	Standard	Death Benefit	28571.16	815	0	High	1
+20	Ola	31135	41	Standard	Third-party Liability	18258.79	333	2	Critical	1
+41	Zomato	49356	76	Standard	Death Benefit	23509.98	465	2	High	1
+20	Urban Company	39219	66	Premium	Death Benefit	29733.9	200	1	Medium	1
+55	Swiggy	24592	35	Standard	Health	30251.15	201	4	Low	0
+19	Urban Company	54212	32	Standard	Death Benefit	2461.11	329	3	High	1
+52	Uber	31932	31	Standard	Third-party Liability	8314.18	680	2	High	1
+34	Uber	27040	37	Basic	Health	1003.44	240	2	Low	0
+26	Uber	13850	48	Basic	Death Benefit	9473.88	884	1	Medium	1
+53	Zomato	59588	37	Basic	Health	31962.84	798	4	High	1
+39	Ola	39716	65	Basic	Third-party Liability	3664.26	702	3	High	1
+48	Zomato	20719	21	Basic	Health	13252.7	583	4	Critical	1
+51	Urban Company	29777	73	Basic	Third-party Liability	13406.68	657	4	Critical	1
+41	Blinkit	57285	21	Basic	Vehicle Damage	3097.3	359	1	Low	0
+26	Urban Company	25022	22	Standard	Death Benefit	4270.01	998	4	Low	0
+19	Ola	41996	48	Standard	Third-party Liability	8439.25	901	3	Medium	1
+38	Urban Company	35945	75	Premium	Death Benefit	3502.15	721	0	Medium	1
+51	Urban Company	36788	27	Standard	Third-party Liability	11553.55	360	0	High	1
+44	Swiggy	12019	30	Basic	Accident	8952.39	378	3	Critical	1
+54	Zepto	17482	31	Basic	Accident	9787.6	385	1	Medium	0
+24	Uber	54873	51	Premium	Accident	2732.92	720	2	High	1
+39	Ola	26580	23	Standard	Third-party Liability	9739.12	465	1	High	1
+21	Porter	17895	28	Standard	Death Benefit	1608.93	222	3	Low	0
+31	Porter	22135	43	Premium	Accident	26597.68	799	4	Critical	1
+51	Porter	57013	68	Basic	Death Benefit	6045.42	675	0	High	1
+40	Porter	18387	75	Basic	Third-party Liability	24283.45	365	4	Low	0
+59	Ola	37136	35	Basic	Death Benefit	15514.11	72	1	High	0
+42	Uber	25359	36	Basic	Death Benefit	18438.06	240	3	Critical	1
+18	Urban Company	55672	66	Premium	Accident	5532.06	504	0	High	1
+32	Swiggy	14121	71	Standard	Health	4101.27	414	3	High	1
+49	Zomato	41796	77	Basic	Vehicle Damage	7265.48	127	0	Medium	0
+31	Zomato	24909	41	Standard	Third-party Liability	1294.29	487	0	Medium	1
+58	Urban Company	10327	26	Standard	Third-party Liability	31123.53	597	0	Low	0
+38	Urban Company	26930	29	Basic	Third-party Liability	6872.96	527	1	High	1
+24	Zepto	57987	48	Basic	Vehicle Damage	54644.11	248	3	Low	0
+53	Porter	43251	55	Basic	Health	18198.09	482	2	Critical	1
+38	Ola	43502	43	Standard	Death Benefit	2007.3	312	2	Low	0
+57	Uber	39547	75	Premium	Third-party Liability	13952.36	444	2	High	1
+29	Urban Company	39688	65	Basic	Death Benefit	4790.33	283	3	Medium	0
+32	Urban Company	50498	33	Standard	Accident	4352.1	2	4	Medium	0
+32	Blinkit	50870	33	Standard	Accident	4557.65	74	3	Low	0
+34	Swiggy	15304	44	Basic	Accident	30733.99	64	0	Medium	0
+51	Zomato	12049	65	Premium	Third-party Liability	9317.29	773	4	High	1
+52	Swiggy	22947	41	Basic	Vehicle Damage	14284.73	347	0	High	1
+56	Swiggy	17495	71	Basic	Third-party Liability	4957.86	324	0	Critical	1
+55	Zepto	32707	69	Premium	Accident	9881.72	239	3	Medium	1
+31	Porter	41160	66	Basic	Accident	6171.24	397	2	Medium	0
+22	Swiggy	52544	42	Basic	Third-party Liability	5648.07	337	4	Critical	1
+47	Uber	51635	51	Premium	Vehicle Damage	4403.78	341	1	Low	1
+21	Zepto	38706	45	Standard	Vehicle Damage	7311.41	279	2	Critical	1
+32	Urban Company	43234	70	Standard	Death Benefit	13946.78	353	1	Medium	1
+56	Uber	41993	46	Standard	Health	4013.02	946	3	Low	0
+52	Zepto	22987	64	Standard	Accident	41382.08	892	4	High	1
+27	Uber	27089	31	Standard	Vehicle Damage	2597.05	463	3	High	1
+19	Zepto	8461	38	Basic	Accident	8851.9	462	1	Critical	1
+41	Zepto	17993	38	Premium	Health	2066.34	713	0	High	1
+45	Ola	19465	71	Standard	Accident	1275.11	293	3	Medium	1
+39	Uber	24535	53	Premium	Vehicle Damage	31717.22	798	4	Critical	1
+49	Ola	40640	51	Standard	Death Benefit	20953.1	733	3	Medium	1
+48	Urban Company	18461	48	Basic	Third-party Liability	15216.14	407	2	Medium	0
+36	Porter	20366	40	Standard	Third-party Liability	25046.74	162	3	Low	0
+38	Porter	37895	54	Standard	Vehicle Damage	20485.39	503	1	Low	0
+20	Zepto	9785	61	Premium	Vehicle Damage	13503.53	448	3	Low	0
+23	Porter	14242	24	Premium	Health	23554.69	695	4	High	1
+49	Zomato	32529	31	Basic	Accident	6947.31	455	3	Low	0
+19	Zepto	55080	26	Premium	Health	10655.7	885	3	Medium	1
+41	Zomato	14356	60	Premium	Third-party Liability	18969.96	265	4	Critical	1
+44	Zomato	31229	21	Premium	Accident	2063.33	132	3	Critical	1
+26	Zomato	27844	44	Basic	Health	24477.81	834	4	Medium	0
+30	Zomato	26220	29	Basic	Third-party Liability	3047.05	120	1	High	0
+31	Porter	50357	57	Basic	Accident	24989.06	892	4	Critical	1
+28	Uber	33651	63	Premium	Death Benefit	5475.97	219	1	Medium	1
+31	Blinkit	39686	25	Premium	Death Benefit	5748.25	417	1	Medium	1
+33	Uber	30127	46	Basic	Health	1921.91	672	4	Medium	1
+27	Urban Company	30662	54	Premium	Vehicle Damage	27048.12	505	3	Critical	1
+37	Blinkit	42261	29	Premium	Accident	3301.34	300	2	Critical	1
+33	Uber	58700	28	Standard	Health	12932.65	109	4	Low	0
+51	Urban Company	33360	39	Basic	Vehicle Damage	13392.8	238	3	Low	0
+33	Porter	45931	56	Basic	Vehicle Damage	4961.26	293	1	Medium	0
+31	Zomato	50380	54	Premium	Accident	51937.23	987	0	Medium	1
+45	Swiggy	22297	56	Premium	Accident	1795.81	988	2	Medium	1
+35	Zepto	46472	59	Standard	Vehicle Damage	12234	579	3	Medium	1
+43	Blinkit	30788	27	Basic	Third-party Liability	8836.6	828	2	Critical	1
+55	Swiggy	47456	65	Basic	Health	4380.15	187	0	Low	0
+24	Zomato	35011	75	Premium	Accident	3143.09	36	0	High	1
+51	Blinkit	56603	73	Basic	Vehicle Damage	17031.06	561	0	Medium	1
+24	Swiggy	36057	50	Premium	Third-party Liability	30768.33	256	4	Low	0
+50	Uber	26447	68	Standard	Death Benefit	2365.37	435	2	Medium	1
+52	Urban Company	26404	62	Premium	Vehicle Damage	3587.76	619	4	Critical	1
+56	Zomato	29141	77	Standard	Third-party Liability	52457.84	8	0	High	1
+38	Uber	30307	35	Premium	Death Benefit	1181.64	748	3	Low	1
+45	Uber	18341	47	Standard	Third-party Liability	9517.47	178	0	Low	0
+49	Zomato	48121	25	Standard	Accident	9710.84	242	4	High	1
+33	Blinkit	17142	51	Basic	Vehicle Damage	4664.64	41	0	Critical	1
+27	Zepto	56034	47	Premium	Death Benefit	14053.1	357	0	High	1
+40	Ola	48984	30	Basic	Third-party Liability	35792.18	757	4	Low	0
+32	Ola	23932	61	Basic	Death Benefit	8178.71	113	4	High	0
+23	Zepto	20017	42	Premium	Health	17607.7	877	3	Critical	1
+50	Porter	41337	49	Basic	Vehicle Damage	13463.88	768	4	Critical	1
+56	Zomato	45880	28	Basic	Accident	8685.33	166	3	Medium	0
+29	Ola	9355	47	Basic	Death Benefit	1613.15	504	1	High	1
+53	Zepto	48824	43	Premium	Third-party Liability	17245.92	854	1	High	1
+48	Swiggy	24086	78	Basic	Death Benefit	6416.57	78	4	Low	0
+27	Zepto	57982	47	Basic	Third-party Liability	4050.89	719	0	Critical	1
+51	Porter	29515	43	Basic	Death Benefit	36540.3	823	2	High	0
+58	Blinkit	22220	34	Premium	Accident	18820.27	878	0	Low	1
+27	Urban Company	55266	58	Standard	Accident	40327.18	196	4	Medium	0
+28	Zepto	41602	69	Standard	Vehicle Damage	4552.07	402	3	High	1
+31	Uber	19308	52	Standard	Accident	22679.55	833	0	High	1
+20	Uber	8969	66	Standard	Death Benefit	12229.4	64	1	Low	0
+50	Urban Company	41360	53	Basic	Death Benefit	48882.21	652	4	Low	0
+24	Zomato	8254	41	Premium	Accident	36095.89	886	0	Critical	1
+21	Uber	18306	48	Basic	Health	44328.83	425	0	Critical	0
+56	Swiggy	35541	53	Premium	Death Benefit	37380.7	42	3	Critical	1
+27	Zepto	10661	61	Basic	Vehicle Damage	1092.28	373	3	High	1
+32	Urban Company	23309	71	Standard	Health	17215.08	956	3	Low	0
+33	Swiggy	49562	66	Standard	Accident	4808.37	306	2	Critical	1
+55	Zomato	26223	29	Premium	Third-party Liability	15650.46	209	4	High	1
+21	Uber	13905	70	Basic	Death Benefit	48316.72	467	4	Critical	0
+21	Urban Company	10431	73	Standard	Third-party Liability	1481.86	932	1	Medium	1
+53	Ola	15756	79	Premium	Vehicle Damage	11043.87	304	1	High	1
+44	Zepto	13353	79	Basic	Health	16934.18	967	4	Critical	1
+39	Ola	58117	64	Premium	Third-party Liability	4506.05	585	0	Critical	1
+39	Blinkit	9737	49	Basic	Vehicle Damage	4060.6	392	4	Medium	0
+34	Zomato	24868	75	Basic	Third-party Liability	1746.92	153	2	Medium	0
+51	Blinkit	40476	30	Basic	Third-party Liability	2183.53	647	1	Critical	1
+49	Ola	32325	73	Premium	Vehicle Damage	13831.55	362	1	Critical	1
+23	Ola	20326	53	Premium	Death Benefit	9443.48	264	1	Low	0
+50	Ola	32586	40	Basic	Third-party Liability	1366.4	216	4	Critical	1
+25	Blinkit	20911	78	Standard	Vehicle Damage	42944.16	721	1	Critical	1
+53	Urban Company	37080	32	Basic	Third-party Liability	13806.96	716	1	Low	0
+22	Zomato	30635	73	Premium	Death Benefit	9694.88	622	4	Low	0
+22	Porter	59179	44	Basic	Vehicle Damage	4821.39	543	0	Critical	1
+27	Zepto	13213	73	Premium	Third-party Liability	13878.8	524	1	Low	1
+57	Porter	46995	77	Basic	Accident	6433.85	639	1	High	1
+24	Urban Company	35940	40	Basic	Death Benefit	15547.86	825	1	Medium	1
+29	Zepto	52047	20	Standard	Third-party Liability	14770.05	194	2	High	1
+47	Swiggy	56604	77	Standard	Health	2167.96	652	4	Medium	1
+42	Porter	31365	24	Premium	Vehicle Damage	29797.18	27	1	Medium	1
+45	Swiggy	16796	72	Basic	Third-party Liability	9009.15	46	2	Critical	0
+30	Porter	57119	41	Premium	Death Benefit	6989.63	647	0	Medium	1
+39	Ola	25352	26	Basic	Death Benefit	38336.99	829	0	High	1
+35	Zomato	24820	32	Basic	Health	7919.51	954	2	Critical	1
+44	Porter	18966	64	Basic	Health	16328.03	58	0	Low	0
+25	Zomato	54735	71	Standard	Third-party Liability	13775.28	13	3	High	1
+23	Uber	9809	42	Premium	Accident	3165.9	949	0	Critical	1
+28	Uber	47314	40	Basic	Death Benefit	57718.26	612	3	Medium	0
+46	Urban Company	48875	25	Basic	Accident	8474.6	961	2	High	1
+58	Porter	13505	39	Premium	Accident	7026.01	49	3	Medium	1
+22	Blinkit	38649	31	Premium	Third-party Liability	31250.91	803	0	Critical	1
+24	Porter	13257	59	Basic	Vehicle Damage	10040.84	94	1	Critical	1
+39	Porter	23051	28	Standard	Vehicle Damage	15652.49	607	3	Low	0
+21	Uber	12909	69	Standard	Vehicle Damage	23468.82	657	0	Low	0
+49	Urban Company	35345	47	Basic	Health	4222.31	584	1	High	1
+36	Zepto	22866	30	Standard	Death Benefit	3228.25	451	2	Low	0
+50	Zepto	50789	71	Premium	Health	1851.6	379	2	Medium	1
+18	Urban Company	32868	51	Standard	Death Benefit	28291.86	10	4	Medium	0
+58	Blinkit	56126	30	Premium	Death Benefit	3683.23	674	2	Low	1
+58	Swiggy	36527	43	Premium	Death Benefit	5413.77	726	4	Low	1
+25	Ola	8461	75	Premium	Third-party Liability	5039.22	516	2	Low	0
+49	Zomato	36460	34	Premium	Vehicle Damage	5359.01	224	2	High	1
+47	Swiggy	56500	60	Standard	Health	14233.65	381	2	High	1
+45	Urban Company	11233	54	Premium	Health	37979.03	541	4	Medium	1
+58	Zepto	20128	36	Basic	Third-party Liability	5795.95	302	4	High	1
+49	Swiggy	13202	44	Premium	Death Benefit	7283.83	203	3	High	1
+42	Blinkit	43707	68	Basic	Vehicle Damage	18696.1	942	0	Critical	1
+51	Ola	39258	54	Premium	Accident	7794.75	589	0	Medium	1
+50	Zepto	55965	38	Premium	Accident	32251.22	571	0	Medium	1
+30	Blinkit	39238	60	Standard	Third-party Liability	9395.25	957	2	Low	1
+42	Urban Company	21722	50	Premium	Vehicle Damage	6127.65	196	0	Critical	1
+59	Swiggy	53766	36	Premium	Accident	43724.77	322	4	Low	0
+57	Zomato	57240	74	Standard	Accident	7656.95	418	3	High	1
+56	Uber	26047	69	Standard	Health	4154.7	619	1	Medium	1
+27	Blinkit	11301	42	Basic	Vehicle Damage	3347.81	342	3	High	0
+48	Zepto	40544	66	Standard	Accident	65023.08	389	0	High	1
+28	Swiggy	39583	20	Basic	Health	17779.81	9	0	Critical	1
+42	Uber	35513	77	Premium	Vehicle Damage	7304.37	532	4	Critical	1
+51	Uber	23640	29	Basic	Death Benefit	22009.48	149	3	Medium	0
+37	Swiggy	30413	27	Standard	Vehicle Damage	10497.22	383	4	Medium	1
+24	Ola	24805	61	Premium	Third-party Liability	5581.97	529	4	Critical	1
+50	Swiggy	28133	45	Basic	Health	17322.18	12	1	Critical	0
+52	Zepto	56899	53	Basic	Death Benefit	17440.08	476	4	Critical	1
+46	Urban Company	29355	38	Basic	Health	9321.83	594	4	Critical	1
+29	Zomato	31229	33	Premium	Health	1554.52	579	1	Medium	1
+22	Zepto	12433	27	Basic	Accident	1961.8	645	2	Medium	1
+29	Urban Company	41033	70	Basic	Vehicle Damage	19656.53	956	2	High	1
+46	Uber	43618	20	Standard	Health	21811.61	53	1	High	1
+52	Zomato	9378	67	Basic	Health	14609.25	436	4	High	0
+37	Blinkit	14503	44	Premium	Third-party Liability	22921.32	206	0	Medium	1
+54	Uber	47925	43	Standard	Third-party Liability	16253.64	944	3	Low	0
+18	Porter	50774	66	Premium	Third-party Liability	28268.7	986	0	High	1
+33	Ola	41617	39	Standard	Health	2955.85	915	0	Low	1
+47	Swiggy	12814	75	Standard	Death Benefit	6887.21	745	4	Low	1
+26	Blinkit	31763	49	Basic	Vehicle Damage	8485.93	913	3	Low	0
+59	Porter	18000	24	Premium	Health	5240.12	54	3	Critical	1
+27	Zepto	23288	22	Basic	Accident	16507.81	999	2	Medium	1
+30	Zomato	11274	51	Standard	Death Benefit	30225.01	580	1	Medium	1
+37	Blinkit	57868	36	Basic	Death Benefit	7382.18	490	4	High	0
+46	Porter	22227	61	Standard	Vehicle Damage	35073.35	803	3	High	1
+21	Porter	25279	24	Standard	Death Benefit	9727.12	344	4	Medium	0
+45	Porter	17368	30	Premium	Vehicle Damage	9870.69	169	2	Critical	1
+54	Ola	52713	57	Premium	Death Benefit	12002.08	909	0	Medium	1
+30	Swiggy	50736	23	Premium	Vehicle Damage	4749.13	161	3	Low	0
+20	Blinkit	39006	58	Premium	Third-party Liability	6801.65	527	2	Medium	1
+54	Zepto	35380	38	Basic	Third-party Liability	10668.74	703	4	Critical	1
+36	Zomato	35968	58	Premium	Death Benefit	35164.21	527	2	Medium	1
+45	Blinkit	17651	65	Premium	Death Benefit	13349.9	287	2	Medium	1
+36	Swiggy	21903	68	Premium	Vehicle Damage	5861.68	875	2	Medium	1
+34	Zepto	26927	42	Standard	Vehicle Damage	1126.29	412	2	Low	1
+35	Blinkit	15771	36	Standard	Health	48987.75	522	2	High	1
+35	Zomato	21460	32	Premium	Third-party Liability	9150.57	569	2	Critical	1
+40	Swiggy	12637	46	Standard	Health	34463.67	199	1	Low	0
+57	Ola	53690	20	Standard	Health	10564.64	161	4	Medium	0
+26	Ola	48834	21	Basic	Accident	12160.56	775	0	Medium	1
+46	Uber	11553	37	Standard	Vehicle Damage	15933.88	389	4	High	1
+59	Blinkit	42117	55	Basic	Accident	5645.18	474	3	High	0
+46	Zomato	43754	64	Standard	Accident	15407.1	381	3	High	1
+19	Blinkit	31580	52	Premium	Health	9978.64	765	4	Low	1
+34	Swiggy	19522	55	Standard	Accident	14394.47	631	2	Critical	1
+48	Uber	42890	21	Standard	Vehicle Damage	22682.47	592	1	High	1
+45	Zomato	36204	23	Basic	Health	3443.46	124	0	Medium	0
+56	Blinkit	21892	35	Premium	Vehicle Damage	12409.06	825	2	Critical	1
+47	Zomato	16689	23	Basic	Death Benefit	1642.22	72	4	Medium	0
+52	Swiggy	36063	76	Premium	Accident	2292.56	982	4	Medium	1
+37	Uber	22062	28	Premium	Health	14472.19	994	1	Critical	1
+33	Zomato	9363	68	Basic	Third-party Liability	1882.95	168	1	Low	0
+51	Swiggy	24691	40	Standard	Vehicle Damage	11857.02	284	4	Critical	1
+31	Ola	10751	42	Premium	Accident	3981.73	494	2	High	1
+43	Zomato	15782	71	Standard	Vehicle Damage	5350.33	36	2	Critical	1
+37	Uber	25648	79	Basic	Vehicle Damage	2666.13	824	2	High	1
+59	Urban Company	20540	72	Basic	Death Benefit	4430.88	175	0	High	1
+41	Zepto	53991	21	Basic	Vehicle Damage	21664.01	199	0	Critical	1
+35	Zepto	13339	22	Basic	Death Benefit	13222.49	116	2	Critical	1
+26	Zomato	35020	42	Premium	Death Benefit	36891.28	936	4	High	1
+36	Zomato	35609	45	Basic	Death Benefit	1599.68	315	1	Medium	1
+37	Swiggy	13848	66	Standard	Accident	19866.4	939	3	Critical	1
+59	Blinkit	24877	26	Standard	Vehicle Damage	15410.82	220	1	Low	0
+47	Zepto	26405	55	Premium	Vehicle Damage	4627.74	891	1	High	1
+43	Porter	58899	63	Basic	Death Benefit	16675.02	578	3	Medium	0
+48	Blinkit	56629	52	Premium	Vehicle Damage	16128.57	777	2	Critical	1
+52	Zepto	54233	68	Premium	Vehicle Damage	8379.69	134	1	Critical	1
+20	Zomato	29471	55	Premium	Death Benefit	15001.65	631	3	Medium	1
+57	Porter	11302	23	Basic	Third-party Liability	8056.39	122	4	Low	0
+46	Uber	22437	73	Standard	Third-party Liability	5905.47	833	4	High	1
+23	Uber	55930	42	Standard	Death Benefit	8539.35	899	4	Critical	1
+18	Urban Company	22512	44	Premium	Accident	28060.35	970	2	Low	1
+41	Zepto	40436	60	Premium	Vehicle Damage	6825.48	421	1	High	1
+55	Porter	31511	45	Standard	Vehicle Damage	7203.9	895	1	Low	1
+51	Zepto	13022	47	Standard	Third-party Liability	12250.27	492	0	High	1
+24	Swiggy	51239	47	Basic	Death Benefit	17780.38	599	4	High	0
+28	Zomato	14155	40	Premium	Accident	16919.15	289	2	Low	1
+28	Zomato	39480	29	Basic	Death Benefit	1239.97	649	3	High	1
+53	Urban Company	46022	46	Standard	Third-party Liability	14954.56	53	2	Critical	1
+37	Blinkit	33332	70	Standard	Third-party Liability	8186.14	205	1	Critical	1
+33	Swiggy	12354	70	Standard	Vehicle Damage	9910.32	348	4	Low	0
+22	Ola	39847	34	Standard	Health	10897.22	51	0	Low	0
+41	Uber	43284	73	Basic	Accident	16788.67	839	2	High	1
+47	Uber	56640	36	Standard	Accident	22357.95	922	0	High	1
+47	Zomato	18156	58	Premium	Health	13470.35	912	1	Low	1
+56	Urban Company	30453	54	Standard	Third-party Liability	10958.8	40	3	Medium	0
+54	Porter	40689	24	Premium	Death Benefit	6616.44	250	2	Low	0
+50	Swiggy	31758	35	Standard	Accident	2780.3	218	1	Medium	1
+37	Ola	16838	42	Basic	Health	39207.23	179	4	Medium	0
+39	Uber	53502	58	Premium	Vehicle Damage	8435.24	551	2	Low	0
+58	Swiggy	51790	67	Basic	Vehicle Damage	11022.4	183	0	Low	0
+38	Ola	45976	28	Standard	Third-party Liability	17687.15	736	2	Low	1
+54	Zepto	57346	52	Basic	Accident	1850.36	164	1	Medium	0
+44	Zomato	21725	54	Standard	Death Benefit	24173.17	746	1	Critical	1
+55	Blinkit	17337	76	Basic	Accident	20136.11	377	0	Critical	1
+52	Uber	18701	59	Basic	Vehicle Damage	18869.42	705	1	Low	0
+55	Uber	37811	69	Premium	Accident	1266.74	497	2	Low	1
+57	Ola	51043	43	Standard	Vehicle Damage	9971.72	597	0	High	1
+23	Blinkit	46978	43	Basic	Health	1669.56	461	1	High	1
+49	Porter	37316	69	Standard	Health	10605.38	755	1	High	1
+33	Zepto	19544	43	Premium	Vehicle Damage	16209.27	474	2	Low	1
+45	Swiggy	29514	38	Basic	Death Benefit	2559.26	685	1	Critical	1
+33	Zomato	24327	58	Standard	Death Benefit	15244.72	905	2	Critical	1
+44	Swiggy	54809	44	Basic	Accident	8163.86	37	4	Low	0
+20	Ola	24705	71	Basic	Vehicle Damage	21027.26	599	2	Low	0
+38	Porter	18479	50	Basic	Third-party Liability	10152.26	641	3	Medium	0
+55	Porter	19323	78	Basic	Death Benefit	5915.87	706	1	Medium	1

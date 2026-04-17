@@ -160,7 +160,26 @@ export async function handleRequest(req, res) {
       const body = await readJson(req);
       return verifyOtp(body.mobile, body.otp);
     }],
-    ["POST", "/api/workers/onboarding", async () => createOrUpdateWorkerProfile(await readJson(req))],
+    ["POST", "/api/workers/onboarding", async () => {
+      const payload = await readJson(req);
+      const result = createOrUpdateWorkerProfile(payload);
+      try {
+        await mlService.storeWorkerData(mlService.formatWorkerDataForStorage({
+          ...result.worker,
+          mobile: result.worker.mobile,
+          platform: result.worker.platform,
+          avgDailyHours: result.worker.avgDailyHours,
+          shiftPattern: result.worker.shiftPattern,
+          zoneName: result.zone.name,
+          zoneRiskScore: result.zone.riskScore,
+          age: payload.age ?? 30,
+          monthly_income: payload.monthly_income ?? 30000
+        }));
+      } catch (error) {
+        console.warn("[ml-store-worker]", error?.message || error);
+      }
+      return result;
+    }],
     ["GET", "/api/workers/:workerId/dashboard", async ({ workerId }) => buildWorkerDashboard(workerId)],
     ["GET", "/api/workers/:workerId/policy", async ({ workerId }) => {
       const worker = getWorker(workerId);
@@ -247,7 +266,30 @@ export async function handleRequest(req, res) {
     ["POST", "/api/ml/fraud", async () => mlService.getPrediction('fraud', await readJson(req))],
     ["POST", "/api/ml/price", async () => mlService.getPrediction('price', await readJson(req))],
     ["POST", "/api/ml/risk", async () => mlService.getPrediction('risk', await readJson(req))],
-    ["POST", "/api/ml/claim", async () => mlService.getPrediction('claim', await readJson(req))]
+    ["POST", "/api/ml/claim", async () => mlService.getPrediction('claim', await readJson(req))],
+    ["POST", "/api/ml/batch-predict/:modelType", async ({ modelType }) => mlService.batchPredict(modelType, await readJson(req))],
+    ["POST", "/api/ml/worker-risk", async () => {
+      const body = await readJson(req);
+      return mlService.predictRisk(body);
+    }],
+    ["POST", "/api/ml/worker-price", async () => {
+      const body = await readJson(req);
+      return mlService.predictPrice(body, body.planId);
+    }],
+    ["POST", "/api/ml/fraud-check", async () => {
+      const body = await readJson(req);
+      return mlService.predictFraud(body);
+    }],
+    ["POST", "/api/ml/store-worker", async () => {
+      const body = await readJson(req);
+      const formattedData = mlService.formatWorkerDataForStorage(body);
+      return mlService.storeWorkerData(formattedData);
+    }],
+    ["GET", "/api/ml/workers", async () => mlService.getAllWorkers()],
+    ["GET", "/api/ml/workers/:workerId", async ({ workerId }) => mlService.getWorkerData(workerId)],
+    ["GET", "/api/ml/workers/:workerId/insights", async ({ workerId }) => mlService.getWorkerInsights(workerId)],
+    ["GET", "/api/ml/analytics", async () => mlService.getAnalytics()],
+    ["GET", "/api/ml/health", async () => mlService.checkHealth()]
   ];
 
   for (const [method, pattern, handler] of routes) {

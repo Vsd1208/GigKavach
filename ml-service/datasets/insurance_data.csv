@@ -1,3 +1,501 @@
-feature1,feature2,target
-1,2,100
-3,4,200
+age	gig_platform	monthly_income	work_hours_per_week	years_experience	health_condition	coverage_type	location_risk_score	num_dependents	past_accidents	city_tier	target
+46	Blinkit	68562	52	16	Poor	Accident Only	6.81	3	3	2	4942.66
+43	Blinkit	32509	52	9	Fair	Accident Only	4.91	1	1	2	3468.89
+36	Uber	69901	34	11	Excellent	Accident Only	2.81	5	1	3	2437.53
+43	Zomato	13703	35	1	Fair	Accident Only	1.97	4	4	1	3957.79
+54	Uber	35109	63	9	Poor	Accident Only	4.96	4	2	2	4872.59
+44	Zepto	51417	77	19	Poor	Health + Accident	2.11	1	4	2	6340.58
+47	Swiggy	30554	75	0	Fair	Accident Only	5.38	3	3	2	4178.22
+47	Uber	35676	57	3	Fair	Accident Only	6.63	3	1	3	3644.16
+20	Swiggy	69710	25	12	Poor	Health + Accident	8.45	0	2	2	4340.15
+24	Zepto	68077	63	11	Poor	Health + Accident	7.11	0	1	1	4415.59
+26	Urban Company	63796	44	10	Good	Accident Only	1.59	5	1	1	2689.7
+58	Zepto	31804	34	9	Good	Accident Only	3.77	2	3	1	3186.43
+59	Ola	53440	23	14	Poor	Accident Only	3.59	0	1	1	3716.2
+30	Swiggy	44923	75	4	Fair	Comprehensive	9.24	3	0	2	6279.16
+32	Blinkit	37802	23	16	Excellent	Comprehensive	8.81	2	2	3	4725.54
+22	Uber	32795	49	4	Fair	Accident Only	4.33	0	2	3	3092.14
+46	Urban Company	68162	53	1	Fair	Health + Accident	1.64	1	0	3	4408.69
+52	Zepto	67250	46	8	Good	Accident Only	9.05	4	3	2	3666.64
+44	Swiggy	10611	50	5	Good	Health + Accident	8.99	0	1	3	3914.57
+44	Urban Company	30075	75	17	Good	Health + Accident	8.69	0	1	1	4102.52
+25	Zomato	59745	51	13	Poor	Health + Accident	8.61	1	2	2	5272.36
+49	Ola	24479	63	18	Poor	Accident Only	5.32	3	3	3	5054.96
+37	Zomato	17180	58	13	Fair	Accident Only	2.6	5	3	1	3779
+27	Zepto	17304	71	7	Fair	Health + Accident	5.3	1	3	1	4635.61
+30	Zomato	63193	28	16	Excellent	Comprehensive	5.45	5	1	2	4258.71
+46	Zomato	67622	60	2	Fair	Comprehensive	5.41	0	3	2	6504.37
+52	Ola	62215	27	9	Fair	Comprehensive	5.85	3	0	3	6054.77
+25	Ola	22610	33	16	Good	Health + Accident	3.32	2	4	3	4018.95
+46	Porter	16437	52	10	Good	Accident Only	4.3	0	3	3	3331.94
+48	Ola	51118	42	7	Good	Health + Accident	4.91	1	4	2	4872.37
+58	Urban Company	20521	40	0	Good	Comprehensive	2.18	2	1	3	5802.25
+47	Porter	60501	74	12	Good	Accident Only	5.1	4	3	3	3495.61
+39	Ola	32028	31	3	Excellent	Health + Accident	8.29	2	2	1	3384.96
+38	Zomato	47328	76	6	Excellent	Health + Accident	8.45	1	1	1	3288.8
+29	Blinkit	35301	21	13	Excellent	Comprehensive	4.7	2	0	1	3329.56
+28	Blinkit	46015	32	4	Good	Health + Accident	5.67	1	0	3	2981.02
+19	Porter	29740	78	10	Poor	Accident Only	1.3	0	4	2	3505.69
+58	Ola	44845	23	16	Good	Comprehensive	7.07	3	4	1	7119.82
+19	Urban Company	29282	39	4	Good	Comprehensive	4.64	4	2	2	5065.57
+51	Uber	18858	69	19	Excellent	Accident Only	5.01	3	2	3	2906.05
+20	Swiggy	52159	70	2	Good	Comprehensive	8.86	3	0	3	4570.8
+33	Zepto	51714	67	4	Excellent	Health + Accident	5.16	3	3	1	4139.99
+21	Urban Company	23186	78	14	Good	Health + Accident	1.19	1	0	2	2862.23
+40	Uber	42185	33	18	Fair	Comprehensive	3.05	1	0	1	5470.64
+37	Zepto	39194	49	15	Poor	Accident Only	5.28	4	2	3	4399.38
+42	Uber	33230	48	7	Poor	Health + Accident	4.82	1	4	2	6348.54
+47	Uber	35018	27	12	Excellent	Accident Only	8.74	5	2	1	2963.65
+35	Porter	57262	31	15	Fair	Health + Accident	5.88	1	2	3	4237.69
+59	Blinkit	32665	60	2	Poor	Health + Accident	7.21	1	2	1	6384.04
+28	Swiggy	49722	57	0	Excellent	Comprehensive	5.22	1	0	2	3433.28
+46	Uber	54359	45	8	Good	Comprehensive	4.96	0	3	2	5837.03
+34	Ola	48159	69	8	Good	Accident Only	5.02	4	0	2	2802.08
+43	Zepto	52132	21	16	Fair	Comprehensive	4.7	5	1	2	6507.47
+40	Urban Company	51139	74	1	Poor	Health + Accident	5.85	1	2	2	5815.41
+37	Blinkit	29516	59	8	Good	Health + Accident	3.25	4	2	1	4182.9
+19	Zepto	43272	75	18	Excellent	Accident Only	9.02	2	1	1	2774.86
+41	Porter	66808	33	12	Good	Accident Only	4	0	2	1	2630.84
+48	Ola	32673	25	4	Good	Health + Accident	2.33	1	2	1	3490.4
+44	Ola	13239	61	8	Poor	Comprehensive	1.87	5	2	3	9247.08
+19	Uber	57444	59	12	Poor	Comprehensive	1.12	0	1	3	5732.91
+31	Ola	34415	50	0	Excellent	Accident Only	4.81	5	0	1	2494.84
+21	Swiggy	58886	36	14	Fair	Accident Only	2.69	0	2	3	2653.06
+30	Porter	45888	44	3	Fair	Health + Accident	1.19	2	3	3	4647.36
+53	Ola	35195	51	3	Good	Health + Accident	5.68	4	1	2	4273.08
+52	Uber	47161	31	19	Excellent	Accident Only	7.12	0	4	1	3364.1
+25	Zepto	37323	68	9	Fair	Health + Accident	1.77	3	1	3	4357.36
+19	Porter	42964	32	5	Fair	Accident Only	5.15	2	0	3	2517.37
+23	Ola	44234	38	11	Good	Accident Only	7.69	3	1	1	2669.11
+48	Blinkit	38763	63	19	Excellent	Comprehensive	9.87	2	4	2	5960.45
+27	Porter	42674	67	15	Fair	Accident Only	7	3	3	1	3752.92
+38	Porter	26105	44	2	Poor	Health + Accident	3.2	3	4	2	6479.18
+59	Urban Company	52651	50	13	Poor	Comprehensive	7.45	5	1	3	9449.23
+27	Blinkit	37739	78	0	Good	Comprehensive	6.38	0	4	2	5802.45
+40	Blinkit	56205	56	9	Good	Health + Accident	2.91	0	1	2	3206.09
+20	Zepto	39969	44	14	Good	Health + Accident	8.66	2	3	1	3905.88
+49	Zomato	22497	35	6	Good	Health + Accident	4.85	4	3	3	4487.47
+37	Urban Company	9816	76	3	Fair	Accident Only	9.66	5	0	1	3690.04
+27	Blinkit	65596	57	13	Excellent	Comprehensive	7.51	0	3	1	4631.52
+46	Blinkit	61379	62	15	Good	Accident Only	6.8	0	2	3	3018.05
+58	Zomato	68863	68	13	Good	Accident Only	7.56	5	4	1	4266.64
+51	Zepto	34483	77	2	Fair	Accident Only	5.3	1	4	1	4203.31
+54	Urban Company	67254	42	16	Good	Accident Only	5.55	5	1	2	3956.62
+37	Blinkit	51481	33	13	Good	Comprehensive	8.66	0	3	1	5560.27
+25	Uber	30159	25	17	Excellent	Comprehensive	7.13	4	0	3	4045.35
+24	Zepto	11849	44	2	Poor	Accident Only	9.08	1	0	1	3118.97
+23	Urban Company	29612	42	18	Good	Health + Accident	9.02	3	0	2	3582.55
+28	Blinkit	47617	79	2	Fair	Comprehensive	9.79	5	2	1	7592.06
+35	Blinkit	41826	62	11	Excellent	Accident Only	7.3	3	3	1	2848.96
+59	Zomato	52498	31	4	Fair	Health + Accident	5.52	1	0	1	4943.42
+46	Urban Company	26706	32	9	Excellent	Health + Accident	2.5	1	2	2	3332.06
+42	Uber	65530	55	8	Excellent	Accident Only	7.35	1	4	3	3167.67
+38	Zepto	58100	58	0	Good	Comprehensive	3.62	2	1	3	4953.25
+20	Ola	32563	53	12	Good	Health + Accident	3.55	5	3	2	3859.96
+35	Swiggy	67634	25	2	Good	Comprehensive	3.14	4	3	2	5629.69
+41	Uber	12359	57	18	Poor	Comprehensive	8.88	4	4	1	9933.7
+55	Ola	38669	69	10	Poor	Health + Accident	8.81	3	3	3	7700.33
+27	Uber	20809	71	15	Fair	Accident Only	6.68	3	3	2	3963.05
+44	Urban Company	46428	59	5	Good	Health + Accident	5.26	3	3	3	4743.9
+29	Ola	37454	27	2	Poor	Health + Accident	7.05	5	3	1	6297.54
+24	Urban Company	15254	27	18	Good	Comprehensive	6.47	0	2	2	4322.26
+34	Ola	53590	59	5	Poor	Accident Only	4.74	3	2	3	4021.26
+18	Uber	32785	52	7	Poor	Comprehensive	4.42	1	1	3	5713.75
+43	Zomato	10093	53	12	Excellent	Health + Accident	4.45	3	3	1	3970.15
+32	Uber	52498	63	11	Good	Accident Only	6.3	1	4	2	3447.79
+50	Urban Company	58715	34	9	Good	Accident Only	6.83	2	0	3	2929.39
+54	Uber	48985	55	2	Poor	Accident Only	5.07	0	1	1	3965.61
+48	Porter	40009	79	3	Good	Accident Only	9.72	0	0	3	3371.83
+52	Porter	24558	76	0	Poor	Accident Only	1.75	5	0	1	4550.2
+18	Ola	25718	54	12	Good	Health + Accident	4.12	5	3	3	4418.73
+25	Porter	24705	65	3	Excellent	Health + Accident	4.77	4	4	3	3969.06
+29	Swiggy	30082	41	10	Good	Health + Accident	1.15	2	0	1	2664.53
+36	Ola	20342	42	18	Excellent	Comprehensive	4.28	5	0	2	4683.3
+42	Porter	20239	59	10	Fair	Accident Only	3.46	1	1	1	3059.44
+49	Blinkit	54622	64	11	Good	Accident Only	5.55	2	4	2	3730.08
+29	Uber	54665	74	10	Good	Health + Accident	4.03	0	4	3	4169.54
+30	Zepto	40274	70	5	Good	Accident Only	7.54	1	0	3	2677.33
+45	Uber	19419	41	11	Excellent	Comprehensive	5.59	2	4	1	5482.64
+18	Porter	50832	24	8	Good	Accident Only	2.17	0	1	1	1404.17
+23	Zomato	23003	50	9	Good	Accident Only	7.75	5	1	2	2792.58
+25	Urban Company	38866	32	2	Poor	Comprehensive	1.89	1	1	2	5795.73
+21	Zepto	29988	47	2	Fair	Health + Accident	8.55	1	3	2	4609.76
+22	Ola	63894	77	19	Excellent	Health + Accident	9.38	0	0	1	3367.76
+42	Zomato	51027	39	15	Poor	Accident Only	3.9	1	4	3	4164.46
+39	Uber	64588	52	2	Excellent	Comprehensive	9.34	5	1	1	5370.17
+45	Porter	32908	35	9	Poor	Health + Accident	8.14	5	0	3	6176.34
+56	Ola	13674	48	10	Fair	Health + Accident	9.3	5	0	1	5562.84
+40	Ola	13002	42	7	Poor	Health + Accident	7	0	3	1	5639.43
+21	Blinkit	35567	43	5	Excellent	Accident Only	3.12	3	4	2	2398.38
+21	Blinkit	8910	53	19	Good	Comprehensive	9.05	3	4	3	5968.93
+38	Porter	37072	26	10	Good	Accident Only	2.66	1	1	1	2419.16
+54	Porter	41717	57	11	Fair	Health + Accident	2.92	5	1	1	5145.56
+58	Swiggy	29809	56	15	Excellent	Comprehensive	3.44	1	0	3	4947.25
+19	Blinkit	34651	23	17	Excellent	Accident Only	3.74	0	4	1	1892.27
+24	Urban Company	59666	53	12	Excellent	Health + Accident	5.63	1	4	3	3086.97
+33	Zepto	52291	61	2	Fair	Health + Accident	7.42	4	1	2	4971.55
+34	Ola	64853	41	14	Good	Accident Only	9.34	3	2	2	3177.72
+37	Blinkit	51989	24	13	Poor	Health + Accident	1.8	1	0	3	4023.4
+40	Porter	24484	69	17	Fair	Health + Accident	9.59	1	4	2	5917.72
+51	Swiggy	12646	61	13	Poor	Comprehensive	9.29	2	3	3	9783.87
+28	Porter	47713	42	4	Good	Health + Accident	1.49	1	3	1	3816.53
+51	Porter	10400	73	13	Fair	Accident Only	4.24	4	2	1	4031.57
+50	Porter	52331	79	7	Good	Comprehensive	8.32	3	1	3	6686.46
+43	Uber	30185	34	14	Poor	Accident Only	6.5	2	1	1	4092.49
+19	Zepto	26727	50	14	Excellent	Health + Accident	8.01	0	1	2	2254.64
+40	Blinkit	41120	78	18	Excellent	Comprehensive	7.47	0	3	1	5107.66
+58	Ola	60107	28	19	Poor	Comprehensive	5.47	3	1	1	8137.8
+39	Uber	56257	62	5	Excellent	Comprehensive	1.37	0	3	3	4649.78
+51	Porter	9018	77	18	Poor	Comprehensive	6.26	4	2	2	9906.37
+32	Urban Company	25563	72	7	Fair	Accident Only	1.44	1	0	1	2731.99
+27	Ola	13193	44	5	Fair	Health + Accident	6.43	3	4	1	5133.28
+32	Uber	23701	44	19	Fair	Health + Accident	8.2	2	2	3	4695.05
+59	Urban Company	11536	68	14	Excellent	Comprehensive	6.26	1	3	3	5909.58
+46	Urban Company	56217	40	2	Good	Health + Accident	9.97	0	2	2	4197.38
+40	Zepto	52610	28	9	Excellent	Accident Only	5.1	0	4	1	2753.04
+34	Ola	26886	74	14	Excellent	Health + Accident	7.74	2	0	3	3176.27
+26	Blinkit	44587	67	15	Good	Accident Only	7	4	4	3	3378.64
+53	Blinkit	64007	57	16	Good	Accident Only	9.92	2	3	3	3904.86
+26	Swiggy	58131	41	18	Good	Health + Accident	7.42	3	4	2	4360.01
+33	Uber	37410	62	10	Good	Accident Only	2.48	2	2	3	2503.64
+53	Swiggy	41744	42	15	Excellent	Accident Only	9.6	0	1	2	2933.09
+50	Zomato	66715	68	4	Poor	Accident Only	7.01	4	2	2	4993.54
+48	Blinkit	59432	23	4	Fair	Accident Only	1.53	4	3	1	3498.26
+23	Uber	46665	48	13	Poor	Comprehensive	6.92	5	0	1	6852.32
+27	Zepto	23957	34	17	Excellent	Health + Accident	8.95	2	4	2	3639.85
+33	Swiggy	56127	20	7	Good	Comprehensive	6.19	3	0	1	4464.36
+21	Zepto	54008	73	4	Fair	Accident Only	4.19	0	3	1	3043.66
+39	Zepto	69920	49	6	Fair	Health + Accident	8.39	1	4	3	5380.68
+30	Porter	40875	48	15	Poor	Accident Only	8.04	4	2	1	4277.13
+33	Porter	56292	39	13	Excellent	Health + Accident	5.9	2	2	2	3544.12
+46	Zepto	66316	52	4	Excellent	Comprehensive	2.39	5	3	1	5739.04
+23	Swiggy	9626	60	8	Excellent	Health + Accident	3.26	3	4	3	3267.96
+43	Porter	33279	63	3	Fair	Accident Only	7.65	3	2	2	4207.4
+28	Zomato	14229	55	3	Poor	Health + Accident	8.25	0	3	1	5606.31
+41	Urban Company	14877	79	15	Fair	Health + Accident	3.51	4	3	2	5856.3
+46	Urban Company	41642	41	16	Fair	Comprehensive	4.31	0	0	1	5545.58
+20	Porter	46311	32	14	Good	Accident Only	1.7	5	2	3	2498.01
+27	Swiggy	40356	26	3	Poor	Health + Accident	7.42	1	4	1	5676.62
+18	Urban Company	11809	27	5	Good	Comprehensive	1.03	1	2	2	3713.51
+43	Ola	51371	47	15	Excellent	Health + Accident	1.42	1	2	2	3351.62
+29	Urban Company	42875	64	3	Fair	Accident Only	1.04	3	2	2	3201.22
+31	Blinkit	52513	62	5	Poor	Health + Accident	6.81	4	3	1	6214.41
+42	Swiggy	17465	28	4	Excellent	Health + Accident	4.76	0	1	1	3129.58
+25	Porter	8559	44	15	Poor	Health + Accident	3.68	0	1	1	4096.62
+21	Porter	16308	75	15	Fair	Health + Accident	9.21	5	0	3	4679.18
+45	Urban Company	29353	35	9	Poor	Accident Only	2.74	1	2	3	3733.92
+24	Swiggy	23250	29	8	Excellent	Comprehensive	4.5	4	1	3	3927.53
+27	Zomato	54023	30	3	Good	Comprehensive	9.46	4	0	2	4876.73
+53	Ola	43814	50	13	Fair	Health + Accident	4.84	5	3	2	5937.68
+19	Porter	54624	31	3	Good	Accident Only	5.99	2	2	2	2181.48
+43	Swiggy	24427	79	11	Fair	Accident Only	1.72	4	4	2	4023.91
+31	Porter	41276	50	9	Excellent	Accident Only	8.11	4	3	2	3093.24
+33	Porter	14107	33	3	Fair	Accident Only	4.8	0	0	1	2468.41
+59	Blinkit	21476	70	17	Good	Accident Only	8.2	5	3	2	4497.64
+34	Urban Company	11439	63	12	Fair	Accident Only	3.28	4	4	1	3987.42
+39	Blinkit	28312	51	12	Excellent	Health + Accident	4.8	4	3	3	4148
+21	Urban Company	29795	69	13	Fair	Comprehensive	8.08	0	0	3	4741.44
+36	Porter	21136	72	17	Good	Comprehensive	9.76	4	4	3	7133.77
+19	Swiggy	22167	36	0	Excellent	Health + Accident	1.54	0	4	3	2785.6
+56	Zepto	25300	54	15	Good	Comprehensive	8.31	2	3	3	6893.4
+26	Urban Company	68289	20	14	Fair	Accident Only	3.71	3	4	2	3297.93
+36	Zepto	25182	48	4	Poor	Accident Only	5.96	0	3	2	3865.03
+33	Ola	12971	70	5	Good	Comprehensive	3.61	0	2	2	4717.69
+42	Blinkit	58912	23	5	Fair	Accident Only	6.52	4	4	3	4251.4
+35	Zepto	34909	42	2	Poor	Accident Only	4.18	0	3	3	3909.55
+40	Blinkit	27659	47	15	Poor	Comprehensive	4	5	2	1	8560.83
+38	Urban Company	39403	35	11	Excellent	Health + Accident	1.34	1	4	2	3446.98
+28	Urban Company	56651	31	3	Poor	Comprehensive	2.32	1	2	3	6242.31
+56	Ola	41586	72	0	Good	Comprehensive	9.25	2	4	3	7821.23
+58	Urban Company	18360	40	3	Good	Comprehensive	9.98	0	0	3	5211.95
+21	Porter	29424	64	0	Poor	Comprehensive	8.02	5	0	1	7152.85
+42	Ola	40499	36	7	Fair	Health + Accident	3.58	4	3	3	5249.09
+49	Zepto	52695	59	4	Good	Health + Accident	4.62	4	1	1	4511.82
+47	Urban Company	56791	32	1	Good	Accident Only	7.66	3	0	1	3286.23
+43	Swiggy	11065	71	11	Excellent	Accident Only	9.72	2	1	2	2984.11
+53	Uber	11259	77	16	Fair	Comprehensive	5.1	5	2	3	8637.43
+51	Zomato	58058	51	6	Poor	Accident Only	8.47	5	2	1	5205.39
+26	Porter	20300	56	10	Fair	Health + Accident	9.78	4	1	3	5064.58
+29	Uber	41370	69	3	Excellent	Accident Only	8.86	3	3	2	3215.57
+19	Uber	12295	34	4	Excellent	Accident Only	3.04	4	4	2	2383.99
+55	Blinkit	35209	31	5	Fair	Accident Only	1.07	3	1	1	3246.94
+22	Porter	50751	68	10	Excellent	Comprehensive	5.43	1	1	2	4030.39
+22	Porter	44295	76	0	Excellent	Accident Only	5.78	5	1	2	2485.22
+39	Ola	28927	34	9	Excellent	Health + Accident	2.81	1	1	2	2906.43
+22	Blinkit	42579	53	19	Fair	Health + Accident	3.56	4	1	3	4101.64
+21	Zepto	52871	25	10	Excellent	Health + Accident	7.89	2	3	3	3365.32
+26	Zomato	17032	36	16	Poor	Health + Accident	5.23	0	0	1	3779.2
+46	Zepto	35718	67	7	Poor	Accident Only	3.86	2	4	1	4788.53
+39	Swiggy	20877	68	12	Good	Comprehensive	6.6	2	0	2	5439.06
+44	Zomato	48731	76	19	Poor	Health + Accident	6.87	0	1	2	5716.01
+27	Blinkit	62401	39	17	Good	Health + Accident	7.92	5	0	1	3772.88
+33	Urban Company	55992	28	15	Fair	Comprehensive	2.41	1	3	2	5938.4
+59	Urban Company	34666	78	1	Excellent	Comprehensive	7.67	1	2	1	5515.36
+59	Blinkit	61767	24	4	Poor	Health + Accident	6.39	5	0	3	6671.24
+27	Zepto	66380	42	17	Good	Health + Accident	1.52	0	4	2	3556.54
+23	Blinkit	49684	52	2	Fair	Comprehensive	8	3	3	2	6312.17
+22	Blinkit	14766	57	16	Good	Health + Accident	4.45	2	2	2	3825.42
+23	Uber	66331	75	15	Excellent	Health + Accident	3.97	4	3	3	3558.82
+42	Swiggy	57954	33	5	Poor	Accident Only	5.03	1	1	3	3848.99
+21	Porter	59734	36	18	Fair	Comprehensive	4.12	5	2	2	6133.11
+57	Urban Company	30829	76	6	Good	Accident Only	4.04	4	4	1	3698.12
+49	Uber	28221	38	17	Fair	Accident Only	8.27	0	2	3	3695.85
+52	Blinkit	33102	52	13	Good	Comprehensive	2.12	4	4	2	7039.14
+27	Ola	42433	20	5	Good	Accident Only	9.74	4	1	2	3151.55
+51	Uber	23932	32	7	Excellent	Health + Accident	5.99	2	4	3	4281.13
+53	Blinkit	33714	65	14	Excellent	Accident Only	2.65	0	3	1	2457.17
+23	Urban Company	65803	46	14	Good	Comprehensive	2.18	4	0	2	4504.85
+33	Porter	47743	25	14	Poor	Health + Accident	6.32	1	3	1	5265.79
+36	Blinkit	10552	78	15	Fair	Health + Accident	6.7	0	3	1	5452.05
+51	Swiggy	64627	25	0	Fair	Health + Accident	1.48	1	2	3	4403.44
+42	Zepto	53987	52	10	Excellent	Health + Accident	3.19	5	1	2	3595.94
+48	Zomato	22274	49	4	Poor	Accident Only	8.16	5	0	2	4426.62
+58	Uber	53380	65	4	Good	Accident Only	1.45	3	4	1	3544.28
+34	Uber	37250	54	5	Excellent	Health + Accident	8.7	5	2	3	3951.91
+47	Uber	10808	42	1	Good	Comprehensive	6.92	4	1	3	6220.89
+56	Blinkit	51858	29	5	Good	Health + Accident	4.91	0	0	3	3296.5
+48	Porter	62785	70	13	Excellent	Accident Only	4.12	5	3	1	3370.32
+36	Swiggy	68587	38	10	Poor	Health + Accident	1.17	1	1	1	4696.33
+52	Porter	53028	70	3	Fair	Accident Only	8.43	4	1	2	4570.31
+46	Blinkit	23295	47	8	Excellent	Health + Accident	2.28	5	1	3	3633.65
+18	Blinkit	55605	42	2	Poor	Comprehensive	3.79	2	3	1	6614.16
+21	Zepto	63248	23	15	Good	Health + Accident	6.12	1	4	3	3665.25
+45	Ola	22669	39	10	Excellent	Comprehensive	3.21	1	2	1	4647.84
+35	Swiggy	18523	38	3	Fair	Comprehensive	5.47	3	4	2	7308.95
+43	Uber	53530	61	0	Fair	Health + Accident	8.28	2	0	3	4815.75
+57	Zomato	21769	46	15	Good	Comprehensive	5.23	3	2	1	6739.46
+36	Uber	54499	76	18	Excellent	Comprehensive	9.54	5	0	3	5389.7
+23	Porter	52645	53	15	Fair	Accident Only	8.63	2	3	1	3644.89
+18	Blinkit	33207	23	10	Excellent	Accident Only	4	1	4	1	1807.53
+25	Swiggy	43224	75	7	Fair	Comprehensive	4.6	3	1	1	5923.23
+50	Urban Company	33557	57	0	Good	Health + Accident	4.81	4	2	3	4673.86
+38	Swiggy	46191	26	8	Good	Comprehensive	6.64	2	1	1	4545.78
+41	Swiggy	22246	67	11	Excellent	Health + Accident	3.58	1	0	2	2827.05
+42	Ola	20846	26	7	Poor	Accident Only	9.72	0	1	3	3738.46
+36	Uber	45085	69	16	Poor	Health + Accident	6.48	2	1	2	5601.26
+46	Ola	58708	71	9	Good	Comprehensive	4.59	2	3	2	6544.36
+27	Urban Company	59357	45	6	Fair	Comprehensive	6.81	5	3	3	7156.54
+29	Urban Company	53403	45	18	Poor	Comprehensive	4.56	4	4	1	8778.01
+50	Zepto	21470	73	5	Good	Comprehensive	8.36	5	0	2	6437.24
+24	Porter	21176	38	18	Fair	Comprehensive	6.11	2	3	3	6125.2
+34	Zomato	61107	28	17	Fair	Health + Accident	1.38	2	3	1	4460.59
+27	Zepto	49881	39	14	Poor	Comprehensive	2.59	4	4	3	8621.73
+48	Blinkit	21546	61	1	Good	Accident Only	8.78	4	2	3	3644.47
+23	Ola	14805	64	13	Fair	Comprehensive	6.07	3	4	3	7200.84
+34	Ola	24788	69	9	Fair	Health + Accident	9.55	1	1	1	4909.83
+54	Zepto	37348	35	15	Excellent	Comprehensive	1.65	1	1	2	4092.38
+35	Blinkit	58772	73	6	Excellent	Comprehensive	3.66	3	3	2	5666.57
+43	Swiggy	60104	36	7	Poor	Health + Accident	2.74	1	3	3	5892.51
+33	Blinkit	16080	41	9	Excellent	Comprehensive	5.98	2	4	3	4777.1
+25	Uber	43886	32	14	Good	Health + Accident	4.45	3	4	1	4150.28
+41	Zepto	31764	31	7	Poor	Comprehensive	2.42	3	0	3	6556.41
+30	Porter	14630	29	12	Poor	Accident Only	6.78	1	1	3	3294.78
+46	Blinkit	66938	20	11	Excellent	Comprehensive	5.83	0	4	3	5034.7
+49	Swiggy	41333	51	7	Fair	Health + Accident	3.47	1	2	2	5083.68
+41	Blinkit	23701	49	14	Good	Accident Only	5.32	5	0	3	2901.43
+33	Ola	22859	27	11	Good	Health + Accident	7.71	0	4	2	3986.31
+28	Zomato	29183	40	10	Good	Comprehensive	2.85	3	3	1	5398.43
+49	Ola	48438	41	18	Poor	Accident Only	3.64	0	4	1	4546.79
+23	Porter	39749	37	13	Good	Health + Accident	4.11	2	3	2	3437.37
+52	Urban Company	60020	21	17	Fair	Accident Only	7.72	4	3	2	4591.13
+50	Zomato	39887	67	12	Fair	Accident Only	8.62	0	1	2	3601.74
+35	Urban Company	66201	63	3	Excellent	Health + Accident	4.39	5	1	2	3842.13
+54	Blinkit	50244	28	16	Good	Accident Only	3.67	4	4	3	3673.94
+30	Uber	16776	22	18	Poor	Health + Accident	9.01	2	4	2	6091.06
+27	Porter	23021	73	8	Excellent	Accident Only	9.99	5	2	2	3048.46
+54	Blinkit	12327	45	6	Fair	Accident Only	7.03	4	0	2	3468.43
+43	Swiggy	63565	40	0	Good	Accident Only	9.91	2	0	3	3021.52
+34	Blinkit	56043	49	6	Fair	Comprehensive	6.94	4	4	3	7792.54
+18	Zomato	15614	47	6	Excellent	Comprehensive	7.6	4	1	3	4057.8
+42	Ola	9245	55	19	Fair	Health + Accident	4.5	1	2	1	4935.59
+51	Uber	49011	45	6	Good	Accident Only	4.9	5	0	3	3132.69
+56	Urban Company	18355	53	7	Good	Health + Accident	2.3	5	4	2	5182.19
+27	Blinkit	41305	27	15	Excellent	Comprehensive	8.4	0	1	3	3799.71
+37	Blinkit	56692	29	2	Good	Comprehensive	9.38	5	1	3	5912.72
+24	Ola	57004	67	12	Fair	Comprehensive	6.61	5	1	2	6416.73
+33	Uber	57692	74	9	Fair	Comprehensive	4.09	4	3	3	7764.28
+54	Zepto	37714	62	17	Poor	Health + Accident	2.39	3	1	1	6642.85
+46	Urban Company	25198	69	6	Poor	Accident Only	3.39	1	4	3	4539.49
+29	Blinkit	9415	73	4	Poor	Health + Accident	3.3	0	2	1	5012.26
+34	Blinkit	51798	33	6	Fair	Accident Only	6.52	1	4	1	3697
+37	Zepto	9652	59	16	Fair	Comprehensive	9.51	0	1	1	6508.85
+43	Urban Company	51625	74	3	Excellent	Accident Only	1.43	2	2	2	2365.49
+36	Zomato	69858	34	15	Poor	Comprehensive	1.01	4	0	3	6429.48
+29	Zomato	28446	36	18	Fair	Health + Accident	6.4	5	0	1	4138.72
+38	Porter	26740	72	9	Excellent	Accident Only	3.56	5	4	1	3391.03
+59	Porter	11810	37	2	Fair	Health + Accident	8.92	3	2	3	5720.03
+51	Swiggy	66207	51	2	Excellent	Comprehensive	3.95	1	4	2	5370.07
+24	Ola	24569	57	16	Poor	Health + Accident	3.61	1	2	2	4887.99
+52	Uber	69700	42	9	Poor	Comprehensive	3.43	1	2	1	8110.94
+32	Blinkit	42319	65	16	Poor	Comprehensive	2.3	5	4	2	9655
+18	Urban Company	21584	42	16	Fair	Comprehensive	6.23	1	2	3	5237.59
+43	Blinkit	34783	54	3	Fair	Health + Accident	2.51	4	1	2	4906.59
+52	Porter	64165	58	5	Excellent	Health + Accident	4.82	0	2	3	3628.55
+42	Swiggy	41529	34	11	Good	Accident Only	5.15	5	2	1	2986.14
+59	Urban Company	20511	72	19	Good	Accident Only	1.18	4	4	3	3757.48
+32	Urban Company	17471	43	16	Poor	Health + Accident	1.15	2	0	1	4295.07
+39	Blinkit	53235	47	16	Good	Health + Accident	5.68	4	3	3	4555.64
+23	Ola	14163	35	9	Poor	Health + Accident	7.26	4	2	3	5110.91
+32	Swiggy	24065	35	6	Excellent	Health + Accident	9.48	2	3	2	3557.4
+41	Ola	64787	59	15	Good	Comprehensive	2.61	4	2	3	5968.92
+38	Swiggy	52654	58	12	Good	Comprehensive	1.93	0	4	1	5828.95
+24	Blinkit	60433	25	2	Poor	Comprehensive	1.47	5	4	3	8411.66
+46	Swiggy	25920	21	1	Excellent	Health + Accident	4.92	3	2	1	3535.83
+49	Zomato	46969	73	15	Good	Comprehensive	6.61	2	4	1	6965.43
+49	Urban Company	60316	32	5	Good	Comprehensive	8.56	5	4	3	7246.3
+22	Uber	56348	63	5	Good	Accident Only	7.14	1	2	2	2559.92
+21	Blinkit	27154	66	12	Excellent	Accident Only	2.88	0	0	3	1869.5
+39	Zepto	67307	78	6	Excellent	Comprehensive	5.16	3	2	3	5719.32
+35	Uber	48167	28	4	Good	Comprehensive	9.19	0	0	2	4138.69
+52	Blinkit	28229	53	6	Poor	Comprehensive	3.94	0	4	1	8785.49
+34	Uber	60587	36	1	Poor	Health + Accident	5.49	1	0	3	4599
+41	Zomato	61862	46	16	Good	Accident Only	9.63	3	4	2	3872.01
+19	Uber	57713	48	12	Excellent	Accident Only	7.61	0	0	2	2014.54
+30	Swiggy	34997	56	15	Good	Accident Only	7.73	1	0	1	2903.03
+32	Porter	29101	62	19	Excellent	Comprehensive	3.27	2	2	2	4248.5
+22	Uber	48391	41	1	Good	Health + Accident	4.73	1	0	1	2519.52
+20	Blinkit	18327	70	4	Excellent	Accident Only	1.74	4	4	3	2546.36
+54	Zepto	15187	43	17	Fair	Accident Only	6.46	5	2	2	4309.48
+54	Zepto	37685	26	6	Poor	Health + Accident	1.93	1	0	3	4766.91
+54	Porter	67405	53	10	Fair	Comprehensive	8.52	1	2	2	7893.75
+20	Ola	42948	67	10	Poor	Comprehensive	8.33	1	3	2	7445.45
+52	Porter	42728	31	16	Excellent	Accident Only	5.8	0	2	3	2478
+40	Urban Company	61031	42	15	Fair	Accident Only	2.27	3	3	2	3583.27
+45	Uber	45921	34	12	Poor	Health + Accident	1.23	1	3	3	5788.08
+47	Zepto	15035	52	4	Good	Accident Only	8.17	1	2	3	3154.51
+35	Porter	19471	76	19	Excellent	Health + Accident	6.4	4	4	1	4401.1
+53	Uber	36460	32	15	Excellent	Accident Only	7.4	4	4	3	3594.31
+50	Urban Company	60422	42	15	Good	Accident Only	3.73	2	4	1	3603.36
+43	Zepto	29071	57	15	Good	Accident Only	5.59	2	1	3	3017.73
+57	Urban Company	8582	51	13	Poor	Comprehensive	7.72	4	3	2	10784.38
+34	Uber	56282	64	5	Excellent	Health + Accident	5.16	3	2	3	4047.43
+57	Blinkit	34189	69	1	Poor	Health + Accident	6.41	2	4	2	7336.58
+24	Uber	66445	54	13	Good	Comprehensive	8.11	5	4	1	6204.41
+25	Porter	23531	20	15	Excellent	Comprehensive	2.94	5	2	2	4440.34
+48	Urban Company	24672	66	19	Good	Comprehensive	1.59	3	3	3	6700.27
+29	Blinkit	62816	77	12	Poor	Health + Accident	5.79	4	2	2	6131.25
+48	Blinkit	48747	64	14	Poor	Accident Only	1.56	2	1	1	3911.81
+36	Ola	28243	24	11	Poor	Comprehensive	7.9	1	1	2	6395.54
+27	Zepto	11060	76	8	Excellent	Comprehensive	7.47	4	2	2	4969.3
+56	Swiggy	68270	32	17	Good	Comprehensive	8.94	2	3	3	6892.47
+29	Blinkit	21731	73	13	Good	Accident Only	6.76	3	4	3	3439.54
+37	Urban Company	20294	24	19	Poor	Accident Only	1.6	5	1	2	3791.61
+54	Zepto	58335	79	3	Poor	Comprehensive	3.28	3	1	1	8646.54
+58	Zomato	28719	51	7	Poor	Accident Only	8.27	2	3	2	5429.55
+24	Uber	55042	70	7	Poor	Comprehensive	2.5	3	1	1	7057.16
+31	Porter	58598	40	15	Fair	Accident Only	7.29	2	1	1	2901.46
+28	Urban Company	57116	43	9	Fair	Health + Accident	8.02	2	3	1	4917.41
+24	Zomato	63831	79	16	Fair	Health + Accident	3.97	3	2	2	4710.55
+46	Urban Company	34325	37	0	Poor	Accident Only	3.9	0	4	1	4231.22
+27	Uber	30597	40	17	Poor	Health + Accident	6.02	1	4	2	5063.01
+46	Ola	9903	73	9	Good	Health + Accident	8.75	4	1	1	4727.93
+26	Urban Company	22551	29	3	Excellent	Health + Accident	3.02	5	4	1	3719.09
+53	Blinkit	35751	43	0	Good	Comprehensive	9.47	1	2	2	6065.89
+27	Swiggy	32278	59	3	Fair	Accident Only	6.39	4	1	3	3364.86
+36	Blinkit	33653	66	3	Good	Accident Only	9.93	4	4	3	4271.75
+48	Uber	23141	40	3	Poor	Accident Only	1.81	5	0	2	3976.15
+34	Urban Company	10377	44	16	Fair	Health + Accident	2.14	1	0	2	3123.84
+26	Swiggy	41615	71	8	Fair	Comprehensive	8.44	5	0	3	6417.43
+50	Blinkit	64522	79	18	Excellent	Accident Only	8.78	2	0	3	2977.33
+51	Swiggy	55148	76	12	Excellent	Health + Accident	5.01	5	0	3	3839.73
+41	Porter	35452	78	3	Fair	Comprehensive	7.43	3	1	2	7310.15
+26	Uber	30725	42	4	Fair	Comprehensive	8.81	0	3	1	5704.35
+24	Ola	58391	41	12	Good	Accident Only	1.39	0	3	2	2239.65
+33	Ola	62752	23	15	Fair	Accident Only	6.17	0	1	3	2441.65
+36	Urban Company	17524	53	4	Poor	Health + Accident	8.68	1	1	1	5289.76
+56	Blinkit	55999	75	7	Good	Accident Only	4.58	1	2	2	3504.03
+23	Zomato	19698	25	15	Poor	Health + Accident	3.72	2	3	3	4890.76
+28	Uber	51339	47	0	Poor	Comprehensive	8.16	0	0	2	5704.09
+29	Blinkit	29175	50	5	Poor	Comprehensive	4.02	2	1	1	6660.75
+59	Blinkit	20314	54	10	Fair	Comprehensive	1.03	0	0	3	5994.75
+30	Ola	52197	58	15	Excellent	Comprehensive	9.64	1	3	2	5170.15
+29	Urban Company	10365	61	4	Excellent	Accident Only	6.33	3	4	1	3103.71
+38	Swiggy	40017	42	15	Poor	Accident Only	8.38	3	4	1	5227.89
+27	Uber	40126	25	6	Fair	Health + Accident	8.43	3	1	2	4259.92
+37	Porter	51372	35	18	Good	Health + Accident	1.6	5	2	1	3705.86
+53	Swiggy	52134	21	0	Poor	Health + Accident	2.54	3	0	3	5377.29
+45	Zepto	45823	43	8	Good	Health + Accident	3.8	4	1	1	4403.96
+41	Zepto	13622	36	17	Good	Health + Accident	3.89	0	2	2	4093.54
+22	Uber	38540	64	12	Fair	Comprehensive	6.93	3	0	3	5800.74
+54	Urban Company	57524	20	14	Fair	Comprehensive	6.61	4	3	1	7772.34
+29	Zomato	48551	25	2	Excellent	Comprehensive	5.45	4	4	1	5138.24
+52	Zepto	9949	24	9	Excellent	Health + Accident	2.9	4	2	3	3662.87
+57	Ola	57396	76	8	Fair	Comprehensive	4.44	2	0	3	6943.49
+19	Zomato	50800	64	12	Poor	Comprehensive	5.89	2	1	1	6457.3
+58	Blinkit	39912	79	15	Excellent	Comprehensive	5.21	4	0	3	5826.65
+56	Zepto	64947	74	2	Good	Comprehensive	2.15	5	1	2	6322.17
+59	Ola	62924	69	14	Poor	Accident Only	6.85	3	4	1	5534.14
+26	Blinkit	40161	48	16	Good	Health + Accident	1.66	0	4	2	3836.7
+39	Zomato	52387	31	13	Fair	Health + Accident	4.4	5	0	1	4758.73
+22	Uber	24508	58	6	Good	Accident Only	7.39	1	0	2	2272.3
+29	Blinkit	53592	66	19	Poor	Comprehensive	1.18	2	1	2	7082.95
+18	Swiggy	51713	22	15	Fair	Comprehensive	6.13	3	1	3	5154.38
+39	Uber	9919	67	7	Poor	Comprehensive	4.01	3	2	1	8366.95
+55	Uber	50595	20	3	Good	Health + Accident	1.08	1	2	3	3299.35
+36	Zomato	17617	46	19	Poor	Health + Accident	2.71	1	2	3	4798.7
+33	Zomato	17732	67	14	Fair	Health + Accident	9.47	3	0	1	4597.96
+48	Ola	41298	43	4	Good	Health + Accident	5.69	1	2	2	4327.19
+20	Ola	48617	63	12	Good	Health + Accident	9.98	3	0	1	3831.02
+40	Swiggy	14929	38	5	Excellent	Accident Only	5.72	5	4	1	3059.66
+59	Uber	45117	78	4	Excellent	Health + Accident	5.9	1	3	1	4378.25
+35	Porter	22456	27	16	Poor	Comprehensive	4.53	5	4	3	9024
+43	Urban Company	52063	74	6	Excellent	Health + Accident	3.79	5	0	1	3642.45
+30	Swiggy	29140	63	5	Excellent	Accident Only	3.26	1	0	1	2007.13
+35	Swiggy	26185	66	1	Excellent	Comprehensive	4.09	3	3	1	5212.09
+20	Urban Company	45924	21	10	Excellent	Accident Only	5.14	4	1	2	1778.05
+40	Urban Company	32240	49	6	Fair	Comprehensive	2.73	3	1	2	6208.09
+20	Urban Company	29845	49	7	Fair	Health + Accident	3.02	0	1	2	3285.08
+42	Zomato	17228	68	4	Excellent	Accident Only	3.44	1	2	2	2728.21
+44	Swiggy	29686	58	17	Poor	Comprehensive	5.04	2	1	3	7646.44
+44	Swiggy	19920	64	15	Fair	Health + Accident	6.88	1	2	3	5163.18
+56	Blinkit	15432	51	13	Excellent	Comprehensive	8.71	0	2	1	5438.47
+42	Urban Company	52971	20	11	Fair	Accident Only	3.58	5	1	3	3331.13
+41	Urban Company	14189	57	16	Good	Accident Only	2.65	2	1	2	2346.04
+25	Ola	36039	32	4	Fair	Accident Only	4.41	2	3	1	3343.61
+26	Ola	41910	30	13	Fair	Accident Only	9.05	3	3	1	3796.63
+54	Uber	64228	29	5	Poor	Health + Accident	1.09	4	2	2	6237.45
+47	Ola	38226	67	14	Fair	Comprehensive	7.1	3	3	2	8102.47
+36	Zepto	15614	78	6	Poor	Health + Accident	5.29	2	2	2	5663.92
+33	Uber	67099	45	13	Good	Accident Only	2.45	2	0	3	2408.93
+41	Porter	55021	75	17	Excellent	Comprehensive	3.89	4	2	1	5701.68
+38	Urban Company	29224	74	0	Poor	Accident Only	3.02	1	2	2	3804.8
+53	Blinkit	26013	39	5	Fair	Health + Accident	8.9	4	3	1	6417
+57	Ola	29446	36	2	Fair	Health + Accident	5.34	5	0	1	5477.49
+56	Blinkit	57914	36	4	Poor	Health + Accident	6.07	3	4	3	7057.46
+23	Ola	47673	23	11	Good	Comprehensive	6.34	1	4	1	5006.37
+22	Ola	45657	24	10	Excellent	Comprehensive	6.76	3	4	2	4486.21
+31	Blinkit	12839	79	12	Fair	Accident Only	5.46	4	0	2	3380.57
+59	Swiggy	44725	42	15	Good	Comprehensive	1.16	1	1	1	5488.46
+21	Swiggy	38203	65	17	Excellent	Comprehensive	4.01	4	0	1	3721.91
+25	Swiggy	8557	71	16	Excellent	Health + Accident	2.65	5	3	3	3825.16
+41	Zepto	38666	29	16	Fair	Accident Only	7.12	0	2	2	3402.23
+28	Swiggy	45389	65	10	Poor	Health + Accident	1.51	2	2	2	5312
+34	Ola	55700	47	19	Fair	Accident Only	6.07	1	3	1	3592.1
+38	Urban Company	41607	52	9	Fair	Accident Only	2.9	2	3	1	3270.7
+43	Zomato	32578	62	15	Fair	Comprehensive	9.54	0	2	1	6803.71
+44	Blinkit	17243	45	1	Good	Health + Accident	4.02	1	1	2	3762.07
+33	Urban Company	17596	74	16	Poor	Comprehensive	3.93	2	1	1	7671.01
+43	Zomato	65500	69	19	Good	Comprehensive	9.31	2	1	3	5967.29
+50	Urban Company	14998	67	9	Fair	Comprehensive	4.76	1	3	3	7639.51
+48	Zepto	18129	48	12	Poor	Accident Only	9.67	2	2	1	4565.99
+23	Zomato	8510	46	11	Excellent	Health + Accident	1.22	2	2	3	2544.12
+25	Porter	19596	37	14	Poor	Health + Accident	3.76	1	2	3	4350.69
+24	Uber	20974	59	6	Fair	Comprehensive	7	2	0	3	5196.75
+51	Swiggy	9137	79	12	Poor	Accident Only	9.02	2	0	3	5011.31
+31	Porter	54468	29	11	Excellent	Health + Accident	3.31	3	4	3	3473.88
+33	Zepto	62758	77	11	Excellent	Health + Accident	9.37	5	0	2	3976.03
+26	Urban Company	69258	61	1	Poor	Comprehensive	6.35	3	1	1	7298.12
+27	Ola	35897	24	4	Excellent	Accident Only	8.21	0	1	3	1925.99
+34	Swiggy	12666	29	1	Good	Comprehensive	4.57	3	1	1	4772.58
+29	Porter	16906	69	19	Poor	Health + Accident	2.91	3	1	3	5374.68
+23	Swiggy	29818	40	12	Excellent	Accident Only	9.2	0	4	2	2779.22
+36	Zomato	51246	43	2	Excellent	Comprehensive	9.4	2	1	2	4232.6
+58	Uber	63598	57	10	Poor	Health + Accident	5.48	2	3	3	7169.28
+46	Swiggy	10654	22	15	Good	Comprehensive	1.06	3	3	3	5574.6
+23	Urban Company	41758	59	0	Poor	Comprehensive	1.99	0	3	3	6611.14
+42	Urban Company	32204	50	18	Excellent	Comprehensive	6.16	2	0	2	4453.17
+41	Blinkit	69773	60	10	Poor	Accident Only	1.21	4	2	2	4593.34
+42	Blinkit	42928	56	8	Excellent	Health + Accident	4.57	1	4	1	3870.01
+33	Swiggy	62892	21	13	Fair	Health + Accident	3.73	1	3	2	4494.21
+33	Zomato	61609	21	8	Poor	Health + Accident	7.43	5	3	3	5961.22
+23	Zomato	38552	58	6	Poor	Health + Accident	1.5	1	1	1	4307.65
