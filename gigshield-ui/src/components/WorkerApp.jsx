@@ -137,17 +137,26 @@ const StatusPill = ({ status, children }) => {
 
 
 // ─── MAIN COMPONENT ───────────────────────────────────
+function normalizeWorkerId(workerId) {
+  return String(workerId ?? '').trim().toUpperCase() || null
+}
+
 function readStoredSession() {
   if (typeof localStorage === 'undefined') {
-    return { registered: false, workerId: 'WRK-001', screen: 'login' }
+    return { registered: false, workerId: null, screen: 'login' }
   }
   const registered = localStorage.getItem('gigshield_registered') === 'true'
-  const storedId = localStorage.getItem('gigshield_worker_id')
+  const storedId = normalizeWorkerId(localStorage.getItem('gigshield_worker_id'))
   return {
-    registered,
-    workerId: storedId || 'WRK-001',
-    screen: registered ? 'app' : 'login'
+    registered: registered && !!storedId,
+    workerId: storedId,
+    screen: registered && storedId ? 'app' : 'login'
   }
+}
+
+function clearStoredSession() {
+  localStorage.removeItem('gigshield_registered')
+  localStorage.removeItem('gigshield_worker_id')
 }
 
 export default function WorkerApp({ onBack }) {
@@ -189,6 +198,34 @@ export default function WorkerApp({ onBack }) {
   const [paymentSession, setPaymentSession] = useState(null)
   const [paymentUpiId, setPaymentUpiId] = useState('')
   const [mandateConsent, setMandateConsent] = useState(true)
+
+  // Validate stored worker ID against backend on startup.
+  // If the backend lost the worker (e.g. server restart in in-memory mode), clear
+  // the stale localStorage session and send the user back to login.
+  useEffect(() => {
+    if (!isRegistered || !workerId) return
+    let cancelled = false
+
+    const validateSession = async () => {
+      try {
+        await apiFetch(`/api/workers/${workerId}/profile`)
+      } catch (err) {
+        if (cancelled) return
+        const is404 = err?.message?.includes('404') || err?.message?.toLowerCase().includes('not found')
+        if (is404) {
+          console.warn(`[GigShield] Worker ${workerId} not found on backend — session cleared.`)
+          clearStoredSession()
+          setIsRegistered(false)
+          setWorkerId(null)
+          setScreen('login')
+          setProfileSnapshot(null)
+        }
+      }
+    }
+
+    validateSession()
+    return () => { cancelled = true }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!isRegistered || !workerId) return
@@ -344,7 +381,7 @@ export default function WorkerApp({ onBack }) {
         setRegistrationStep('profile')
         getLocation()
       } else {
-        const resolvedWorkerId = data.workerId || 'WRK-001'
+        const resolvedWorkerId = normalizeWorkerId(data.workerId || 'WRK-001')
         localStorage.setItem('gigshield_registered', 'true')
         localStorage.setItem('gigshield_worker_id', resolvedWorkerId)
         setWorkerId(resolvedWorkerId)
@@ -370,9 +407,10 @@ export default function WorkerApp({ onBack }) {
           lng: location?.lng
         })
       })
+      const resolvedWorkerId = normalizeWorkerId(data.worker.id)
       localStorage.setItem('gigshield_registered', 'true')
-      localStorage.setItem('gigshield_worker_id', data.worker.id)
-      setWorkerId(data.worker.id)
+      localStorage.setItem('gigshield_worker_id', resolvedWorkerId)
+      setWorkerId(resolvedWorkerId)
       setIsRegistered(true)
       setScreen('app')
       setShowOnboarding(true)

@@ -8,6 +8,10 @@ import PDFDocument from "pdfkit";
 
 const RAZORPAY_DEMO_KEY = "rzp_test_gigshield_demo";
 
+export function normalizeWorkerId(workerId) {
+  return String(workerId ?? "").trim().toUpperCase();
+}
+
 const triggerDefinitions = [
   { key: "rainfall", label: "Heavy Rain", threshold: ">15 mm/hr", check: (zone) => zone.metrics.rainfall > 15, sustainedMinutes: 10 },
   { key: "temperature", label: "Extreme Heat", threshold: ">43 C", check: (zone) => zone.metrics.temperature > 43, sustainedMinutes: 10 },
@@ -22,8 +26,9 @@ export function listPlans() {
 }
 
 export function getWorker(workerId) {
-  const worker = store.workers.find((item) => item.id === workerId);
-  if (!worker) throw createError(404, `Worker ${workerId} not found`);
+  const normalizedId = normalizeWorkerId(workerId);
+  const worker = store.workers.find((item) => item.id === normalizedId);
+  if (!worker) throw createError(404, `Worker ${normalizedId} not found`);
   return worker;
 }
 
@@ -40,8 +45,9 @@ export function getPlan(planId) {
 }
 
 export function getWorkerPolicy(workerId) {
-  return store.policies.find((item) => item.workerId === workerId && item.status === "active")
-    ?? store.policies.find((item) => item.workerId === workerId)
+  const normalizedId = normalizeWorkerId(workerId);
+  return store.policies.find((item) => item.workerId === normalizedId && item.status === "active")
+    ?? store.policies.find((item) => item.workerId === normalizedId)
     ?? null;
 }
 
@@ -515,10 +521,11 @@ export function createOrUpdatePaymentMandate(workerId, payload = {}) {
 }
 
 export function getPaymentState(workerId) {
+  const normalizedId = normalizeWorkerId(workerId);
   return {
-    activeMandate: store.paymentMandates.find((item) => item.workerId === workerId && item.status === "active") ?? null,
-    recentPayments: store.paymentTransactions.filter((item) => item.workerId === workerId).slice(0, 5),
-    recentOrders: store.paymentOrders.filter((item) => item.workerId === workerId).slice(0, 5)
+    activeMandate: store.paymentMandates.find((item) => item.workerId === normalizedId && item.status === "active") ?? null,
+    recentPayments: store.paymentTransactions.filter((item) => item.workerId === normalizedId).slice(0, 5),
+    recentOrders: store.paymentOrders.filter((item) => item.workerId === normalizedId).slice(0, 5)
   };
 }
 
